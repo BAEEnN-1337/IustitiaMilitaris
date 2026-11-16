@@ -1,5 +1,5 @@
-const CACHE_NAME = 'ethical-simulator-v2';
-self.addEventListener('install', event => event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(['/', '/index.html', '/manifest.json'])).then(() => self.skipWaiting())));
+const CACHE_NAME = 'ethical-simulator-__BUILD_ID__';
+self.addEventListener('install', event => event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(['/', '/index.html', '/manifest.json', ...[] /* BUILD_ASSETS */])).then(() => self.skipWaiting())));
 self.addEventListener('activate', event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith('ethical-simulator-') && k !== CACHE_NAME).map(k => caches.delete(k)))).then(() => self.clients.claim())));
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);

@@ -1,3 +1,4 @@
+import designLabels from '../i18n/design.json';
 import { ui } from '../i18n/ui';
 import React from 'react';
 import { ShieldCheck, Zap, HeartHandshake, Info } from 'lucide-react';
@@ -25,20 +26,21 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
   };
 
   const getScoreColor = (val: number) => {
-    if (val > 0) return 'text-emerald-400 bg-emerald-500/15 border-emerald-500/30';
-    if (val === 0) return 'text-amber-300 bg-amber-500/15 border-amber-500/30';
+    if (val > 0)
+      return 'text-emerald-400 bg-emerald-500/15 border-emerald-500/30';
+    if (val === 0) return 'text-slate-300 bg-navy-800 border-navy-700';
     return 'text-rose-400 bg-rose-500/15 border-rose-500/30';
   };
 
   const getBarWidth = (val: number) => {
     // scale -2..+2 to 0%..100% with 50% as baseline 0
     // -2 => 10%, -1 => 30%, 0 => 50%, +1 => 70%, +2 => 90%
-    return `${Math.round(((val + 2) / 4) * 80 + 10)}%`;
+    return `${Math.round(((Math.max(-2, Math.min(2, val)) + 2) / 4) * 80 + 10)}%`;
   };
 
   const getBarColor = (val: number) => {
     if (val > 0) return 'bg-emerald-500';
-    if (val === 0) return 'bg-amber-400';
+    if (val === 0) return 'bg-slate-500';
     return 'bg-rose-500';
   };
 
@@ -50,7 +52,8 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
         </span>
         <span className="text-[11px] text-amber-400/90 flex items-center gap-1">
           <Info className="w-3.5 h-3.5" />
-          {ui(lang, 'm0')}{' '}</span>
+          {ui(lang, 'm0')}{' '}
+        </span>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -60,7 +63,9 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
               {t.dimensions.dobrochesnist}
             </span>
-            <span className={`text-xs font-bold px-2 py-0.5 rounded border ${getScoreColor(scores.dobrochesnist)}`}>
+            <span
+              className={`text-xs font-bold px-2 py-0.5 rounded border ${getScoreColor(scores.dobrochesnist)}`}
+            >
               {formatDelta(scores.dobrochesnist)}
             </span>
           </div>
@@ -70,6 +75,17 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
               style={{ width: getBarWidth(scores.dobrochesnist) }}
             />
           </div>
+          <p className="text-xs text-slate-400">
+            {
+              designLabels[lang][
+                scores.dobrochesnist > 0
+                  ? 'positive'
+                  : scores.dobrochesnist < 0
+                    ? 'negative'
+                    : 'neutral'
+              ]
+            }
+          </p>
         </div>
         <div className="p-3 rounded-lg bg-navy-850 border border-navy-750 space-y-2">
           <div className="flex flex-wrap items-center justify-between gap-2">
@@ -77,7 +93,9 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
               <Zap className="w-4 h-4 text-amber-400" />
               {t.dimensions.efektyvnist}
             </span>
-            <span className={`text-xs font-bold px-2 py-0.5 rounded border ${getScoreColor(scores.efektyvnist)}`}>
+            <span
+              className={`text-xs font-bold px-2 py-0.5 rounded border ${getScoreColor(scores.efektyvnist)}`}
+            >
               {formatDelta(scores.efektyvnist)}
             </span>
           </div>
@@ -87,6 +105,17 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
               style={{ width: getBarWidth(scores.efektyvnist) }}
             />
           </div>
+          <p className="text-xs text-slate-400">
+            {
+              designLabels[lang][
+                scores.efektyvnist > 0
+                  ? 'positive'
+                  : scores.efektyvnist < 0
+                    ? 'negative'
+                    : 'neutral'
+              ]
+            }
+          </p>
         </div>
         <div className="p-3 rounded-lg bg-navy-850 border border-navy-750 space-y-2">
           <div className="flex flex-wrap items-center justify-between gap-2">
@@ -94,7 +123,9 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
               <HeartHandshake className="w-4 h-4 text-cyan-400" />
               {t.dimensions.dovira}
             </span>
-            <span className={`text-xs font-bold px-2 py-0.5 rounded border ${getScoreColor(scores.dovira)}`}>
+            <span
+              className={`text-xs font-bold px-2 py-0.5 rounded border ${getScoreColor(scores.dovira)}`}
+            >
               {formatDelta(scores.dovira)}
             </span>
           </div>
@@ -104,12 +135,23 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
               style={{ width: getBarWidth(scores.dovira) }}
             />
           </div>
+          <p className="text-xs text-slate-400">
+            {
+              designLabels[lang][
+                scores.dovira > 0
+                  ? 'positive'
+                  : scores.dovira < 0
+                    ? 'negative'
+                    : 'neutral'
+              ]
+            }
+          </p>
         </div>
       </div>
 
       {showExplanation && explanation && (
         <div className="mt-2 text-xs text-slate-300 bg-navy-950/70 p-2.5 rounded-lg border border-navy-800 leading-relaxed">
-          <strong className="text-slate-400">{ui(lang, 'm1')}{' '}</strong>
+          <strong className="text-slate-400">{ui(lang, 'm1')} </strong>
           {explanation}
         </div>
       )}

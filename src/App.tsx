@@ -1,3 +1,4 @@
+import designLabels from './i18n/design.json';
 import { Auth } from './components/Auth';
 import accountLabels from './i18n/accounts.json';
 import { localizeScenario } from './i18n/content';
@@ -146,6 +147,32 @@ export const App: React.FC = () => {
           setLang={setLang}
         />
         <main className="flex-1">
+          {pathname !== '/' && (
+            <nav
+              id="breadcrumbs"
+              aria-label={designLabels[lang].breadcrumbs}
+              className="max-w-6xl mx-auto px-4 sm:px-6 pt-4 flex flex-wrap items-center gap-2 text-xs text-slate-400"
+            >
+              <button
+                className="hover:text-emerald-300"
+                onClick={() => navigate('/')}
+              >
+                {designLabels[lang].catalog}
+              </button>
+              <span aria-hidden="true">/</span>
+              <span aria-current="page">
+                {currentView === 'solo'
+                  ? `${designLabels[lang].scenario} ${scenarioId}`
+                  : currentView === 'auth'
+                    ? designLabels[lang].account
+                    : currentView === 'builder'
+                      ? designLabels[lang].builder
+                      : currentView === 'norms'
+                        ? designLabels[lang].norms
+                        : designLabels[lang].classroom}
+              </span>
+            </nav>
+          )}
           {currentView === 'auth' && (
             <Auth lang={lang} onExit={() => navigate('/')} />
           )}
@@ -197,7 +224,8 @@ export const App: React.FC = () => {
           )}
 
           {currentView === 'student' && (
-            <ClassroomStudent key={pathname}
+            <ClassroomStudent
+              key={pathname}
               initialCode={studentRoomCode}
               onExit={() => setCurrentView('catalog')}
               lang={lang}
