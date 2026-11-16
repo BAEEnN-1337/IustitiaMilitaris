@@ -1,3 +1,5 @@
+import { localizeScenario } from '../i18n/content';
+import { ui } from '../i18n/ui';
 import React, { useState } from 'react';
 import { 
   Wrench, CheckCircle2, AlertTriangle, Download, Upload, 
@@ -6,7 +8,7 @@ import {
 } from 'lucide-react';
 import { Scenario, Node, Variant, Role, ValueConflict, ScenarioNorm } from '../types';
 import { normyData } from '../data/scenarios';
-import { validateScenario, ValidationError } from '../utils/validator';
+import { validateScenario } from '../utils/validator';
 import { DecisionTreeSvg } from './DecisionTreeSvg';
 import { generateScorm12Zip } from '../utils/scormExport';
 import { Language, translations } from '../i18n';
@@ -28,55 +30,55 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
   // Initial template scenario
   const [scenario, setScenario] = useState<Scenario>({
     id: "S09",
-    nazva: "Нова етична дилема",
+    nazva: ui(lang, 'm53'),
     versiia: "1.0",
     data_stvorennia: "2026-11-16",
     tema: "konflikt-interesiv",
-    audytoriia: ["офіцери підрозділів", "слухачі курсів"],
+    audytoriia: [ui(lang, 'm54'), ui(lang, 'm55')],
     tryvalist_khv: 20,
-    kontekst: "Військова частина в районі виконання завдань. Офіцер постає перед складним етичним вибором.",
+    kontekst: ui(lang, 'm56'),
     diiovi_osoby: [
-      { id: "R1", rol: "Командир роти", opys: "Офіцер, який ухвалює рішення. Його грає користувач.", hravets: true },
-      { id: "R2", rol: "Підлеглий старшина", opys: "Військовослужбовець, причетний до ситуації.", hravets: false }
+      { id: "R1", rol: ui(lang, 'm57'), opys: ui(lang, 'm58'), hravets: true },
+      { id: "R2", rol: ui(lang, 'm59'), opys: ui(lang, 'm60'), hravets: false }
     ],
-    sytuatsiia: "Опишіть ситуацію гострого морального вибору, де жоден з варіантів не є простим і кожен має власну ціну.",
+    sytuatsiia: ui(lang, 'm61'),
     tsinnosti_v_konflikti: [
-      { tsinnist_a: "законність", tsinnist_b: "лояльність підрозділу", poiasnennia: "Конфлікт між вимогами статуту і неформальними очікуваннями колег." }
+      { tsinnist_a: ui(lang, 'm62'), tsinnist_b: ui(lang, 'm63'), poiasnennia: ui(lang, 'm64') }
     ],
     pochatkovyi_vuzol: "V1",
     vuzly: [
       {
         id: "V1",
         tekst: "",
-        zapytannia: "Яке первинне рішення ви ухвалюєте?",
+        zapytannia: ui(lang, 'm65'),
         varianty: [
           {
             id: "A",
-            tekst: "Діяти строго за процедурою та зареєструвати офіційний рапорт.",
-            naslidky: { odrazu: "Процедура розпочата законно.", vidkladeni: "Виникає напруга в колективі." },
+            tekst: ui(lang, 'm66'),
+            naslidky: { odrazu: ui(lang, 'm67'), vidkladeni: ui(lang, 'm68') },
             baly: { dobrochesnist: 2, efektyvnist: 0, dovira: 1 },
-            chomu_taki_baly: "Дотримання вимог закону.",
-            zvorotnyi_zviazok: "Законне рішення, хоч і вимагає стійкості.",
+            chomu_taki_baly: ui(lang, 'm69'),
+            zvorotnyi_zviazok: ui(lang, 'm70'),
             normy: ["ZPK-28"],
             nastupnyi_vuzol: "V2"
           },
           {
             id: "B",
-            tekst: "Врегулювати питання усно без оформлення документів.",
-            naslidky: { odrazu: "Конфлікт приховано.", vidkladeni: "Проблема повторюється у більшому масштабі." },
+            tekst: ui(lang, 'm71'),
+            naslidky: { odrazu: ui(lang, 'm72'), vidkladeni: ui(lang, 'm73') },
             baly: { dobrochesnist: -1, efektyvnist: 1, dovira: -1 },
-            chomu_taki_baly: "Кулуарне вирішення.",
-            zvorotnyi_zviazok: "Компроміс створює ризик рецидиву.",
+            chomu_taki_baly: ui(lang, 'm74'),
+            zvorotnyi_zviazok: ui(lang, 'm75'),
             normy: ["ZPK-42"],
             nastupnyi_vuzol: null
           },
           {
             id: "C",
-            tekst: "Звернутися за порадою до уповноваженої особи з питань запобігання корупції.",
-            naslidky: { odrazu: "Отримано фахову консультацію.", vidkladeni: "Рішення ухвалено з урахуванням юридичних ризиків." },
+            tekst: ui(lang, 'm76'),
+            naslidky: { odrazu: ui(lang, 'm77'), vidkladeni: ui(lang, 'm78') },
             baly: { dobrochesnist: 2, efektyvnist: 1, dovira: 2 },
-            chomu_taki_baly: "Фахова консультація.",
-            zvorotnyi_zviazok: "Використання інституційних каналів консультування.",
+            chomu_taki_baly: ui(lang, 'm79'),
+            zvorotnyi_zviazok: ui(lang, 'm80'),
             normy: ["ZPK-28", "ZPK-44"],
             nastupnyi_vuzol: null
           }
@@ -84,26 +86,26 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
       },
       {
         id: "V2",
-        tekst: "Після реєстрації рапорту керівництво вимагає пояснень.",
-        zapytannia: "Як ви обґрунтовуєте свою позицію?",
+        tekst: ui(lang, 'm81'),
+        zapytannia: ui(lang, 'm82'),
         varianty: [
           {
             id: "E1",
-            tekst: "Надати повні нормативні посилання на статті закону та статуту.",
-            naslidky: { odrazu: "Позиція зафіксована.", vidkladeni: "Питання передано на розгляд комісії." },
+            tekst: ui(lang, 'm83'),
+            naslidky: { odrazu: ui(lang, 'm84'), vidkladeni: ui(lang, 'm85') },
             baly: { dobrochesnist: 2, efektyvnist: 1, dovira: 1 },
-            chomu_taki_baly: "Тверде дотримання закону.",
-            zvorotnyi_zviazok: "Професійне правове обґрунтування.",
+            chomu_taki_baly: ui(lang, 'm86'),
+            zvorotnyi_zviazok: ui(lang, 'm87'),
             normy: ["ZPK-28"],
             nastupnyi_vuzol: null
           },
           {
             id: "E2",
-            tekst: "Спробувати відкликати рапорт під тиском зауважень.",
-            naslidky: { odrazu: "Тиск слабшає.", vidkladeni: "Втрата репутації принципового офіцера." },
+            tekst: ui(lang, 'm88'),
+            naslidky: { odrazu: ui(lang, 'm89'), vidkladeni: ui(lang, 'm90') },
             baly: { dobrochesnist: -2, efektyvnist: 0, dovira: -2 },
-            chomu_taki_baly: "Поступка перед тиском.",
-            zvorotnyi_zviazok: "Невпевненість руйнує авторитет.",
+            chomu_taki_baly: ui(lang, 'm91'),
+            zvorotnyi_zviazok: ui(lang, 'm92'),
             normy: ["ZPK-41"],
             nastupnyi_vuzol: null
           }
@@ -111,38 +113,39 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
       }
     ],
     normy: [
-      { id: "ZPK-28", yak_zastosovuietsia: "Запобігання та врегулювання конфлікту інтересів." },
-      { id: "ZPK-41", yak_zastosovuietsia: "Заборона виконання незаконних наказів." },
-      { id: "ZPK-42", yak_zastosovuietsia: "Вимоги щодо законності дій посадових осіб." },
-      { id: "ZPK-44", yak_zastosovuietsia: "Звернення до уповноважених підрозділів." }
+      { id: "ZPK-28", yak_zastosovuietsia: ui(lang, 'm93') },
+      { id: "ZPK-41", yak_zastosovuietsia: ui(lang, 'm94') },
+      { id: "ZPK-42", yak_zastosovuietsia: ui(lang, 'm95') },
+      { id: "ZPK-44", yak_zastosovuietsia: ui(lang, 'm96') }
     ],
-    zastosovnist: "Норми поширюються на військових посадових осіб підрозділу згідно з пп. «г» п. 1 ч. 1 ст. 3 Закону «Про запобігання корупції».",
+    zastosovnist: ui(lang, 'm97'),
     porady: [
-      "Завжди фіксуйте процесуальні дії у письмовій формі.",
-      "Звертайтеся за консультацією до антикорупційного уповноваженого у разі сумнівів."
+      ui(lang, 'm98'),
+      ui(lang, 'm99')
     ],
     pytannia_dlia_obhovorennia: [
-      "Як балансувати між військовою дисципліною та повідомленням про порушення?",
-      "Які фактори найбільше впливають на страх офіцера перед відкритим конфліктом?"
+      ui(lang, 'm100'),
+      ui(lang, 'm101')
     ],
-    dzherelo_vypadku: { typ: "вигаданий", opys: "Розроблено в конструкторі сценаріїв для навчальних цілей." },
-    perevirka_zmistu: { fakhivets_dzpk: "не проведено", khto: null, data: null, prymitka: "Чернетка створена в конструкторі. Потребує верифікації." },
-    shi: { vykorystano: false, instrument: null, shcho_zrobleno: "Створено користувачем вручну.", perevirka_liudynoiu: "Авторський текст." }
+    dzherelo_vypadku: { typ: "вигаданий", opys: ui(lang, 'm102') },
+    perevirka_zmistu: { fakhivets_dzpk: "не проведено", khto: null, data: null, prymitka: ui(lang, 'm103') },
+    shi: { vykorystano: false, instrument: null, shcho_zrobleno: ui(lang, 'm104'), perevirka_liudynoiu: ui(lang, 'm105') }
   });
 
   const [selectedNodeIdx, setSelectedNodeIdx] = useState<number>(0);
-  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
+  const [validationRequested, setValidationRequested] = useState(false);
+  const validationErrors = validationRequested ? validateScenario(scenario, normyData, lang) : [];
 
   // Run validation
   const runValidation = () => {
-    const errors = validateScenario(scenario, normyData);
-    setValidationErrors(errors);
+    const errors = validateScenario(scenario, normyData, lang);
+    setValidationRequested(true);
     return errors.length === 0;
   };
 
   const handleDownloadJson = () => {
     const isValid = runValidation();
-    if (!isValid && !confirm('Сценарій містить помилки валідації. Завантажити все одно?')) {
+    if (!isValid && !confirm(ui(lang, 'm106'))) {
       return;
     }
     const jsonStr = JSON.stringify(scenario, null, 2);
@@ -166,11 +169,11 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
       try {
         const parsed = JSON.parse(event.target?.result as string);
         setScenario(parsed);
-        const errors = validateScenario(parsed, normyData);
-        setValidationErrors(errors);
-        alert(`Сценарій "${parsed.nazva || file.name}" успішно імпортовано!`);
+        const errors = validateScenario(parsed, normyData, lang);
+        setValidationRequested(true);
+        alert(ui(lang, 'm107', parsed.nazva || file.name));
       } catch (err) {
-        alert('Помилка читання JSON-файлу: некоректний синтаксис.');
+        alert(ui(lang, 'm108'));
       }
     };
     reader.readAsText(file);
@@ -179,20 +182,20 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
   const handleTestInSimulator = () => {
     const isValid = runValidation();
     if (!isValid) {
-      alert(`Сценарій має ${validationErrors.length} помилок валідації. Будь ласка, виправте їх перед тестуванням.`);
+      alert(ui(lang, 'm109', validationErrors.length));
       return;
     }
-    onTestScenario(scenario);
+    onTestScenario(localizeScenario(scenario, lang));
   };
 
   const handleExportScorm = async () => {
     const isValid = runValidation();
     if (!isValid) {
-      alert('Будь ласка, виправте помилки валідації перед експортом у SCORM.');
+      alert(ui(lang, 'm110'));
       return;
     }
     try {
-      const zipBlob = await generateScorm12Zip(scenario, normyData);
+      const zipBlob = await generateScorm12Zip(scenario, normyData, lang);
       const url = URL.createObjectURL(zipBlob);
       const a = document.createElement('a');
       a.href = url;
@@ -203,7 +206,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
       URL.revokeObjectURL(url);
     } catch (err) {
       console.error('SCORM export error', err);
-      alert('Помилка генерації SCORM');
+      alert(ui(lang, 'm111'));
     }
   };
 
@@ -212,26 +215,26 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
     const newId = `V${nextIdx}`;
     const newNode: Node = {
       id: newId,
-      tekst: "Опис наступного етапу ситуації.",
-      zapytannia: "Що ви робите на цьому кроці?",
+      tekst: ui(lang, 'm112'),
+      zapytannia: ui(lang, 'm113'),
       varianty: [
         {
           id: `X${nextIdx}1`,
-          tekst: "Варіант вирішення 1",
-          naslidky: { odrazu: "Прямий наслідок.", vidkladeni: "Відкладений наслідок." },
+          tekst: ui(lang, 'm114'),
+          naslidky: { odrazu: ui(lang, 'm115'), vidkladeni: ui(lang, 'm116') },
           baly: { dobrochesnist: 1, efektyvnist: 1, dovira: 1 },
-          chomu_taki_baly: "Пояснення балів.",
-          zvorotnyi_zviazok: "Зворотний звʼязок.",
+          chomu_taki_baly: ui(lang, 'm117'),
+          zvorotnyi_zviazok: ui(lang, 'm118'),
           normy: [],
           nastupnyi_vuzol: null
         },
         {
           id: `X${nextIdx}2`,
-          tekst: "Варіант вирішення 2",
-          naslidky: { odrazu: "Прямий наслідок.", vidkladeni: "Відкладений наслідок." },
+          tekst: ui(lang, 'm119'),
+          naslidky: { odrazu: ui(lang, 'm120'), vidkladeni: ui(lang, 'm121') },
           baly: { dobrochesnist: -1, efektyvnist: 0, dovira: -1 },
-          chomu_taki_baly: "Пояснення балів.",
-          zvorotnyi_zviazok: "Зворотний звʼязок.",
+          chomu_taki_baly: ui(lang, 'm122'),
+          zvorotnyi_zviazok: ui(lang, 'm123'),
           normy: [],
           nastupnyi_vuzol: null
         }
@@ -243,7 +246,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
 
   const removeNode = (idx: number) => {
     if (scenario.vuzly.length <= 1) {
-      alert('Сценарій повинен містити хоча б один вузол.');
+      alert(ui(lang, 'm124'));
       return;
     }
     setScenario(prev => ({
@@ -258,7 +261,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
       {/* Top Header & Action Toolbar */}
       <div className="p-6 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <div className="p-2 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30">
               <Wrench className="w-5 h-5" />
             </div>
@@ -316,10 +319,9 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
       {/* Validation Status Banner */}
       {validationErrors.length > 0 ? (
         <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs space-y-1">
-          <div className="font-bold flex items-center gap-2 text-rose-400">
+          <div className="font-bold flex flex-wrap items-center gap-2 text-rose-400">
             <AlertTriangle className="w-4 h-4" />
-            Виявлено {validationErrors.length} невідповідностей вимогам schema.json / zibraty.py:
-          </div>
+            {ui(lang, 'm125')}{' '}{validationErrors.length} {ui(lang, 'm126')}{' '}</div>
           <ul className="list-disc pl-5 space-y-0.5">
             {validationErrors.map((err, idx) => (
               <li key={idx}><strong>{err.field}:</strong> {err.message}</li>
@@ -327,9 +329,9 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
           </ul>
         </div>
       ) : (
-        <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2">
+        <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex flex-wrap items-center gap-2">
           <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-          <span>Сценарій повністю валідний: відповідає schema.json, усі вузли досяжні, ID унікальні.</span>
+          <span>{ui(lang, 'm127')}{' '}</span>
         </div>
       )}
 
@@ -348,7 +350,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-4 py-2.5 rounded-t-lg transition-colors flex items-center gap-2 border-t border-x ${
+              className={`px-4 py-2.5 rounded-t-lg transition-colors flex flex-wrap items-center gap-2 border-t border-x ${
                 isActive
                   ? 'bg-navy-900 border-navy-700 text-emerald-400 font-bold'
                   : 'bg-navy-950 border-transparent text-slate-400 hover:text-white'
@@ -377,7 +379,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-slate-300 font-bold mb-1">Версія:</label>
+                <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm128')}{' '}</label>
                 <input
                   type="text"
                   value={scenario.versiia}
@@ -386,7 +388,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-slate-300 font-bold mb-1">Дата створення (РРРР-ММ-ДД):</label>
+                <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm129')}{' '}</label>
                 <input
                   type="text"
                   value={scenario.data_stvorennia}
@@ -397,7 +399,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
             </div>
 
             <div>
-              <label className="block text-slate-300 font-bold mb-1">Назва сценарію:</label>
+              <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm130')}{' '}</label>
               <input
                 type="text"
                 value={scenario.nazva}
@@ -408,27 +410,27 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-slate-300 font-bold mb-1">Тема (enum):</label>
+                <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm131')}{' '}</label>
                 <select
                   value={scenario.tema}
                   onChange={e => setScenario({ ...scenario, tema: e.target.value })}
                   className="w-full bg-navy-950 border border-navy-700 rounded-lg p-2.5 text-white"
                 >
-                  <option value="podarunok">Подарунок (podarunok)</option>
-                  <option value="konflikt-interesiv">Конфлікт інтересів (konflikt-interesiv)</option>
-                  <option value="vykryvach">Захист викривача (vykryvach)</option>
-                  <option value="akademichna-dobrochesnist">Академічна доброчесність (akademichna-dobrochesnist)</option>
-                  <option value="sluzhbove-maino">Службове майно (sluzhbove-maino)</option>
-                  <option value="kadrovi-rishennia">Кадрові рішення (kadrovi-rishennia)</option>
-                  <option value="neformalnyi-tysk">Неформальний тиск (neformalnyi-tysk)</option>
-                  <option value="rozpodil-resursiv">Розподіл ресурсів (rozpodil-resursiv)</option>
-                  <option value="pravdyvist-zvitiv">Правдивість звітів (pravdyvist-zvitiv)</option>
-                  <option value="inshe">Інше (inshe)</option>
+                  <option value="podarunok">{ui(lang, 'm132')}{' '}</option>
+                  <option value="konflikt-interesiv">{ui(lang, 'm133')}{' '}</option>
+                  <option value="vykryvach">{ui(lang, 'm134')}{' '}</option>
+                  <option value="akademichna-dobrochesnist">{ui(lang, 'm135')}{' '}</option>
+                  <option value="sluzhbove-maino">{ui(lang, 'm136')}{' '}</option>
+                  <option value="kadrovi-rishennia">{ui(lang, 'm137')}{' '}</option>
+                  <option value="neformalnyi-tysk">{ui(lang, 'm138')}{' '}</option>
+                  <option value="rozpodil-resursiv">{ui(lang, 'm139')}{' '}</option>
+                  <option value="pravdyvist-zvitiv">{ui(lang, 'm140')}{' '}</option>
+                  <option value="inshe">{ui(lang, 'm141')}{' '}</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-slate-300 font-bold mb-1">Орієнтовна тривалість (хвилин):</label>
+                <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm142')}{' '}</label>
                 <input
                   type="number"
                   min={1}
@@ -441,7 +443,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
             </div>
 
             <div>
-              <label className="block text-slate-300 font-bold mb-1">Контекст (щонайменше 20 символів):</label>
+              <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm143')}{' '}</label>
               <textarea
                 rows={3}
                 value={scenario.kontekst}
@@ -451,7 +453,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
             </div>
 
             <div>
-              <label className="block text-slate-300 font-bold mb-1">Опис ситуації (щонайменше 50 символів):</label>
+              <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm144')}{' '}</label>
               <textarea
                 rows={4}
                 value={scenario.sytuatsiia}
@@ -461,7 +463,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
             </div>
 
             <div>
-              <label className="block text-slate-300 font-bold mb-1">Застосовність норм (хто субʼєкт, хто ні):</label>
+              <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm145')}{' '}</label>
               <textarea
                 rows={3}
                 value={scenario.zastosovnist}
@@ -475,16 +477,15 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
         {/* TAB 2: ROLES */}
         {activeTab === 'roles' && (
           <div className="space-y-4 text-xs">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="text-slate-400">
-                Дійові особи (щонайменше 2, рівно одна з позначкою "Гравець"):
-              </span>
+                {ui(lang, 'm146')}{' '}</span>
               <button
                 onClick={() => {
                   const newR: Role = {
                     id: `R${scenario.diiovi_osoby.length + 1}`,
-                    rol: "Нова роль",
-                    opys: "Опис ролі",
+                    rol: ui(lang, 'm147'),
+                    opys: ui(lang, 'm148'),
                     hravets: false
                   };
                   setScenario({ ...scenario, diiovi_osoby: [...scenario.diiovi_osoby, newR] });
@@ -492,14 +493,13 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                 className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold flex items-center gap-1.5"
               >
                 <Plus className="w-3.5 h-3.5" />
-                Додати роль
-              </button>
+                {ui(lang, 'm149')}{' '}</button>
             </div>
 
             <div className="space-y-3">
               {scenario.diiovi_osoby.map((role, rIdx) => (
                 <div key={role.id} className="p-4 rounded-xl bg-navy-950 border border-navy-800 space-y-3">
-                  <div className="flex items-center justify-between gap-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2 gap-3">
                     <div className="flex items-center gap-3">
                       <input
                         type="text"
@@ -514,7 +514,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                       <input
                         type="text"
                         value={role.rol}
-                        placeholder="Назва посади без імені"
+                        placeholder={ui(lang, 'm150')}
                         onChange={e => {
                           const updated = [...scenario.diiovi_osoby];
                           updated[rIdx].rol = e.target.value;
@@ -525,7 +525,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <label className="flex items-center gap-2 cursor-pointer text-slate-300">
+                      <label className="flex flex-wrap items-center gap-2 cursor-pointer text-slate-300">
                         <input
                           type="checkbox"
                           checked={!!role.hravets}
@@ -539,7 +539,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                           }}
                           className="rounded text-emerald-500 focus:ring-0"
                         />
-                        <span>Роль користувача (hravets)</span>
+                        <span>{ui(lang, 'm151')}{' '}</span>
                       </label>
 
                       <button
@@ -559,7 +559,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                   <textarea
                     rows={2}
                     value={role.opys}
-                    placeholder="Опис посади та функцій"
+                    placeholder={ui(lang, 'm152')}
                     onChange={e => {
                       const updated = [...scenario.diiovi_osoby];
                       updated[rIdx].opys = e.target.value;
@@ -577,8 +577,8 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
         {activeTab === 'nodes' && (
           <div className="space-y-6 text-xs">
             {/* Node Selector Pills */}
-            <div className="flex items-center justify-between pb-3 border-b border-navy-800">
-              <div className="flex items-center gap-2 overflow-x-auto pb-1">
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-navy-800">
+              <div className="flex flex-wrap items-center gap-2 overflow-x-auto pb-1">
                 {scenario.vuzly.map((node, nIdx) => (
                   <button
                     key={node.id}
@@ -599,18 +599,16 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                 className="px-3 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 text-emerald-300 font-semibold flex items-center gap-1.5 shrink-0"
               >
                 <Plus className="w-3.5 h-3.5" />
-                Додати вузол
-              </button>
+                {ui(lang, 'm153')}{' '}</button>
             </div>
 
             {/* Selected Node Editor */}
             {scenario.vuzly[selectedNodeIdx] && (
               <div className="p-5 rounded-xl bg-navy-950 border border-navy-800 space-y-4">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-3">
                     <span className="font-mono text-sm font-bold text-emerald-400">
-                      Редагування вузла:
-                    </span>
+                      {ui(lang, 'm154')}{' '}</span>
                     <input
                       type="text"
                       value={scenario.vuzly[selectedNodeIdx].id}
@@ -628,14 +626,12 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                     className="p-1 rounded text-slate-500 hover:text-rose-400 flex items-center gap-1"
                   >
                     <Trash2 className="w-4 h-4" />
-                    Видалити вузол
-                  </button>
+                    {ui(lang, 'm155')}{' '}</button>
                 </div>
 
                 <div>
                   <label className="block text-slate-300 font-bold mb-1">
-                    Текст кроку (для V1 може бути порожнім):
-                  </label>
+                    {ui(lang, 'm156')}{' '}</label>
                   <textarea
                     rows={2}
                     value={scenario.vuzly[selectedNodeIdx].tekst}
@@ -650,8 +646,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
 
                 <div>
                   <label className="block text-slate-300 font-bold mb-1">
-                    Питання вибору (zapytannia):
-                  </label>
+                    {ui(lang, 'm157')}{' '}</label>
                   <input
                     type="text"
                     value={scenario.vuzly[selectedNodeIdx].zapytannia}
@@ -667,13 +662,12 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                 {/* Variants List */}
                 <div className="space-y-4 pt-3 border-t border-navy-800">
                   <span className="font-bold text-slate-300 uppercase tracking-wider block">
-                    Варіанти дій (2–4 варіанти):
-                  </span>
+                    {ui(lang, 'm158')}{' '}</span>
 
                   {scenario.vuzly[selectedNodeIdx].varianty.map((v, vIdx) => (
                     <div key={v.id} className="p-4 rounded-xl bg-navy-900 border border-navy-750 space-y-3">
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center justify-between gap-2 gap-3">
+                        <div className="flex flex-wrap items-center gap-2">
                           <input
                             type="text"
                             value={v.id}
@@ -685,11 +679,11 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                             }}
                             className="w-16 font-mono font-bold bg-navy-950 border border-navy-700 rounded p-1.5 text-center text-emerald-400"
                           />
-                          <span className="text-slate-400">Наступний крок:</span>
+                          <span className="text-slate-400">{ui(lang, 'm159')}{' '}</span>
                           <input
                             type="text"
                             value={v.nastupnyi_vuzol || ''}
-                            placeholder="V2 (або порожньо)"
+                            placeholder={ui(lang, 'm160')}
                             onChange={e => {
                               const updated = [...scenario.vuzly];
                               updated[selectedNodeIdx].varianty[vIdx].nastupnyi_vuzol = e.target.value.trim() || null;
@@ -700,8 +694,8 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                         </div>
 
                         {/* Scores -2..+2 */}
-                        <div className="flex items-center gap-2 text-xs">
-                          <label className="text-slate-400">Д:</label>
+                        <div className="flex flex-wrap items-center gap-2 text-xs">
+                          <label className="text-slate-400">{ui(lang, 'm161')}{' '}</label>
                           <input
                             type="number"
                             min={-2}
@@ -714,7 +708,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                             }}
                             className="w-12 bg-navy-950 border border-navy-700 rounded p-1 text-center font-bold text-emerald-400"
                           />
-                          <label className="text-slate-400">Е:</label>
+                          <label className="text-slate-400">{ui(lang, 'm162')}{' '}</label>
                           <input
                             type="number"
                             min={-2}
@@ -727,7 +721,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                             }}
                             className="w-12 bg-navy-950 border border-navy-700 rounded p-1 text-center font-bold text-amber-400"
                           />
-                          <label className="text-slate-400">Дв:</label>
+                          <label className="text-slate-400">{ui(lang, 'm163')}{' '}</label>
                           <input
                             type="number"
                             min={-2}
@@ -746,7 +740,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                       <textarea
                         rows={2}
                         value={v.tekst}
-                        placeholder="Текст варіанта"
+                        placeholder={ui(lang, 'm164')}
                         onChange={e => {
                           const updated = [...scenario.vuzly];
                           updated[selectedNodeIdx].varianty[vIdx].tekst = e.target.value;
@@ -759,7 +753,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                         <input
                           type="text"
                           value={v.naslidky.odrazu}
-                          placeholder="Наслідки: Одразу"
+                          placeholder={ui(lang, 'm165')}
                           onChange={e => {
                             const updated = [...scenario.vuzly];
                             updated[selectedNodeIdx].varianty[vIdx].naslidky.odrazu = e.target.value;
@@ -770,7 +764,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                         <input
                           type="text"
                           value={v.naslidky.vidkladeni}
-                          placeholder="Наслідки: Згодом"
+                          placeholder={ui(lang, 'm166')}
                           onChange={e => {
                             const updated = [...scenario.vuzly];
                             updated[selectedNodeIdx].varianty[vIdx].naslidky.vidkladeni = e.target.value;
@@ -791,11 +785,10 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
         {activeTab === 'verification' && (
           <div className="space-y-4 text-xs">
             <h3 className="font-bold text-white uppercase tracking-wider">
-              Паспорт перевірки змісту (ДЗПК)
-            </h3>
+              {ui(lang, 'm167')}{' '}</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-slate-300 font-bold mb-1">Статус перевірки:</label>
+                <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm168')}{' '}</label>
                 <select
                   value={scenario.perevirka_zmistu.fakhivets_dzpk}
                   onChange={e => setScenario({
@@ -804,14 +797,14 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                   })}
                   className="w-full bg-navy-950 border border-navy-700 rounded p-2 text-white"
                 >
-                  <option value="не проведено">не проведено</option>
-                  <option value="проведено">проведено</option>
-                  <option value="проведено із зауваженнями">проведено із зауваженнями</option>
+                  <option value="не проведено">{ui(lang, 'm169')}{' '}</option>
+                  <option value="проведено">{ui(lang, 'm170')}{' '}</option>
+                  <option value="проведено із зауваженнями">{ui(lang, 'm171')}{' '}</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-slate-300 font-bold mb-1">Хто перевірив (посада без імені):</label>
+                <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm172')}{' '}</label>
                 <input
                   type="text"
                   value={scenario.perevirka_zmistu.khto || ''}
@@ -819,14 +812,14 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                     ...scenario,
                     perevirka_zmistu: { ...scenario.perevirka_zmistu, khto: e.target.value || null }
                   })}
-                  placeholder="Фахівець ДЗПК"
+                  placeholder={ui(lang, 'm173')}
                   className="w-full bg-navy-950 border border-navy-700 rounded p-2 text-white"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-slate-300 font-bold mb-1">Примітки перевірки змісту:</label>
+              <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm174')}{' '}</label>
               <textarea
                 rows={2}
                 value={scenario.perevirka_zmistu.prymitka}
@@ -839,10 +832,9 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
             </div>
 
             <h3 className="font-bold text-white uppercase tracking-wider pt-4 border-t border-navy-800">
-              Політика використання ШІ
-            </h3>
+              {ui(lang, 'm175')}{' '}</h3>
             <div>
-              <label className="block text-slate-300 font-bold mb-1">Інструмент ШІ:</label>
+              <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm176')}{' '}</label>
               <input
                 type="text"
                 value={scenario.shi.instrument || ''}
@@ -856,7 +848,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
             </div>
 
             <div>
-              <label className="block text-slate-300 font-bold mb-1">Що зроблено за допомогою ШІ:</label>
+              <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm177')}{' '}</label>
               <textarea
                 rows={2}
                 value={scenario.shi.shcho_zrobleno}
@@ -869,7 +861,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
             </div>
 
             <div>
-              <label className="block text-slate-300 font-bold mb-1">Перевірка людиною:</label>
+              <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm178')}{' '}</label>
               <textarea
                 rows={2}
                 value={scenario.shi.perevirka_liudynoiu}
@@ -886,9 +878,9 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
         {/* TAB 5: VISUAL GRAPH */}
         {activeTab === 'graph' && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between text-xs text-slate-400">
-              <span>Жива візуалізація дерева рішень (недосяжні вузли підсвічуються пунктиром та червоним):</span>
-              <span className="font-mono">{scenario.vuzly.length} вузлів</span>
+            <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
+              <span>{ui(lang, 'm179')}{' '}</span>
+              <span className="font-mono">{scenario.vuzly.length} {ui(lang, 'm180')}{' '}</span>
             </div>
             <DecisionTreeSvg scenario={scenario} />
           </div>

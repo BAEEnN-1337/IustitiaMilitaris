@@ -10,7 +10,7 @@
     "server": "node server/index.js",
     "start": "node server/index.js",
     "validate": "python3 zibraty.py",
-    "test": "node tests/run_tests.js"
+    "test": "node tests/run_tests.js && node tests/localization_tests.js"
   },
   "dependencies": {
     "clsx": "^2.1.1",

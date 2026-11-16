@@ -1,3 +1,4 @@
+import { ui } from '../i18n/ui';
 import React from 'react';
 import { Shield, BookOpen, Users, Compass, Wrench, Globe, Wifi } from 'lucide-react';
 import { Language, translations } from '../i18n';
@@ -15,21 +16,20 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, lan
   return (
     <header className="sticky top-0 z-40 bg-navy-900/90 backdrop-blur border-b border-navy-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex flex-wrap items-center justify-between gap-2 min-h-16 py-3">
           {/* Logo & Title */}
           <div 
-            className="flex items-center space-x-3 cursor-pointer group"
+            className="flex items-center gap-2 cursor-pointer group"
             onClick={() => setCurrentView('catalog')}
           >
-            <div className="w-10 h-10 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 shrink-0 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 group-hover:scale-105 transition-transform">
               <Shield className="w-6 h-6" />
             </div>
             <div>
-              <div className="font-bold text-base sm:text-lg text-white tracking-tight flex items-center gap-2">
+              <div className="font-bold text-base sm:text-lg text-white tracking-tight flex flex-wrap items-center gap-2">
                 {t.appTitle}
                 <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded bg-navy-800 text-emerald-400 border border-emerald-500/30">
-                  IV Хакатон
-                </span>
+                  {ui(lang, 'm32')}{' '}</span>
               </div>
               <div className="text-xs text-slate-400 hidden sm:block">
                 {t.appSubtitle}
@@ -38,10 +38,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, lan
           </div>
 
           {/* Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
+          <nav className="hidden xl:flex items-center space-x-1 lg:space-x-2">
             <button
               onClick={() => setCurrentView('catalog')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex flex-wrap items-center gap-2 ${
                 currentView === 'catalog'
                   ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
                   : 'text-slate-300 hover:text-white hover:bg-navy-800'
@@ -52,7 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, lan
             </button>
             <button
               onClick={() => setCurrentView('classroom')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex flex-wrap items-center gap-2 ${
                 currentView === 'classroom'
                   ? 'bg-indigo-500/15 text-indigo-300 border border-indigo-500/30'
                   : 'text-slate-300 hover:text-white hover:bg-navy-800'
@@ -63,7 +63,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, lan
             </button>
             <button
               onClick={() => setCurrentView('builder')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex flex-wrap items-center gap-2 ${
                 currentView === 'builder'
                   ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
                   : 'text-slate-300 hover:text-white hover:bg-navy-800'
@@ -74,7 +74,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, lan
             </button>
             <button
               onClick={() => setCurrentView('norms')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex flex-wrap items-center gap-2 ${
                 currentView === 'norms'
                   ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30'
                   : 'text-slate-300 hover:text-white hover:bg-navy-800'
@@ -86,10 +86,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, lan
           </nav>
 
           {/* Right Toolbar: Offline Badge & Language Switcher */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center gap-2 shrink-0">
             {/* 100% Offline Status Pill */}
             <div 
-              className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-navy-800 border border-emerald-500/20 text-xs text-slate-300"
+              className="hidden 2xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-navy-800 border border-emerald-500/20 text-xs text-slate-300"
               title={t.nav.offlineDesc}
             >
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -107,8 +107,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, lan
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                УКР
-              </button>
+                {ui(lang, 'm33')}{' '}</button>
               <button
                 onClick={() => setLang('en')}
                 className={`px-2.5 py-1 rounded-md transition-colors ${
@@ -125,7 +124,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, lan
       </div>
 
       {/* Mobile Submenu Navigation */}
-      <div className="md:hidden flex border-t border-navy-800 bg-navy-950 px-2 py-1 justify-around text-xs">
+      <div className="xl:hidden flex border-t border-navy-800 bg-navy-950 px-2 py-1 justify-around text-xs gap-1">
         <button
           onClick={() => setCurrentView('catalog')}
           className={`py-1.5 px-2 rounded font-medium flex flex-col items-center ${

@@ -1,3 +1,4 @@
+import { ui } from '../i18n/ui';
 import React from 'react';
 import { ShieldCheck, Zap, HeartHandshake, Info } from 'lucide-react';
 import { Scores } from '../types';
@@ -43,20 +44,19 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
 
   return (
     <div className="space-y-3 p-4 rounded-xl bg-navy-900 border border-navy-700">
-      <div className="flex items-center justify-between text-xs text-slate-400 pb-2 border-b border-navy-800">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400 pb-2 border-b border-navy-800">
         <span className="font-semibold uppercase tracking-wider text-slate-300">
           {t.feedback.balanceTitle}
         </span>
         <span className="text-[11px] text-amber-400/90 flex items-center gap-1">
           <Info className="w-3.5 h-3.5" />
-          Окремі осі • Без сумування
-        </span>
+          {ui(lang, 'm0')}{' '}</span>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {/* Dobrochesnist */}
         <div className="p-3 rounded-lg bg-navy-850 border border-navy-750 space-y-2">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
               {t.dimensions.dobrochesnist}
@@ -75,7 +75,7 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
 
         {/* Efektyvnist */}
         <div className="p-3 rounded-lg bg-navy-850 border border-navy-750 space-y-2">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
               <Zap className="w-4 h-4 text-amber-400" />
               {t.dimensions.efektyvnist}
@@ -94,7 +94,7 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
 
         {/* Dovira */}
         <div className="p-3 rounded-lg bg-navy-850 border border-navy-750 space-y-2">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
               <HeartHandshake className="w-4 h-4 text-cyan-400" />
               {t.dimensions.dovira}
@@ -114,7 +114,7 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
 
       {showExplanation && explanation && (
         <div className="mt-2 text-xs text-slate-300 bg-navy-950/70 p-2.5 rounded-lg border border-navy-800 leading-relaxed">
-          <strong className="text-slate-400">Пояснення балансу: </strong>
+          <strong className="text-slate-400">{ui(lang, 'm1')}{' '}</strong>
           {explanation}
         </div>
       )}

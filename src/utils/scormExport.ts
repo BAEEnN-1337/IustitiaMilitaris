@@ -1,8 +1,13 @@
+import { Language } from '../i18n';
+import { localizeNorms, localizeScenario } from '../i18n/content';
+import scormLabels from '../i18n/scorm.json';
 import JSZip from 'jszip';
 import { Scenario, NormsData } from '../types';
 
-export async function generateScorm12Zip(scenario: Scenario, normsData: NormsData): Promise<Blob> {
+export async function generateScorm12Zip(scenario: Scenario, normsData: NormsData, lang: Language = 'uk'): Promise<Blob> {
   const zip = new JSZip();
+  scenario = localizeScenario(scenario, lang);
+  normsData = localizeNorms(normsData, lang);
 
   // 1. imsmanifest.xml (SCORM 1.2 compliant)
   const manifestXml = `<?xml version="1.0" standalone="no" ?>
@@ -97,7 +102,7 @@ window.SCORM_COMPLETE = function() {
   const relevantNormIds = new Set(scenario.normy.map(n => n.id));
   const embeddedNorms = normsData.normy.filter(n => relevantNormIds.has(n.id));
 
-  const standaloneHtml = generateStandaloneHtmlPlayer(scenario, embeddedNorms);
+  const standaloneHtml = generateStandaloneHtmlPlayer(scenario, embeddedNorms, lang);
   zip.file('index.html', standaloneHtml);
 
   return await zip.generateAsync({ type: 'blob' });
@@ -116,16 +121,17 @@ function escapeXml(unsafe: string): string {
   });
 }
 
-function generateStandaloneHtmlPlayer(scenario: Scenario, embeddedNorms: any[]): string {
-  const scenarioJson = JSON.stringify(scenario);
-  const normsJson = JSON.stringify(embeddedNorms);
+function generateStandaloneHtmlPlayer(scenario: Scenario, embeddedNorms: any[], lang: Language): string {
+  const labels = scormLabels[lang];
+  const scenarioJson = JSON.stringify(scenario).replace(/</g, '\\u003c');
+  const normsJson = JSON.stringify(embeddedNorms).replace(/</g, '\\u003c');
 
   return `<!DOCTYPE html>
-<html lang="uk" class="dark">
+<html lang="${lang}" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${escapeXml(scenario.nazva)} - Симулятор етичних дилем</title>
+  <title>${escapeXml(scenario.nazva)} - ${escapeXml(labels.s0)}</title>
   <script src="scorm-api.js"></script>
   <style>
     :root {
@@ -144,7 +150,7 @@ function generateStandaloneHtmlPlayer(scenario: Scenario, embeddedNorms: any[]):
       background-color: var(--bg);
       color: var(--text);
       font-family: system-ui, -apple-system, sans-serif;
-      line-height: 1.6;
+      line-height: 1.6; overflow-wrap: anywhere;
       padding: 1rem;
       min-height: 100vh;
       display: flex;
@@ -224,7 +230,7 @@ function generateStandaloneHtmlPlayer(scenario: Scenario, embeddedNorms: any[]):
     }
     .scores-row {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 0.5rem;
       margin: 1rem 0;
       text-align: center;
@@ -276,18 +282,18 @@ function generateStandaloneHtmlPlayer(scenario: Scenario, embeddedNorms: any[]):
       var app = document.getElementById('app');
       if (state.step === 'briefing') {
         app.innerHTML = \`
-          <span class="badge">\${scenario.id} • \${scenario.tryvalist_khv} хв • \${scenario.tema}</span>
+          <span class="badge">\${scenario.id} • \${scenario.tryvalist_khv} ${escapeXml(labels.s1)} • \${scenario.tema}</span>
           <h1>\${scenario.nazva}</h1>
           <div class="context-box">
-            <strong>Контекст:</strong> \${scenario.kontekst}
+            <strong>${escapeXml(labels.s2)}</strong> \${scenario.kontekst}
           </div>
           <div style="margin-bottom: 1.25rem;">
-            <h3>Ситуація:</h3>
+            <h3>${escapeXml(labels.s3)}</h3>
             <p>\${scenario.sytuatsiia}</p>
           </div>
-          <button class="btn-primary" onclick="startScenario()">Почати вирішення дилеми</button>
+          <button class="btn-primary" onclick="startScenario()">${escapeXml(labels.s4)}</button>
           <div class="disclaimer">
-            Навчальний інструмент IV Хакатону. Zero PII: бали не сумуються і не оцінюють особистість.
+            ${escapeXml(labels.s5)}
           </div>
         \`;
       } else if (state.step === 'node') {
@@ -299,7 +305,7 @@ function generateStandaloneHtmlPlayer(scenario: Scenario, embeddedNorms: any[]):
         }).join('');
 
         app.innerHTML = \`
-          <span class="badge">Крок \${node.id}</span>
+          <span class="badge">${escapeXml(labels.s6)} \${node.id}</span>
           <h2>\${node.zapytannia}</h2>
           \${node.tekst ? '<p style="margin-bottom: 1rem; color: var(--text-muted);">' + node.tekst + '</p>' : ''}
           <div class="options-grid">
@@ -312,56 +318,56 @@ function generateStandaloneHtmlPlayer(scenario: Scenario, embeddedNorms: any[]):
         function scoreClass(num) { return num > 0 ? 'pos' : (num === 0 ? 'zero' : 'neg'); }
 
         app.innerHTML = \`
-          <span class="badge">Наслідки вибору \${v.id}</span>
-          <h2>Аналіз рішення</h2>
+          <span class="badge">${escapeXml(labels.s7)} \${v.id}</span>
+          <h2>${escapeXml(labels.s8)}</h2>
           <div class="scores-row">
             <div class="score-card">
-              <div style="font-size:0.8rem;color:var(--text-muted)">Доброчесність</div>
+              <div style="font-size:0.8rem;color:var(--text-muted)">${escapeXml(labels.s9)}</div>
               <div class="score-val \${scoreClass(v.baly.dobrochesnist)}">\${formatScore(v.baly.dobrochesnist)}</div>
             </div>
             <div class="score-card">
-              <div style="font-size:0.8rem;color:var(--text-muted)">Ефективність</div>
+              <div style="font-size:0.8rem;color:var(--text-muted)">${escapeXml(labels.s10)}</div>
               <div class="score-val \${scoreClass(v.baly.efektyvnist)}">\${formatScore(v.baly.efektyvnist)}</div>
             </div>
             <div class="score-card">
-              <div style="font-size:0.8rem;color:var(--text-muted)">Довіра</div>
+              <div style="font-size:0.8rem;color:var(--text-muted)">${escapeXml(labels.s11)}</div>
               <div class="score-val \${scoreClass(v.baly.dovira)}">\${formatScore(v.baly.dovira)}</div>
             </div>
           </div>
           <div class="feedback-box">
-            <p><strong>Одразу:</strong> \${v.naslidky.odrazu}</p>
-            <p style="margin-top: 0.5rem;"><strong>Згодом:</strong> \${v.naslidky.vidkladeni}</p>
+            <p><strong>${escapeXml(labels.s12)}</strong> \${v.naslidky.odrazu}</p>
+            <p style="margin-top: 0.5rem;"><strong>${escapeXml(labels.s13)}</strong> \${v.naslidky.vidkladeni}</p>
           </div>
-          <p style="margin: 1rem 0; font-size: 0.95rem;"><strong>Чому такі бали:</strong> \${v.chomu_taki_baly}</p>
+          <p style="margin: 1rem 0; font-size: 0.95rem;"><strong>${escapeXml(labels.s14)}</strong> \${v.chomu_taki_baly}</p>
           <div class="context-box">
-            <strong>Зворотний звʼязок:</strong> \${v.zvorotnyi_zviazok}
+            <strong>${escapeXml(labels.s15)}</strong> \${v.zvorotnyi_zviazok}
           </div>
-          <button class="btn-primary" onclick="nextStage()">\${v.nastupnyi_vuzol ? 'Перейти до наступного кроку' : 'Переглянути підсумки'}</button>
+          <button class="btn-primary" onclick="nextStage()">\${v.nastupnyi_vuzol ? ${JSON.stringify(labels.s16)} : ${JSON.stringify(labels.s17)}}</button>
         \`;
       } else if (state.step === 'reflection') {
         if (window.SCORM_COMPLETE) window.SCORM_COMPLETE();
         var stepsList = state.pathway.map(function(p, idx) {
-          return '<li>Етап ' + p.nodeId + ' → Варіант ' + p.variant.id + '</li>';
+          return '<li>${escapeXml(labels.s18)} ' + p.nodeId + ' → ${escapeXml(labels.s19)} ' + p.variant.id + '</li>';
         }).join('');
 
         app.innerHTML = \`
-          <span class="badge" style="background:rgba(16,185,129,0.2)">Сценарій завершено</span>
-          <h1>Підсумкова карта рішень</h1>
+          <span class="badge" style="background:rgba(16,185,129,0.2)">${escapeXml(labels.s20)}</span>
+          <h1>${escapeXml(labels.s21)}</h1>
           <div class="context-box" style="margin-top:1rem;">
-            <h3>Ваш пройдений шлях:</h3>
+            <h3>${escapeXml(labels.s22)}</h3>
             <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">\${stepsList}</ul>
           </div>
           <div style="margin: 1.5rem 0;">
-            <h3>Практичні поради:</h3>
+            <h3>${escapeXml(labels.s23)}</h3>
             <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
               \${scenario.porady.map(function(p) { return '<li>' + p + '</li>'; }).join('')}
             </ul>
           </div>
           <div class="feedback-box">
-            <strong>Факт проходження успішно передано до LMS (SCORM).</strong><br>
-            Згідно з правилами етики та конфіденційності, жодні ваші варіанти чи бали за доброчесність до журналу LMS не передавалися.
+            <strong>${escapeXml(labels.s24)}</strong><br>
+            ${escapeXml(labels.s25)}
           </div>
-          <button class="btn-primary" onclick="restart()">Пройти заново</button>
+          <button class="btn-primary" onclick="restart()">${escapeXml(labels.s26)}</button>
         \`;
       }
     }

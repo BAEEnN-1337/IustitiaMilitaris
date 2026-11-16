@@ -1,6 +1,8 @@
+import { localizeNorms } from '../i18n/content';
+import { ui } from '../i18n/ui';
 import React, { useState } from 'react';
 import { BookOpen, Search, ExternalLink, CheckCircle2, AlertTriangle, ShieldCheck, Tag } from 'lucide-react';
-import { normyData, allScenarios } from '../data/scenarios';
+import { normyData as originalNorms, allScenarios } from '../data/scenarios';
 import { NormEntry } from '../types';
 import { NormDetailModal } from './NormDetailModal';
 import { Language, translations } from '../i18n';
@@ -10,6 +12,7 @@ interface NormsLibraryProps {
 }
 
 export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
+  const normyData = localizeNorms(originalNorms, lang);
   const t = translations[lang];
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -43,7 +46,7 @@ export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
       {/* Header */}
       <div className="p-6 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <div className="p-2 rounded-lg bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
               <BookOpen className="w-5 h-5" />
             </div>
@@ -57,8 +60,7 @@ export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
         </div>
 
         <div className="text-xs font-mono text-cyan-300 px-3 py-1.5 rounded-lg bg-navy-800 border border-navy-700 shrink-0">
-          Стан: {normyData.data_stanu} • 36 норм
-        </div>
+          {ui(lang, 'm42')}{' '}{normyData.data_stanu} {ui(lang, 'm43')}{' '}</div>
       </div>
 
       {/* Filter and Search Bar */}
@@ -67,24 +69,24 @@ export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
           <input
             type="text"
-            placeholder="Пошук статті, закону, пункту..."
+            placeholder={ui(lang, 'm44')}
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             className="w-full bg-navy-950 border border-navy-700 rounded-lg pl-9 pr-4 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500"
           />
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto text-xs">
-          <span className="text-slate-400">Статус звірки:</span>
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto text-xs">
+          <span className="text-slate-400">{ui(lang, 'm45')}{' '}</span>
           <select
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value)}
             className="bg-navy-950 border border-navy-700 text-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:border-cyan-500 text-xs"
           >
-            <option value="all">Усі статуси</option>
-            <option value="zvireno">Звірено</option>
-            <option value="zvireno-rekomendatsiinyi">Звірено (рекомендаційний акт)</option>
-            <option value="ne-zvireno">Не звірено</option>
+            <option value="all">{ui(lang, 'm46')}{' '}</option>
+            <option value="zvireno">{ui(lang, 'm47')}{' '}</option>
+            <option value="zvireno-rekomendatsiinyi">{ui(lang, 'm48')}{' '}</option>
+            <option value="ne-zvireno">{ui(lang, 'm49')}{' '}</option>
           </select>
         </div>
       </div>
@@ -103,7 +105,7 @@ export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
               className="p-5 rounded-xl bg-navy-900 border border-navy-800 hover:border-cyan-500/40 hover:bg-navy-850 transition-all cursor-pointer flex flex-col justify-between space-y-3"
             >
               <div className="space-y-2">
-                <div className="flex items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center justify-between gap-2 gap-2">
                   <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
                     {norm.id}
                   </span>
@@ -115,22 +117,22 @@ export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
                       : 'bg-amber-500/10 text-amber-300 border-amber-500/30'
                   }`}>
                     {isVerified ? <CheckCircle2 className="w-3 h-3" /> : <AlertTriangle className="w-3 h-3" />}
-                    {isVerified ? 'Звірено' : isRecommended ? 'Рекомендаційний' : 'Не звірено'}
+                    {isVerified ? ui(lang, 'm50') : isRecommended ? ui(lang, 'm51') : ui(lang, 'm52')}
                   </span>
                 </div>
 
-                <h3 className="font-bold text-sm text-white line-clamp-1">
+                <h3 className="font-bold text-sm text-white ">
                   {norm.akt}
                 </h3>
                 <div className="text-xs text-slate-400 font-medium">
                   {norm.punkt}
                 </div>
-                <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+                <p className="text-xs text-slate-300  leading-relaxed">
                   {norm.korotko}
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-navy-800 flex items-center justify-between text-[11px] text-slate-400">
+              <div className="pt-2 border-t border-navy-800 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400">
                 <span>{norm.redaktsiia}</span>
                 {usedInScenarios.length > 0 && (
                   <span className="flex items-center gap-1 text-emerald-400 font-mono">

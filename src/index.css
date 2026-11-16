@@ -16,3 +16,18 @@
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out forwards;
 }
+
+/* Let text determine card height, including translated and user-authored content. */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; overflow-wrap: anywhere; }
+  #root, main { min-width: 0; width: 100%; }
+  button, input, textarea, select { max-width: 100%; min-width: 0; }
+  button { white-space: normal; }
+  input, textarea, select { font: inherit; }
+  svg { flex-shrink: 0; }
+}
+@layer utilities {
+  .flex > *, .inline-flex > *, .grid > * { min-width: 0; }
+  .flex-wrap > *, .inline-flex { overflow-wrap: anywhere; }
+}
