@@ -1,6 +1,6 @@
 import { localizeNorm, localizeScenario } from '../i18n/content';
 import { ui } from '../i18n/ui';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ArrowLeft, ArrowRight, RotateCcw, Shield, HelpCircle, 
   ChevronDown, ChevronUp, User, CheckCircle2, AlertTriangle,
@@ -31,7 +31,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
   const t = translations[lang];
 
   // Simulator stage: 'briefing' | 'decision' | 'feedback' | 'reflection'
-  const [phase, setPhase] = useState<'briefing' | 'decision' | 'feedback' | 'reflection'>('briefing');
+  const [phase, setPhase] = useState<'briefing' | 'decision' | 'feedback' | 'reflection'>(() => window.location.pathname.endsWith('/summary') ? 'reflection' : window.location.pathname.endsWith('/play') ? 'decision' : 'briefing');
   const [currentNodeId, setCurrentNodeId] = useState<string>(scenario.pochatkovyi_vuzol);
   const [storedSelectedVariant, setSelectedVariant] = useState<Variant | null>(null);
   const [storedPendingVariant, setPendingVariant] = useState<Variant | null>(null);
@@ -55,17 +55,37 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
   const [showValuesConflict, setShowValuesConflict] = useState(false);
   const [isExportingScorm, setIsExportingScorm] = useState(false);
 
+  useEffect(() => {
+    if (!window.location.pathname.endsWith('/play') && !window.location.pathname.endsWith('/summary')) return;
+    let cancelled = false;
+    fetch('/api/progress').then(async response => {
+      let progress;
+      if (response.ok) progress = (await response.json())[scenario.id];
+      else if (response.status === 401) { try { progress = JSON.parse(localStorage.getItem(`simulator_progress_${scenario.id}`) || 'null'); } catch {} }
+      else return;
+      if (cancelled || !progress?.pathway?.length) return;
+      const restored = progress.pathway.map((entry: {nodeId:string;variantId:string}) => ({ nodeId: entry.nodeId, variant: scenario.vuzly.find(n => n.id === entry.nodeId)?.varianty.find(v => v.id === entry.variantId) })).filter((entry: {variant?:Variant}) => entry.variant);
+      if (!restored.length) return;
+      setPathway(restored);
+      const last = restored[restored.length - 1];
+      setCurrentNodeId(last.variant.nastupnyi_vuzol || last.nodeId);
+      setPhase(last.variant.nastupnyi_vuzol ? 'decision' : 'reflection');
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [scenario.id]);
+
   const saveLocalProgress = (newPathway: { nodeId: string; variant: Variant }[]) => {
-    try {
-      localStorage.setItem(`simulator_progress_${scenario.id}`, JSON.stringify({
-        scenarioId: scenario.id,
-        pathway: newPathway,
-        timestamp: Date.now()
-      }));
-    } catch (e) {}
+    const progress = { scenarioId: scenario.id, pathway: newPathway.map(p => ({ nodeId: p.nodeId, variantId: p.variant.id })) };
+    fetch('/api/progress', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(progress) }).then(response => {
+      if (response.status === 401) {
+        try { localStorage.setItem(`simulator_progress_${scenario.id}`, JSON.stringify(progress)); } catch {}
+      }
+    }).catch(() => {});
   };
 
   const handleStartFromBriefing = () => {
+    window.history.pushState({}, '', `/scenarios/${scenario.id}/play`);
+    window.dispatchEvent(new PopStateEvent('popstate'));
     setPhase('decision');
     setCurrentNodeId(scenario.pochatkovyi_vuzol);
     setSelectedVariant(null);
@@ -96,6 +116,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
 
   const handleRestart = () => {
     localStorage.removeItem(`simulator_progress_${scenario.id}`);
+    fetch('/api/progress', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({scenarioId:scenario.id,pathway:[]}) }).catch(()=>{});
     setPathway([]);
     setCurrentNodeId(scenario.pochatkovyi_vuzol);
     setSelectedVariant(null);

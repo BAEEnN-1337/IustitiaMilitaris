@@ -7,7 +7,7 @@ import {
   FileCode, Sparkles
 } from 'lucide-react';
 import { Scenario, Node, Variant, Role, ValueConflict, ScenarioNorm } from '../types';
-import { normyData } from '../data/scenarios';
+import { normyData, allScenarios } from '../data/scenarios';
 import { validateScenario } from '../utils/validator';
 import { DecisionTreeSvg } from './DecisionTreeSvg';
 import { generateScorm12Zip } from '../utils/scormExport';
@@ -28,7 +28,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
   const [activeTab, setActiveTab] = useState<'general' | 'roles' | 'nodes' | 'verification' | 'graph'>('general');
 
   // Initial template scenario
-  const [scenario, setScenario] = useState<Scenario>({
+  const [scenario, setScenario] = useState<Scenario>(allScenarios.find(s => s.id === window.location.pathname.split('/')[2]) || {
     id: "S09",
     nazva: ui(lang, 'm53'),
     versiia: "1.0",
