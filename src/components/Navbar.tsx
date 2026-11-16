@@ -1,16 +1,18 @@
+import accountLabels from '../i18n/accounts.json';
 import { ui } from '../i18n/ui';
 import React from 'react';
 import { Shield, BookOpen, Users, Compass, Wrench, Globe, Wifi } from 'lucide-react';
 import { Language, translations } from '../i18n';
 
 interface NavbarProps {
+  onAuth?: () => void;
   currentView: 'catalog' | 'solo' | 'classroom' | 'builder' | 'norms';
   setCurrentView: (view: 'catalog' | 'solo' | 'classroom' | 'builder' | 'norms') => void;
   lang: Language;
   setLang: (lang: Language) => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, lang, setLang }) => {
+export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, lang, setLang, onAuth }) => {
   const t = translations[lang];
 
   return (
@@ -81,7 +83,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, lan
               {t.nav.norms}
             </button>
           </nav>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <button onClick={onAuth} className="px-2 py-1 text-xs rounded border border-navy-700">{accountLabels[lang].title}</button>
             <div 
               className="hidden 2xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-navy-800 border border-emerald-500/20 text-xs text-slate-300"
               title={t.nav.offlineDesc}

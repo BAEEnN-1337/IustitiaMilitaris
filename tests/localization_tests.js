@@ -65,3 +65,10 @@ for (const id of ['S01', 'S02', 'S03', 'S04', 'S05', 'S06', 'S07', 'S08']) {
   assert.equal(overlays[id].perevirka_zmistu.fakhivets_dzpk, 'pending');
 }
 console.log('PASS: S01–S08 complete English content, all branches, IDs, edges, scores and metadata');
+
+for (const name of ['accounts', 'group']) {
+  const dictionary = read(`../src/i18n/${name}.json`);
+  assert.deepEqual(Object.keys(dictionary.uk).sort(), Object.keys(dictionary.en).sort());
+  assert.ok(!/[\u0400-\u04ff]/u.test(JSON.stringify(dictionary.en)));
+}
+console.log('PASS: local account and classroom UI language parity');
