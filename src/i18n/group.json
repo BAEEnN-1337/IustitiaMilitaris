@@ -44,7 +44,9 @@
     "participation": "Проголосувало",
     "hidden": "Відсотки приховано до завершення голосування",
     "reviewAnother": "Розібрати інший варіант",
-    "path": "Шлях групи"
+    "path": "Шлях групи",
+    "joinHint": "Введіть шестизначний код від ведучого.",
+    "codePlaceholder": "Напр. 482910"
   },
   "en": {
     "code": "Room code",
@@ -91,6 +93,8 @@
     "participation": "Votes cast",
     "hidden": "Percentages hidden until voting closes",
     "reviewAnother": "Discuss another option",
-    "path": "Group pathway"
+    "path": "Group pathway",
+    "joinHint": "Enter the six-digit code from your instructor.",
+    "codePlaceholder": "e.g. 482910"
   }
 }

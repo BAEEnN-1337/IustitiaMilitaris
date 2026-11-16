@@ -248,6 +248,45 @@ export function GroupSession({
       })}
     </div>
   );
+  const scenarioCards = (team: boolean) => (
+    <div
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+      data-testid={team ? 'landing-team-grid' : 'landing-examples-grid'}
+    >
+      {allScenarios
+        .filter((s) => ['S06', 'S07', 'S08'].includes(s.id) === team)
+        .map((source) => {
+          const s = localizeScenario(source, lang);
+          return (
+            <article
+              key={s.id}
+              className="surface-muted h-full flex flex-col justify-between gap-4"
+            >
+              <div className="space-y-3">
+                <div className="flex flex-wrap gap-2">
+                  <span className="badge">{s.id}</span>
+                  <span className="badge">
+                    {themes[lang][s.tema as keyof typeof themes.en] || s.tema}
+                  </span>
+                  <span className="badge">
+                    {s.tryvalist_khv} {t.minutes} · {s.vuzly.length} {t.stages}
+                  </span>
+                </div>
+                <h4 className="font-bold text-white leading-relaxed">
+                  {s.nazva}
+                </h4>
+              </div>
+              <a
+                className="action w-full"
+                href={`/classroom/host/new?scenario=${s.id}`}
+              >
+                {t.host} →
+              </a>
+            </article>
+          );
+        })}
+    </div>
+  );
   return (
     <section
       className={`page-shell ${projector ? '!max-w-none sm:!px-12 text-lg' : ''}`}
@@ -266,76 +305,54 @@ export function GroupSession({
             <h1 className="text-2xl font-bold text-white">{t.title}</h1>
             <p className="mt-2 text-sm text-slate-400">{t.privacy}</p>
           </header>
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] items-start">
-            <form
-              className="surface space-y-5"
-              onSubmit={(e) => {
-                e.preventDefault();
-                activeCode.current = code;
-                history.pushState({}, '', `/classroom/join/${code}`);
-                window.dispatchEvent(new PopStateEvent('popstate'));
-                setJoining(true);
-              }}
-            >
+          <form
+            className="surface flex flex-col lg:flex-row lg:items-center justify-between gap-5"
+            onSubmit={(e) => {
+              e.preventDefault();
+              activeCode.current = code;
+              history.pushState({}, '', `/classroom/join/${code}`);
+              window.dispatchEvent(new PopStateEvent('popstate'));
+              setJoining(true);
+            }}
+          >
+            <div className="space-y-1">
               <h2 className="text-xl font-bold">{t.participant}</h2>
-              <label className="block text-sm">
-                {t.code}
+              <p className="text-sm text-slate-400">{t.joinHint}</p>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full lg:w-auto">
+              <label className="block flex-1 sm:flex-none">
+                <span className="sr-only">{t.code}</span>
                 <input
-                  className="field mt-2 text-2xl tracking-widest font-mono"
+                  className="field h-12 py-2 text-lg text-center tracking-widest font-mono sm:w-48"
                   inputMode="numeric"
                   maxLength={6}
                   pattern="[0-9]{6}"
                   required
+                  placeholder={t.codePlaceholder}
                   value={code}
                   onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
                 />
               </label>
               <button
-                className="action-primary w-full"
+                className="action-primary h-12 w-full sm:w-auto"
                 disabled={!/^\d{6}$/.test(code)}
               >
                 {t.join}
               </button>
-            </form>
-            <div className="surface space-y-6">
-              <h2 className="text-xl font-bold">{t.hostTitle}</h2>
-              {[true, false].map((team) => (
-                <div key={String(team)} className="space-y-3">
-                  <h3 className="font-semibold text-slate-300">
-                    {team ? t.team : t.examples}
-                  </h3>
-                  {allScenarios
-                    .filter(
-                      (s) => ['S06', 'S07', 'S08'].includes(s.id) === team
-                    )
-                    .map((source) => {
-                      const s = localizeScenario(source, lang);
-                      return (
-                        <article key={s.id} className="surface-muted space-y-3">
-                          <div className="flex flex-wrap gap-2">
-                            <span className="badge">{s.id}</span>
-                            <span className="badge">
-                              {themes[lang][s.tema as keyof typeof themes.en] ||
-                                s.tema}
-                            </span>
-                            <span className="badge">
-                              {s.tryvalist_khv} {t.minutes} · {s.vuzly.length}{' '}
-                              {t.stages}
-                            </span>
-                          </div>
-                          <h4 className="font-bold text-white">{s.nazva}</h4>
-                          <a
-                            className="action"
-                            href={`/classroom/host/new?scenario=${s.id}`}
-                          >
-                            {t.host} →
-                          </a>
-                        </article>
-                      );
-                    })}
-                </div>
-              ))}
             </div>
+          </form>
+          <div className="surface space-y-6">
+            <h2 className="text-xl font-bold">{t.hostTitle}</h2>
+            <section className="space-y-3" aria-label={t.team}>
+              <h3 className="font-semibold text-slate-300">{t.team}</h3>
+              {scenarioCards(true)}
+            </section>
+            <details className="border-t border-navy-700 pt-4">
+              <summary className="cursor-pointer rounded-lg py-2 font-semibold text-slate-300 hover:text-white">
+                {t.examples} (5)
+              </summary>
+              <div className="mt-3">{scenarioCards(false)}</div>
+            </details>
           </div>
         </>
       )}
