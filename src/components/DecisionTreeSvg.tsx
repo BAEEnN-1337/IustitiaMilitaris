@@ -135,8 +135,6 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
             <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981" />
           </marker>
         </defs>
-
-        {/* Draw Edges */}
         {edges.map((e, idx) => {
           const fromPos = nodePositions[e.from];
           const toPos = nodePositions[e.to];
@@ -173,8 +171,6 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
             </g>
           );
         })}
-
-        {/* Draw Nodes */}
         {scenario.vuzly.map((node) => {
           const pos = nodePositions[node.id];
           if (!pos) return null;

@@ -28,10 +28,9 @@ export const CidsHelperModal: React.FC<CidsHelperModalProps> = ({ isOpen, onClos
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm overflow-y-auto">
       <div role="dialog" aria-modal="true" aria-label={ui(lang, 'closeDialog')}
-        className="relative w-full max-w-3xl bg-navy-900 border border-navy-700 rounded-xl shadow-2xl p-6 sm:p-8 my-8 text-slate-100 max-h-[85dvh] overflow-y-auto"
+        className="animate-fadeIn relative w-full max-w-3xl bg-navy-900 border border-navy-700 rounded-xl shadow-2xl p-6 sm:p-8 my-8 text-slate-100 max-h-[85dvh] overflow-y-auto"
         onClick={e => e.stopPropagation()}
       >
-        {/* Header */}
         <div className="flex items-start justify-between gap-3 pb-4 border-b border-navy-700">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
@@ -54,8 +53,6 @@ export const CidsHelperModal: React.FC<CidsHelperModalProps> = ({ isOpen, onClos
             <X className="w-5 h-5" />
           </button>
         </div>
-
-        {/* Part 1: Kidder's 4 Dilemma Types */}
         <div className="mt-6 space-y-3">
           <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex flex-wrap items-center gap-2">
             <BookOpen className="w-4 h-4" />
@@ -80,8 +77,6 @@ export const CidsHelperModal: React.FC<CidsHelperModalProps> = ({ isOpen, onClos
             </div>
           </div>
         </div>
-
-        {/* Part 2: CIDS 5-Tests Checklist */}
         <div className="mt-8 pt-6 border-t border-navy-800 space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-wider flex flex-wrap items-center gap-2">
@@ -128,8 +123,6 @@ export const CidsHelperModal: React.FC<CidsHelperModalProps> = ({ isOpen, onClos
             })}
           </div>
         </div>
-
-        {/* Footer info & Close button */}
         <div className="mt-8 pt-4 border-t border-navy-800 flex flex-wrap items-center justify-between gap-2">
           <span className="text-[11px] text-slate-400">
             {ui(lang, 'm3')}{' '}</span>

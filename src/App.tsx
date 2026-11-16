@@ -61,7 +61,6 @@ export const App: React.FC = () => {
 
   return (
     <LanguageContext.Provider value={lang}><div className="min-h-screen flex flex-col bg-navy-950 text-slate-100 selection:bg-emerald-600 selection:text-white">
-      {/* Top Navbar */}
       <Navbar
         currentView={currentView === 'student' ? 'classroom' : currentView}
         setCurrentView={(view) => {
@@ -71,8 +70,6 @@ export const App: React.FC = () => {
         lang={lang}
         setLang={setLang}
       />
-
-      {/* Main View Container */}
       <main className="flex-1">
         {currentView === 'catalog' && (
           <ScenarioCatalog
@@ -119,8 +116,6 @@ export const App: React.FC = () => {
           />
         )}
       </main>
-
-      {/* Institutional Footer */}
       <Footer lang={lang} />
     </div></LanguageContext.Provider>
   );

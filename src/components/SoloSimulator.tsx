@@ -1,6 +1,6 @@
 import { localizeNorm, localizeScenario } from '../i18n/content';
 import { ui } from '../i18n/ui';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   ArrowLeft, ArrowRight, RotateCcw, Shield, HelpCircle, 
   ChevronDown, ChevronUp, User, CheckCircle2, AlertTriangle,
@@ -54,20 +54,6 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
   const [activeNormDetail, setActiveNormDetail] = useState<{ norm: NormEntry; note?: string } | null>(null);
   const [showValuesConflict, setShowValuesConflict] = useState(false);
   const [isExportingScorm, setIsExportingScorm] = useState(false);
-
-  // Local storage auto-save of current scenario progress (strictly local, zero server transfer)
-  useEffect(() => {
-    const saveKey = `simulator_progress_${scenario.id}`;
-    const saved = localStorage.getItem(saveKey);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (parsed.pathway && parsed.pathway.length > 0) {
-          // If user had prior progress, we can restore or let them restart
-        }
-      } catch (e) {}
-    }
-  }, [scenario.id]);
 
   const saveLocalProgress = (newPathway: { nodeId: string; variant: Variant }[]) => {
     try {
@@ -158,7 +144,6 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
-      {/* Top Header Bar */}
       <div className="flex flex-wrap items-center justify-between gap-2 pb-4 mb-6 border-b border-navy-800">
         <button
           onClick={onBackToCatalog}
@@ -177,10 +162,8 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
           </span>
         </div>
       </div>
-
-      {/* PHASE 1: BRIEFING SCREEN */}
       {phase === 'briefing' && (
-        <div className="space-y-6 animate-fadeIn">
+        <div key={`${scenario.id}:${phase}:${currentNodeId}`} className="space-y-6 animate-fadeIn">
           <div className="p-6 sm:p-8 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl space-y-6">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
@@ -190,14 +173,10 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 {scenario.nazva}
               </h1>
             </div>
-
-            {/* Context Box */}
             <div className="p-4 rounded-xl bg-navy-950/80 border-l-4 border-indigo-500 text-sm text-slate-200 leading-relaxed">
               <strong className="text-indigo-300 block mb-1">{ui(lang, 'm214')}{' '}</strong>
               {scenario.kontekst}
             </div>
-
-            {/* Situation */}
             <div className="space-y-2">
               <h2 className="text-sm font-bold text-slate-300 uppercase tracking-wider">
                 {t.briefing.situationTitle}
@@ -206,8 +185,6 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 {scenario.sytuatsiia}
               </div>
             </div>
-
-            {/* Roles Grid */}
             <div className="space-y-3">
               <h2 className="text-sm font-bold text-slate-300 uppercase tracking-wider flex flex-wrap items-center gap-2">
                 <User className="w-4 h-4 text-emerald-400" />
@@ -240,8 +217,6 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 ))}
               </div>
             </div>
-
-            {/* Values in Conflict (Collapsible so user can ponder first) */}
             <div className="rounded-xl border border-navy-750 overflow-hidden bg-navy-950">
               <button
                 onClick={() => setShowValuesConflict(!showValuesConflict)}
@@ -254,7 +229,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 {showValuesConflict ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </button>
               {showValuesConflict && (
-                <div className="p-4 border-t border-navy-800 space-y-3 text-xs sm:text-sm">
+                <div className="animate-fadeIn p-4 border-t border-navy-800 space-y-3 text-xs sm:text-sm">
                   {scenario.tsinnosti_v_konflikti.map((c, idx) => (
                     <div key={idx} className="p-3 rounded-lg bg-navy-900 border border-navy-800">
                       <div className="font-bold text-amber-300 flex flex-wrap items-center gap-2 mb-1">
@@ -268,8 +243,6 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 </div>
               )}
             </div>
-
-            {/* Start Button */}
             <button
               onClick={handleStartFromBriefing}
               className="w-full py-3.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm sm:text-base transition-all shadow-lg shadow-emerald-900/30 flex items-center justify-center gap-2"
@@ -280,11 +253,8 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
           </div>
         </div>
       )}
-
-      {/* PHASE 2: DECISION STAGE */}
       {phase === 'decision' && currentNode && (
-        <div className="space-y-6 animate-fadeIn">
-          {/* Stage Progress & CIDS Helper */}
+        <div key={`${scenario.id}:${phase}:${currentNodeId}`} className="space-y-6 animate-fadeIn">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-400">
               <span className="px-2.5 py-1 rounded bg-navy-800 text-emerald-400 border border-emerald-500/30 font-mono">
@@ -294,8 +264,6 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 {t.step.stepLabel} {pathway.length + 1}
               </span>
             </div>
-
-            {/* CIDS 2025 Helper Button */}
             <button
               onClick={() => setIsCidsOpen(true)}
               className="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-semibold transition-colors"
@@ -306,14 +274,11 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
           </div>
 
           <div className="p-6 sm:p-8 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl space-y-6">
-            {/* Step context if present, else fallback to situation */}
             {currentNode.tekst && (
               <div className="p-4 rounded-xl bg-navy-950 border border-navy-800 text-sm text-slate-200 leading-relaxed">
                 {currentNode.tekst}
               </div>
             )}
-
-            {/* Question */}
             <div>
               <h2 className="text-base sm:text-xl font-bold text-white leading-snug">
                 {currentNode.zapytannia}
@@ -322,8 +287,6 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 {t.step.selectPrompt}
               </p>
             </div>
-
-            {/* Variant Options Grid */}
             <div className="space-y-3">
               {currentNode.varianty.map((v) => {
                 const isSelected = pendingVariant?.id === v.id;
@@ -353,8 +316,6 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 );
               })}
             </div>
-
-            {/* Confirm Choice Button */}
             <button
               onClick={handleConfirmDecision}
               disabled={!pendingVariant}
@@ -370,12 +331,9 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
           </div>
         </div>
       )}
-
-      {/* PHASE 3: FEEDBACK SCREEN */}
       {phase === 'feedback' && selectedVariant && (
-        <div className="space-y-6 animate-fadeIn">
+        <div key={`${scenario.id}:${phase}:${currentNodeId}`} className="space-y-6 animate-fadeIn">
           <div className="p-6 sm:p-8 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl space-y-6">
-            {/* Header */}
             <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-navy-800">
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
                 {t.feedback.title}
@@ -384,8 +342,6 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 {ui(lang, 'm215')}{' '}{selectedVariant.id}
               </span>
             </div>
-
-            {/* Consequences: Immediate & Delayed */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="p-4 rounded-xl bg-navy-950 border border-navy-800 space-y-1.5">
                 <div className="text-xs font-bold text-indigo-400 uppercase tracking-wider">
@@ -405,23 +361,17 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 </p>
               </div>
             </div>
-
-            {/* 3-Axis Balance (NO sum!) */}
             <BalanceIndicators
               scores={selectedVariant.baly}
               explanation={selectedVariant.chomu_taki_baly}
               lang={lang}
             />
-
-            {/* Decision Analysis */}
             <div className="p-4 rounded-xl bg-navy-950 border-l-4 border-emerald-500 text-xs sm:text-sm text-slate-200 leading-relaxed">
               <strong className="text-emerald-400 block mb-1">
                 {t.feedback.analysisTitle}
               </strong>
               {selectedVariant.zvorotnyi_zviazok}
             </div>
-
-            {/* Applicable Legal Norms Chips */}
             {selectedVariant.normy && selectedVariant.normy.length > 0 && (
               <div className="space-y-2">
                 <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
@@ -445,8 +395,6 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 </div>
               </div>
             )}
-
-            {/* Action button to Next Step or Finish */}
             <button
               onClick={handleNextStep}
               className="w-full py-3.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm sm:text-base transition-all shadow-lg flex items-center justify-center gap-2"
@@ -457,10 +405,8 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
           </div>
         </div>
       )}
-
-      {/* PHASE 4: REFLECTION & DECISION MAP */}
       {phase === 'reflection' && (
-        <div className="space-y-6 animate-fadeIn">
+        <div key={`${scenario.id}:${phase}:${currentNodeId}`} className="space-y-6 animate-fadeIn">
           <div className="p-6 sm:p-8 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl space-y-6">
             <div className="border-b border-navy-800 pb-3 flex flex-wrap items-center justify-between gap-2">
               <div>
@@ -474,8 +420,6 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
               <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-semibold">
                 {ui(lang, 'm216')}{' '}</span>
             </div>
-
-            {/* Decision Pathway visual graph */}
             <div className="space-y-2">
               <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider flex flex-wrap items-center gap-2">
                 <Layers className="w-4 h-4 text-emerald-400" />
@@ -486,8 +430,6 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 visitedNodeIds={pathway.map(p => p.nodeId)}
               />
             </div>
-
-            {/* Stepped summary list */}
             <div className="space-y-2">
               {pathway.map((p, idx) => (
                 <div key={idx} className="p-3.5 rounded-lg bg-navy-950 border border-navy-800 flex items-start justify-between gap-3 text-xs sm:text-sm">
@@ -504,8 +446,6 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 </div>
               ))}
             </div>
-
-            {/* Cumulative Profile (Trade-off Balance) */}
             <div className="space-y-2">
               <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider">
                 {t.reflection.profileTitle}
@@ -519,8 +459,6 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 {t.reflection.profileNotice}
               </p>
             </div>
-
-            {/* Norm Applicability */}
             <div className="p-4 rounded-xl bg-navy-950 border border-navy-800 space-y-1.5 text-xs sm:text-sm">
               <h3 className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
                 {t.reflection.applicabilityTitle}
@@ -529,8 +467,6 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 {scenario.zastosovnist}
               </p>
             </div>
-
-            {/* Practical Advice */}
             <div className="space-y-2">
               <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider">
                 {t.reflection.adviceTitle}
@@ -544,14 +480,10 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 ))}
               </ul>
             </div>
-
-            {/* Privacy Guarantee Banner */}
             <div className="p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-xs text-emerald-300 flex flex-wrap items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>{t.reflection.privacyBanner}</span>
             </div>
-
-            {/* Bottom Actions: Replay & SCORM Export */}
             <div className="pt-4 border-t border-navy-800 flex flex-col sm:flex-row items-center justify-between gap-3">
               <button
                 onClick={handleRestart}
@@ -573,15 +505,11 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
           </div>
         </div>
       )}
-
-      {/* CIDS Helper Modal */}
       <CidsHelperModal
         isOpen={isCidsOpen}
         onClose={() => setIsCidsOpen(false)}
         lang={lang}
       />
-
-      {/* Norm Detail Modal */}
       <NormDetailModal
         norm={activeNormDetail?.norm || null}
         yakZastosovuietsia={scenario.normy.find(n => n.id === activeNormDetail?.norm.id)?.yak_zastosovuietsia ?? activeNormDetail?.note}

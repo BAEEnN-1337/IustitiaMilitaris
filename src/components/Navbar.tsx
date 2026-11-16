@@ -17,7 +17,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, lan
     <header className="sticky top-0 z-40 bg-navy-900/90 backdrop-blur border-b border-navy-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-center justify-between gap-2 min-h-16 py-3">
-          {/* Logo & Title */}
           <div 
             className="flex items-center gap-2 cursor-pointer group"
             onClick={() => setCurrentView('catalog')}
@@ -36,8 +35,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, lan
               </div>
             </div>
           </div>
-
-          {/* Navigation Links */}
           <nav className="hidden xl:flex items-center space-x-1 lg:space-x-2">
             <button
               onClick={() => setCurrentView('catalog')}
@@ -84,20 +81,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, lan
               {t.nav.norms}
             </button>
           </nav>
-
-          {/* Right Toolbar: Offline Badge & Language Switcher */}
           <div className="flex items-center gap-2 shrink-0">
-            {/* 100% Offline Status Pill */}
             <div 
               className="hidden 2xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-navy-800 border border-emerald-500/20 text-xs text-slate-300"
               title={t.nav.offlineDesc}
             >
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
               <Wifi className="w-3.5 h-3.5 text-emerald-400" />
               <span className="text-[11px] font-medium text-emerald-300">{t.nav.offlineReady}</span>
             </div>
-
-            {/* Language Switcher */}
             <div className="flex items-center bg-navy-800 border border-navy-700 rounded-lg p-0.5 text-xs font-semibold">
               <button
                 onClick={() => setLang('uk')}
@@ -122,8 +114,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, lan
           </div>
         </div>
       </div>
-
-      {/* Mobile Submenu Navigation */}
       <div className="xl:hidden flex border-t border-navy-800 bg-navy-950 px-2 py-1 justify-around text-xs gap-1">
         <button
           onClick={() => setCurrentView('catalog')}

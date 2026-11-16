@@ -54,7 +54,6 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        {/* Dobrochesnist */}
         <div className="p-3 rounded-lg bg-navy-850 border border-navy-750 space-y-2">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
@@ -67,13 +66,11 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
           </div>
           <div className="w-full bg-navy-950 h-2 rounded-full overflow-hidden border border-navy-700/50">
             <div
-              className={`h-full rounded-full transition-all duration-500 ${getBarColor(scores.dobrochesnist)}`}
+              className={`h-full rounded-full transition-all duration-200 ${getBarColor(scores.dobrochesnist)}`}
               style={{ width: getBarWidth(scores.dobrochesnist) }}
             />
           </div>
         </div>
-
-        {/* Efektyvnist */}
         <div className="p-3 rounded-lg bg-navy-850 border border-navy-750 space-y-2">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
@@ -86,13 +83,11 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
           </div>
           <div className="w-full bg-navy-950 h-2 rounded-full overflow-hidden border border-navy-700/50">
             <div
-              className={`h-full rounded-full transition-all duration-500 ${getBarColor(scores.efektyvnist)}`}
+              className={`h-full rounded-full transition-all duration-200 ${getBarColor(scores.efektyvnist)}`}
               style={{ width: getBarWidth(scores.efektyvnist) }}
             />
           </div>
         </div>
-
-        {/* Dovira */}
         <div className="p-3 rounded-lg bg-navy-850 border border-navy-750 space-y-2">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <span className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
@@ -105,7 +100,7 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
           </div>
           <div className="w-full bg-navy-950 h-2 rounded-full overflow-hidden border border-navy-700/50">
             <div
-              className={`h-full rounded-full transition-all duration-500 ${getBarColor(scores.dovira)}`}
+              className={`h-full rounded-full transition-all duration-200 ${getBarColor(scores.dovira)}`}
               style={{ width: getBarWidth(scores.dovira) }}
             />
           </div>

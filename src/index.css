@@ -9,12 +9,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(3px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fadeIn {
-  animation: fadeIn 0.3s ease-out forwards;
+  animation: fadeIn 200ms ease-out forwards;
 }
 
 /* Let text determine card height, including translated and user-authored content. */
@@ -30,4 +30,23 @@
 @layer utilities {
   .flex > *, .inline-flex > *, .grid > * { min-width: 0; }
   .flex-wrap > *, .inline-flex { overflow-wrap: anywhere; }
+}
+
+@layer base {
+  button, a, input, textarea, select, summary {
+    transition-duration: 200ms;
+  }
+  :is(button, a, input, textarea, select, summary):focus-visible {
+    outline: 2px solid #67e8f9;
+    outline-offset: 3px;
+  }
+  button:not(:disabled):active { filter: brightness(0.92); }
+  button:disabled { cursor: not-allowed; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }

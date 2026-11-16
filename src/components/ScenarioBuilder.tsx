@@ -258,7 +258,6 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-      {/* Top Header & Action Toolbar */}
       <div className="p-6 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
@@ -273,8 +272,6 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
             {t.builder.subtitle}
           </p>
         </div>
-
-        {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
           <button
             onClick={runValidation}
@@ -315,8 +312,6 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
           </button>
         </div>
       </div>
-
-      {/* Validation Status Banner */}
       {validationErrors.length > 0 ? (
         <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs space-y-1">
           <div className="font-bold flex flex-wrap items-center gap-2 text-rose-400">
@@ -334,8 +329,6 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
           <span>{ui(lang, 'm127')}{' '}</span>
         </div>
       )}
-
-      {/* Tabs */}
       <div className="flex border-b border-navy-800 gap-1 overflow-x-auto text-xs font-semibold">
         {[
           { id: 'general', label: t.builder.mainInfoTab, icon: FileCode },
@@ -362,10 +355,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
           );
         })}
       </div>
-
-      {/* TAB CONTENT */}
       <div className="p-6 sm:p-8 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl space-y-6">
-        {/* TAB 1: GENERAL */}
         {activeTab === 'general' && (
           <div className="space-y-4 text-xs">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -473,8 +463,6 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
             </div>
           </div>
         )}
-
-        {/* TAB 2: ROLES */}
         {activeTab === 'roles' && (
           <div className="space-y-4 text-xs">
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -572,11 +560,8 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
             </div>
           </div>
         )}
-
-        {/* TAB 3: NODES & VARIANTS */}
         {activeTab === 'nodes' && (
           <div className="space-y-6 text-xs">
-            {/* Node Selector Pills */}
             <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-navy-800">
               <div className="flex flex-wrap items-center gap-2 overflow-x-auto pb-1">
                 {scenario.vuzly.map((node, nIdx) => (
@@ -601,8 +586,6 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                 <Plus className="w-3.5 h-3.5" />
                 {ui(lang, 'm153')}{' '}</button>
             </div>
-
-            {/* Selected Node Editor */}
             {scenario.vuzly[selectedNodeIdx] && (
               <div className="p-5 rounded-xl bg-navy-950 border border-navy-800 space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -658,8 +641,6 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                     className="w-full bg-navy-900 border border-navy-700 rounded p-2 text-white font-semibold text-sm"
                   />
                 </div>
-
-                {/* Variants List */}
                 <div className="space-y-4 pt-3 border-t border-navy-800">
                   <span className="font-bold text-slate-300 uppercase tracking-wider block">
                     {ui(lang, 'm158')}{' '}</span>
@@ -692,8 +673,6 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                             className="w-24 font-mono bg-navy-950 border border-navy-700 rounded p-1.5 text-center text-amber-400"
                           />
                         </div>
-
-                        {/* Scores -2..+2 */}
                         <div className="flex flex-wrap items-center gap-2 text-xs">
                           <label className="text-slate-400">{ui(lang, 'm161')}{' '}</label>
                           <input
@@ -780,8 +759,6 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
             )}
           </div>
         )}
-
-        {/* TAB 4: VERIFICATION & AI PASSPORT */}
         {activeTab === 'verification' && (
           <div className="space-y-4 text-xs">
             <h3 className="font-bold text-white uppercase tracking-wider">
@@ -874,8 +851,6 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
             </div>
           </div>
         )}
-
-        {/* TAB 5: VISUAL GRAPH */}
         {activeTab === 'graph' && (
           <div className="space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
