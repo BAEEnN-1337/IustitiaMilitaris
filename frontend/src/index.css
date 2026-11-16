@@ -1,0 +1,179 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --color-bg: #111827;
+    --color-surface: #1e2a3a;
+    --color-surface-2: #243040;
+    --color-border: #2d4060;
+    --color-text: #e5eaf3;
+    --color-text-muted: #8fa3c4;
+    --color-accent: #4a7fb8;
+    --color-emerald: #10b981;
+    --color-amber: #f59e0b;
+    --color-danger: #ef4444;
+    --color-danger-muted: #7f1d1d;
+  }
+
+  html {
+    @apply text-base;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-gray-900 text-gray-100 font-sans min-h-screen;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  * {
+    @apply box-border;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border p-5 transition-all duration-200;
+    background-color: var(--color-surface);
+    border-color: var(--color-border);
+  }
+
+  .card-hover {
+    @apply card cursor-pointer hover:border-blue-400 hover:shadow-lg;
+  }
+
+  .btn {
+    @apply px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-150 inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-blue-600 hover:bg-blue-500 text-white;
+  }
+
+  .btn-secondary {
+    @apply btn border text-gray-200 hover:bg-gray-700;
+    border-color: var(--color-border);
+    background-color: var(--color-surface);
+  }
+
+  .btn-danger {
+    @apply btn bg-red-800 hover:bg-red-700 text-white;
+  }
+
+  .btn-emerald {
+    @apply btn bg-emerald-700 hover:bg-emerald-600 text-white;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-verified {
+    @apply badge bg-emerald-900 text-emerald-300 border border-emerald-700;
+  }
+
+  .badge-draft {
+    @apply badge bg-gray-800 text-gray-400 border border-gray-700;
+  }
+
+  .badge-ai {
+    @apply badge bg-purple-900 text-purple-300 border border-purple-700;
+  }
+
+  .score-bar {
+    @apply h-2 rounded-full transition-all duration-500;
+  }
+
+  .scale-positive { @apply bg-emerald-500; }
+  .scale-negative { @apply bg-red-500; }
+  .scale-neutral { @apply bg-gray-500; }
+
+  /* Projector mode styles */
+  .projector-mode .card { @apply text-xl; }
+  .projector-mode h1 { @apply text-5xl; }
+  .projector-mode h2 { @apply text-4xl; }
+  .projector-mode h3 { @apply text-3xl; }
+  .projector-mode p { @apply text-2xl leading-relaxed; }
+  .projector-mode .btn { @apply text-2xl px-8 py-5; }
+
+  /* Norm chip */
+  .norm-chip {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-mono
+           bg-blue-950 text-blue-300 border border-blue-800 cursor-pointer
+           hover:bg-blue-900 hover:border-blue-600 transition-all;
+  }
+
+  /* Value scale indicator */
+  .dim-indicator {
+    @apply flex flex-col gap-1;
+  }
+
+  .dim-label {
+    @apply text-xs font-medium;
+    color: var(--color-text-muted);
+  }
+
+  .dim-track {
+    @apply relative h-3 rounded-full;
+    background-color: var(--color-surface-2);
+  }
+
+  .dim-fill {
+    @apply absolute top-0 h-3 rounded-full transition-all duration-700;
+  }
+
+  /* Disclaimer footer */
+  .disclaimer {
+    @apply text-xs text-center py-3 px-4 mt-auto;
+    color: var(--color-text-muted);
+    border-top: 1px solid var(--color-border);
+  }
+
+  /* Graph node */
+  .graph-node {
+    @apply rounded-lg border-2 p-2 text-xs font-medium text-center transition-all;
+  }
+
+  .graph-node-current {
+    @apply border-blue-400 bg-blue-950 text-blue-200;
+  }
+
+  .graph-node-visited {
+    @apply border-emerald-600 bg-emerald-950 text-emerald-300;
+  }
+
+  .graph-node-unreachable {
+    @apply border-red-700 bg-red-950 text-red-400;
+  }
+
+  .graph-node-default {
+    border-color: var(--color-border);
+    background-color: var(--color-surface);
+    color: var(--color-text-muted);
+  }
+
+  /* Mobile-first responsive layout */
+  .container-main {
+    @apply max-w-3xl mx-auto px-4 py-6;
+  }
+
+  /* Voting bar */
+  .vote-bar {
+    @apply h-10 rounded-lg flex items-center justify-end pr-3 font-bold text-sm transition-all duration-700;
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #2d4060 transparent;
+  }
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
