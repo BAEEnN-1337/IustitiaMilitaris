@@ -1,3 +1,5 @@
+import { localizeScenario } from '../i18n/content';
+import { ui, localizeMessage } from '../i18n/ui';
 import React, { useState, useEffect } from 'react';
 import { Users, CheckCircle2, AlertCircle, ArrowLeft, Send } from 'lucide-react';
 import { RoomState, Scenario } from '../types';
@@ -51,7 +53,7 @@ export const ClassroomStudent: React.FC<ClassroomStudentProps> = ({
     try {
       socket = new WebSocket(wsUrl);
     } catch (e) {
-      setErrorMsg('Не вдалося зʼєднатися з локальним сервером кімнат.');
+      setErrorMsg(ui(lang, 'm20'));
       setIsJoining(false);
       return;
     }
@@ -76,10 +78,10 @@ export const ClassroomStudent: React.FC<ClassroomStudentProps> = ({
         } else if (data.type === 'VOTE_ACCEPTED') {
           setVotedVariantId(data.variantId);
         } else if (data.type === 'SESSION_CLOSED') {
-          setErrorMsg('Викладач завершив сесію.');
+          setErrorMsg(ui(lang, 'm21'));
           setRoom(null);
         } else if (data.type === 'ERROR') {
-          setErrorMsg(data.message || 'Помилка входу');
+          setErrorMsg(ui(lang, 'm22'));
           setIsJoining(false);
         }
       } catch (err) {
@@ -88,7 +90,7 @@ export const ClassroomStudent: React.FC<ClassroomStudentProps> = ({
     };
 
     socket.onerror = () => {
-      setErrorMsg('Сервер кімнати недоступний або код вказано неправильно.');
+      setErrorMsg(ui(lang, 'm22'));
       setIsJoining(false);
     };
 
@@ -106,7 +108,8 @@ export const ClassroomStudent: React.FC<ClassroomStudentProps> = ({
   };
 
   // Find scenario and current node from local data
-  const currentScenario = allScenarios.find(s => s.id === room?.scenarioId);
+  const originalScenario = allScenarios.find(s => s.id === room?.scenarioId);
+  const currentScenario = originalScenario ? localizeScenario(originalScenario, lang) : undefined;
   const currentNode = currentScenario?.vuzly.find(v => v.id === room?.currentNodeId);
 
   return (
@@ -137,9 +140,9 @@ export const ClassroomStudent: React.FC<ClassroomStudentProps> = ({
           </div>
 
           {errorMsg && (
-            <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2 text-left">
+            <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex flex-wrap items-center gap-2 text-left">
               <AlertCircle className="w-4 h-4 shrink-0" />
-              <span>{errorMsg}</span>
+              <span>{localizeMessage(errorMsg, lang)}</span>
             </div>
           )}
 
@@ -162,7 +165,7 @@ export const ClassroomStudent: React.FC<ClassroomStudentProps> = ({
                   : 'bg-navy-800 text-slate-500 border border-navy-700 cursor-not-allowed'
               }`}
             >
-              <span>{isJoining ? 'Підключення...' : t.classroom.joinBtn}</span>
+              <span>{isJoining ? ui(lang, 'm23') : t.classroom.joinBtn}</span>
               <Send className="w-4 h-4" />
             </button>
           </div>
@@ -175,12 +178,12 @@ export const ClassroomStudent: React.FC<ClassroomStudentProps> = ({
         /* Screen 2: Student Vote Interface */
         <div className="p-5 sm:p-6 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl space-y-5">
           {/* Room Header */}
-          <div className="flex items-center justify-between pb-3 border-b border-navy-800 text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-navy-800 text-xs">
             <span className="font-mono text-slate-400">
-              Кімната: <strong className="text-emerald-400">{room.code}</strong>
+              {ui(lang, 'm24')}{' '}<strong className="text-emerald-400">{room.code}</strong>
             </span>
             <span className="font-mono px-2 py-0.5 rounded bg-navy-800 text-slate-300">
-              Етап {room.currentNodeId}
+              {ui(lang, 'm25')}{' '}{room.currentNodeId}
             </span>
           </div>
 
@@ -236,7 +239,7 @@ export const ClassroomStudent: React.FC<ClassroomStudentProps> = ({
 
           {/* Post-Vote Notice */}
           {votedVariantId && (
-            <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2">
+            <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex flex-wrap items-center gap-2">
               <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-400" />
               <span>{t.classroom.votedThanks}</span>
             </div>
@@ -244,8 +247,7 @@ export const ClassroomStudent: React.FC<ClassroomStudentProps> = ({
 
           {!room.votingActive && !votedVariantId && (
             <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs text-center">
-              Голосування на цьому етапі закрито викладачем.
-            </div>
+              {ui(lang, 'm26')}{' '}</div>
           )}
         </div>
       )}

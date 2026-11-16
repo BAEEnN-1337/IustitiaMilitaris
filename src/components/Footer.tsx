@@ -1,3 +1,4 @@
+import { ui } from '../i18n/ui';
 import React from 'react';
 import { ShieldAlert, Lock, CheckCircle2 } from 'lucide-react';
 import { Language, translations } from '../i18n';
@@ -16,18 +17,18 @@ export const Footer: React.FC<FooterProps> = ({ lang }) => {
         <div className="flex items-start gap-3 p-3.5 rounded-lg bg-navy-900/80 border border-amber-500/20 text-slate-300">
           <ShieldAlert className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
           <p className="leading-relaxed">
-            <strong className="text-amber-300">Правове та етичне застереження: </strong>
+            <strong className="text-amber-300">{ui(lang, 'm31')}{' '}</strong>
             {t.footer.disclaimer}
           </p>
         </div>
 
         {/* Zero-PII Policy and Privacy Note */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 text-slate-400">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Lock className="w-4 h-4 text-emerald-400" />
             <span>{t.footer.zeroPii}</span>
           </div>
-          <div className="flex items-center gap-2 text-slate-400">
+          <div className="flex flex-wrap items-center gap-2 text-slate-400">
             <CheckCircle2 className="w-4 h-4 text-indigo-400" />
             <span>{t.footer.copyright}</span>
           </div>

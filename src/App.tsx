@@ -1,3 +1,4 @@
+import { localizeScenario } from './i18n/content';
 import React, { useState, useEffect } from 'react';
 import { Scenario } from './types';
 import { teamScenarios } from './data/scenarios';
@@ -9,13 +10,14 @@ import { ClassroomFacilitator } from './components/ClassroomFacilitator';
 import { ClassroomStudent } from './components/ClassroomStudent';
 import { ScenarioBuilder } from './components/ScenarioBuilder';
 import { NormsLibrary } from './components/NormsLibrary';
-import { Language } from './i18n';
+import { Language, translations } from './i18n';
+import { LanguageContext } from './i18n/ui';
 
 export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<'catalog' | 'solo' | 'classroom' | 'student' | 'builder' | 'norms'>('catalog');
   const [activeScenario, setActiveScenario] = useState<Scenario | null>(teamScenarios[0] || null);
   const [studentRoomCode, setStudentRoomCode] = useState<string>('');
-  const [lang, setLang] = useState<Language>('uk');
+  const [lang, setLang] = useState<Language>(() => { try { return localStorage.getItem('eds-language') === 'en' ? 'en' : 'uk'; } catch { return 'uk'; } });
 
   useEffect(() => {
     // Check if URL has ?room=123456 for direct student phone join
@@ -31,6 +33,13 @@ export const App: React.FC = () => {
       navigator.serviceWorker.register('/sw.js').catch(() => {});
     }
   }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    document.title = translations[lang].appTitle;
+    document.querySelector('meta[name=description]')?.setAttribute('content', translations[lang].appSubtitle);
+    try { localStorage.setItem('eds-language', lang); } catch {}
+  }, [lang]);
 
   const handleStartSolo = (scenario: Scenario) => {
     setActiveScenario(scenario);
@@ -51,7 +60,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-navy-950 text-slate-100 selection:bg-emerald-600 selection:text-white">
+    <LanguageContext.Provider value={lang}><div className="min-h-screen flex flex-col bg-navy-950 text-slate-100 selection:bg-emerald-600 selection:text-white">
       {/* Top Navbar */}
       <Navbar
         currentView={currentView === 'student' ? 'classroom' : currentView}
@@ -75,7 +84,7 @@ export const App: React.FC = () => {
 
         {currentView === 'solo' && activeScenario && (
           <SoloSimulator
-            scenario={activeScenario}
+            scenario={localizeScenario(activeScenario, lang)}
             onBackToCatalog={() => setCurrentView('catalog')}
             lang={lang}
           />
@@ -83,7 +92,7 @@ export const App: React.FC = () => {
 
         {currentView === 'classroom' && activeScenario && (
           <ClassroomFacilitator
-            scenario={activeScenario}
+            scenario={localizeScenario(activeScenario, lang)}
             onExit={() => setCurrentView('catalog')}
             lang={lang}
           />
@@ -113,6 +122,6 @@ export const App: React.FC = () => {
 
       {/* Institutional Footer */}
       <Footer lang={lang} />
-    </div>
+    </div></LanguageContext.Provider>
   );
 };

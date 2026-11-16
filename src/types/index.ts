@@ -46,7 +46,7 @@ export interface ScenarioNorm {
 }
 
 export interface VerificationInfo {
-  fakhivets_dzpk: 'не проведено' | 'проведено' | 'проведено із зауваженнями';
+  fakhivets_dzpk: 'не проведено' | 'проведено' | 'проведено із зауваженнями' | 'pending' | 'verified' | 'verified with comments';
   khto: string | null;
   data: string | null;
   prymitka: string;
@@ -60,7 +60,7 @@ export interface AiInfo {
 }
 
 export interface CaseSource {
-  typ: 'вигаданий' | 'знеособлений з практики';
+  typ: 'вигаданий' | 'знеособлений з практики' | 'fictional' | 'anonymized from practice';
   opys: string;
 }
 

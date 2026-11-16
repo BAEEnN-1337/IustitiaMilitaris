@@ -1,3 +1,5 @@
+import { useLanguage } from '../i18n/ui';
+import { ui } from '../i18n/ui';
 import React from 'react';
 import { Scenario } from '../types';
 
@@ -16,11 +18,11 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
   onSelectNode,
   unreachableNodeIds = []
 }) => {
+  const lang = useLanguage();
   if (!scenario.vuzly || scenario.vuzly.length === 0) {
     return (
       <div className="p-8 text-center text-slate-500 text-sm">
-        Немає вузлів для побудови графа
-      </div>
+        {ui(lang, 'm27')}{' '}</div>
     );
   }
 
@@ -66,10 +68,10 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
   const sortedLevels = Object.keys(levelGroups).map(Number).sort((a, b) => a - b);
 
   // Layout parameters
-  const colWidth = 160;
-  const rowHeight = 90;
-  const nodeWidth = 90;
-  const nodeHeight = 44;
+  const colWidth = 240;
+  const rowHeight = 130;
+  const nodeWidth = 170;
+  const nodeHeight = 84;
 
   const nodePositions: Record<string, { x: number; y: number }> = {};
   let maxCol = sortedLevels.length;
@@ -221,25 +223,14 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
                 strokeWidth={isCurrent ? 2.5 : 1.5}
                 strokeDasharray={isUnreachable ? '4 2' : 'none'}
               />
-              <text
-                x={pos.x + nodeWidth / 2}
-                y={pos.y + 20}
-                fill={textColor}
-                fontSize="12"
-                fontWeight="bold"
-                textAnchor="middle"
-              >
-                {node.id}
-              </text>
-              <text
-                x={pos.x + nodeWidth / 2}
-                y={pos.y + 34}
-                fill="#94a3b8"
-                fontSize="9"
-                textAnchor="middle"
-              >
-                {isStart ? 'Старт' : isUnreachable ? 'Недосяжний' : `${node.varianty?.length || 0} вар.`}
-              </text>
+              <foreignObject x={pos.x + 8} y={pos.y + 8} width={nodeWidth - 16} height={nodeHeight - 16}>
+                <button type="button" onClick={e => { e.stopPropagation(); onSelectNode?.(node.id); }}
+                  style={{ color: textColor, width: '100%', height: '100%', overflowY: 'auto', overflowWrap: 'anywhere' }}
+                  className="text-xs text-center p-1 rounded focus-visible:outline focus-visible:outline-2">
+                  <strong className="block">{node.id}</strong>
+                  <span className="block mt-1 text-slate-400">{isStart ? ui(lang, 'm28') : isUnreachable ? ui(lang, 'm29') : ui(lang, 'm30', node.varianty?.length || 0)}</span>
+                </button>
+              </foreignObject>
             </g>
           );
         })}

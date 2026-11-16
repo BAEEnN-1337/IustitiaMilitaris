@@ -1,3 +1,5 @@
+import { localizeScenario } from '../i18n/content';
+import { ui, localizeMessage } from '../i18n/ui';
 import React, { useState, useEffect, useRef } from 'react';
 import QRCode from 'qrcode';
 import { 
@@ -16,10 +18,11 @@ interface ClassroomFacilitatorProps {
 }
 
 export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
-  scenario,
+  scenario: sourceScenario,
   onExit,
   lang
 }) => {
+  const scenario = localizeScenario(sourceScenario, lang);
   const t = translations[lang];
 
   const [ws, setWs] = useState<WebSocket | null>(null);
@@ -27,7 +30,7 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
   const [qrDataUrl, setQrDataUrl] = useState<string>('');
   const [isProjectorMode, setIsProjectorMode] = useState<boolean>(false);
   const [selectedVariantForAdvance, setSelectedVariantForAdvance] = useState<Variant | null>(null);
-  const [statusMessage, setStatusMessage] = useState<string>('Підключення до сервера...');
+  const [statusMessage, setStatusMessage] = useState<string>(ui(lang, 'm4'));
 
   // Connect to WebSocket server
   useEffect(() => {
@@ -42,12 +45,12 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
     try {
       socket = new WebSocket(wsUrl);
     } catch (e) {
-      setStatusMessage('Сервер групового режиму недоступний оффлайн. Для роботи в класі запустіть npm run server');
+      setStatusMessage(ui(lang, 'm5'));
       return;
     }
 
     socket.onopen = () => {
-      setStatusMessage('Підключено до сервера. Створення кімнати...');
+      setStatusMessage(ui(lang, 'm6'));
       socket.send(JSON.stringify({
         type: 'CREATE_ROOM',
         scenarioId: scenario.id,
@@ -69,7 +72,7 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
 
     socket.onerror = (e) => {
       console.warn('WS error', e);
-      setStatusMessage('Локальний сервер сесій не запущено. Запустіть "npm run server" для групового голосування в мережі класу.');
+      setStatusMessage(ui(lang, 'm7'));
     };
 
     setWs(socket);
@@ -154,7 +157,7 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
             <X className="w-5 h-5" />
           </button>
           <div>
-            <h1 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+            <h1 className="text-lg sm:text-xl font-bold text-white flex flex-wrap items-center gap-2">
               <Users className="w-5 h-5 text-indigo-400" />
               {t.classroom.facilitatorTitle}: {scenario.nazva}
             </h1>
@@ -165,10 +168,10 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
         </div>
 
         {/* Projector Mode Toggle */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setIsProjectorMode(!isProjectorMode)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-colors border ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex flex-wrap items-center gap-2 transition-colors border ${
               isProjectorMode
                 ? 'bg-amber-500 text-navy-950 border-amber-400 font-bold'
                 : 'bg-navy-800 hover:bg-navy-700 text-slate-300 border-navy-700'
@@ -192,13 +195,12 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
       {statusMessage && !room && (
         <div className="p-6 rounded-xl bg-navy-900 border border-amber-500/30 text-center space-y-4">
           <AlertCircle className="w-8 h-8 text-amber-400 mx-auto" />
-          <div className="text-sm text-slate-200">{statusMessage}</div>
+          <div className="text-sm text-slate-200">{localizeMessage(statusMessage, lang)}</div>
           <button
             onClick={handleStartMockRoom}
             className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition-colors"
           >
-            Запустити автономну сесію заняття (симуляція аудиторії)
-          </button>
+            {ui(lang, 'm8')}{' '}</button>
         </div>
       )}
 
@@ -230,12 +232,12 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
 
             {/* Voting Control */}
             <div className="p-3.5 rounded-xl bg-navy-950 border border-navy-800 flex flex-col justify-center gap-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-400">Статус:</span>
+              <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                <span className="text-slate-400">{ui(lang, 'm9')}{' '}</span>
                 <span className={`font-bold px-2 py-0.5 rounded text-[11px] ${
                   room.votingActive ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'
                 }`}>
-                  {room.votingActive ? 'Голосування триває' : 'Голосування закрито'}
+                  {room.votingActive ? ui(lang, 'm10') : ui(lang, 'm11')}
                 </span>
               </div>
               <button
@@ -265,19 +267,19 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
               {qrDataUrl ? (
                 <div className="text-center">
                   <img src={qrDataUrl} alt="Room QR" className="w-20 h-20 mx-auto rounded bg-white p-1" />
-                  <span className="text-[10px] text-slate-400 mt-1 block">Вхід зі смартфона</span>
+                  <span className="text-[10px] text-slate-400 mt-1 block">{ui(lang, 'm12')}{' '}</span>
                 </div>
               ) : (
-                <span className="text-xs text-slate-500">Генерація QR...</span>
+                <span className="text-xs text-slate-500">{ui(lang, 'm13')}{' '}</span>
               )}
             </div>
           </div>
 
           {/* Current Stage Question & Projector Display */}
           <div className="p-6 sm:p-8 rounded-2xl bg-navy-900 border border-navy-700 shadow-2xl space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="font-mono text-xs font-bold px-3 py-1 rounded bg-navy-800 text-emerald-400 border border-emerald-500/30">
-                Етап {currentNode.id}
+                {ui(lang, 'm14')}{' '}{currentNode.id}
               </span>
               <span className="text-xs text-slate-400">
                 {t.classroom.votesCount} <strong className="text-white text-sm">{room.totalVotes}</strong>
@@ -311,7 +313,7 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
                         : 'border-navy-800 bg-navy-950/70 hover:bg-navy-850'
                     }`}
                   >
-                    <div className="flex items-start justify-between gap-3 mb-2">
+                    <div className="flex items-start justify-between gap-3 gap-3 mb-2">
                       <div className="flex items-start gap-3">
                         <span className="w-7 h-7 rounded-lg bg-navy-800 border border-navy-700 text-emerald-300 font-bold flex items-center justify-center text-xs shrink-0">
                           {v.id}
@@ -325,8 +327,7 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
                           {percent}%
                         </span>
                         <span className="text-xs text-slate-400 block font-mono">
-                          {count} гол.
-                        </span>
+                          {count} {ui(lang, 'm15')}{' '}</span>
                       </div>
                     </div>
 
@@ -353,8 +354,7 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
                     {t.classroom.discussionIndex}
                   </div>
                   <div className="text-xs text-slate-400">
-                    Показує рівень поляризації думок у класі (від 0.0 до 1.0)
-                  </div>
+                    {ui(lang, 'm16')}{' '}</div>
                 </div>
               </div>
               <div className="text-2xl font-mono font-extrabold text-amber-300">
@@ -365,7 +365,7 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
             {/* Discussion Facilitation Questions */}
             {scenario.pytannia_dlia_obhovorennia && scenario.pytannia_dlia_obhovorennia.length > 0 && (
               <div className="p-4 rounded-xl bg-navy-950/80 border border-navy-800 space-y-2">
-                <div className="text-xs font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+                <div className="text-xs font-bold text-indigo-400 uppercase tracking-wider flex flex-wrap items-center gap-2">
                   <MessageSquare className="w-4 h-4" />
                   {t.classroom.discussionQuestions}
                 </div>
@@ -381,7 +381,7 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
             <div className="pt-4 border-t border-navy-800 flex flex-col sm:flex-row items-center justify-between gap-3">
               <div className="text-xs text-slate-400">
                 {selectedVariantForAdvance ? (
-                  <span>Обрано варіант <strong>{selectedVariantForAdvance.id}</strong> для переходу на наступний крок</span>
+                  <span>{ui(lang, 'm17')}{' '}<strong>{selectedVariantForAdvance.id}</strong> {ui(lang, 'm18')}{' '}</span>
                 ) : (
                   <span>{t.classroom.selectPathPrompt}</span>
                 )}
@@ -389,13 +389,13 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
               <button
                 onClick={() => selectedVariantForAdvance && advanceToNext(selectedVariantForAdvance)}
                 disabled={!selectedVariantForAdvance}
-                className={`py-3 px-6 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 transition-all ${
+                className={`py-3 px-6 rounded-xl font-bold text-xs sm:text-sm flex flex-wrap items-center gap-2 transition-all ${
                   selectedVariantForAdvance
                     ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg cursor-pointer'
                     : 'bg-navy-800 text-slate-500 border border-navy-700 cursor-not-allowed'
                 }`}
               >
-                <span>Перейти до наступного етапу</span>
+                <span>{ui(lang, 'm19')}{' '}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

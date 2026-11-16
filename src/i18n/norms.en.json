@@ -1,0 +1,561 @@
+{
+  "nazva": "Legal norms for the ethical dilemma scenarios",
+  "versiia": "2026-11-10",
+  "data_stanu": "2026-11-10",
+  "prymitka": "Unofficial English translations for educational use. Consult the linked original instruments. Source verification dates and statuses are retained from the Ukrainian edition. NACP instruments and OECD documents are advisory; they are not binding provisions of Ukrainian law. Unverified provisions must not be treated as established law.",
+  "statusy": {
+    "zvireno": "Source text and edition verified",
+    "zvireno-rekomendatsiinyi": "Source verified; advisory instrument",
+    "ne-zvireno": "Original source not verified"
+  },
+  "normy": {
+    "ZPK-1": {
+      "id": "ZPK-1",
+      "akt": "Law of Ukraine on Prevention of Corruption, 14 October 2014, No. 1700-VII",
+      "punkt": "Article 1: close persons, whistleblower, gift, potential conflict of interest, private interest, actual conflict of interest, direct subordination",
+      "korotko": "Private interest includes family, friendship and other relationships outside official duties. Whistleblower information may arise during service or study.",
+      "tsytaty": [
+        "private interest means any pecuniary or non-pecuniary interest of a person, including one arising from personal, family, friendly or other non-official relations with natural or legal persons",
+        "during their service or study"
+      ],
+      "redaktsiia": "Edition of 23 October 2026, pursuant to Law No. 4903-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/1700-18",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026; article text identical to our snapshot dated 30.05.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZPK-3-1-g": {
+      "id": "ZPK-3-1-g",
+      "akt": "Law of Ukraine on Prevention of Corruption, 14 October 2014, No. 1700-VII",
+      "punkt": "Article 3(1)(1)(g)",
+      "korotko": "The Law covers military officials of the Armed Forces and other military formations, with exceptions including cadets of higher military educational institutions. Articles 22–28 therefore do not apply to cadets solely as cadets, but do apply to commanders and superiors.",
+      "tsytaty": [
+        "g) military officials of the Armed Forces of Ukraine, the State Service of Special Communications and Information Protection of Ukraine and other military formations established under law, except conscripts and cadets of higher military educational institutions"
+      ],
+      "redaktsiia": "Edition of 23 October 2026, pursuant to Law No. 4903-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/1700-18",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026; in Article 3, compared with our snapshot of 30 May 2026, only paragraph 2(a) (state banks) changed; paragraph 1(g) is unchanged",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZPK-22": {
+      "id": "ZPK-22",
+      "akt": "Law of Ukraine on Prevention of Corruption, 14 October 2014, No. 1700-VII",
+      "punkt": "Article 22(1)",
+      "korotko": "Official powers or position must not be used to obtain an unlawful benefit, including using state property for private interests.",
+      "tsytaty": [
+        "It is prohibited to use official powers or position and the opportunities arising from them to obtain an unlawful benefit for oneself or others, including using any state or municipal property or funds in private interests"
+      ],
+      "redaktsiia": "Edition of 23 October 2026, pursuant to Law No. 4903-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/1700-18",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026; identical to our snapshot dated 30.05.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZPK-23": {
+      "id": "ZPK-23",
+      "akt": "Law of Ukraine on Prevention of Corruption, 14 October 2014, No. 1700-VII",
+      "punkt": "Article 23(1), (3), (4)",
+      "korotko": "Gifts connected to official duties or received from subordinates are prohibited regardless of value. Gifts to the state are transferred under Cabinet procedures. Decisions benefiting a donor within three years are deemed to involve an actual conflict of interest.",
+      "tsytaty": [
+        "It is prohibited, directly or through others, to demand, request or receive gifts for oneself or close persons from legal or natural persons:",
+        "in connection with activities involving the performance of state or local government functions",
+        "Decisions by a person specified in Article 3(1)(1) or (2) benefiting someone from whom that person or their close persons received a gift within the preceding three years are deemed to have been taken under an actual conflict of interest"
+      ],
+      "redaktsiia": "Edition of 23 October 2026, pursuant to Law No. 4903-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/1700-18",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026; identical to our snapshot dated 30.05.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZPK-24": {
+      "id": "ZPK-24",
+      "akt": "Law of Ukraine on Prevention of Corruption, 14 October 2014, No. 1700-VII",
+      "punkt": "Article 24(1), (2), (5)",
+      "korotko": "Refuse an offered gift, identify the person where possible, involve witnesses and notify the superior in writing. If already received, report in writing within one working day and draw up a record. Seek NACP guidance if in doubt.",
+      "tsytaty": [
+        "1) refuse the offer;",
+        "4) notify the immediate superior (if any), the head of the relevant body, enterprise, institution or organisation, or specially authorised anti-corruption entities in writing of the offer",
+        "the person must immediately, but no later than one working day, notify their immediate superior of this fact in writing"
+      ],
+      "redaktsiia": "Edition of 23 October 2026, pursuant to Law No. 4903-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/1700-18",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026; identical to our snapshot dated 30.05.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZPK-27": {
+      "id": "ZPK-27",
+      "akt": "Law of Ukraine on Prevention of Corruption, 14 October 2014, No. 1700-VII",
+      "punkt": "Article 27(1)",
+      "korotko": "Direct subordination between close persons is prohibited. Included as a reference for new scenario authors; not used in the starter scenarios.",
+      "tsytaty": [
+        "may not have close persons directly subordinate to them or be directly subordinate to close persons in connection with exercising their powers"
+      ],
+      "redaktsiia": "Edition of 23 October 2026, pursuant to Law No. 4903-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/1700-18",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026; identical to our snapshot dated 30.05.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZPK-28": {
+      "id": "ZPK-28",
+      "akt": "Law of Ukraine on Prevention of Corruption, 14 October 2014, No. 1700-VII",
+      "punkt": "Article 28(1), (3), (5)",
+      "korotko": "Notify the immediate superior of an actual or potential conflict of interest no later than the next working day, and do not act or decide under an actual conflict. The superior must decide on management measures within two working days.",
+      "tsytaty": [
+        "notify the immediate superior no later than the next working day after learning, or when they should have learned, of an actual or potential conflict of interest",
+        "not take actions or make decisions under an actual conflict of interest",
+        "within two working days of receiving notice of a subordinate's actual or potential conflict of interest, decide how to manage the conflict"
+      ],
+      "redaktsiia": "Edition of 23 October 2026, pursuant to Law No. 4903-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/1700-18",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026; identical to our snapshot dated 30.05.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZPK-29": {
+      "id": "ZPK-29",
+      "akt": "Law of Ukraine on Prevention of Corruption, 14 October 2014, No. 1700-VII",
+      "punkt": "Article 29(1)",
+      "korotko": "External management measures include removal from a decision, external supervision, restricting information access, reviewing powers, transfer or dismissal.",
+      "tsytaty": [
+        "1) removing the person from a task, action, decision or participation in a decision under an actual or potential conflict of interest"
+      ],
+      "redaktsiia": "Edition of 23 October 2026, pursuant to Law No. 4903-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/1700-18",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026; identical to our snapshot dated 30.05.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZPK-41": {
+      "id": "ZPK-41",
+      "akt": "Law of Ukraine on Prevention of Corruption, 14 October 2014, No. 1700-VII",
+      "punkt": "Article 41",
+      "korotko": "Persons specified in Article 3(1)(1) and (2)(a) must act impartially.",
+      "tsytaty": [
+        "act impartially, regardless of private interests or personal attitudes towards any persons"
+      ],
+      "redaktsiia": "Edition of 23 October 2026, pursuant to Law No. 4903-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/1700-18",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026; identical to our snapshot dated 30.05.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZPK-42": {
+      "id": "ZPK-42",
+      "akt": "Law of Ukraine on Prevention of Corruption, 14 October 2014, No. 1700-VII",
+      "punkt": "Article 42",
+      "korotko": "Officials must act competently and efficiently, preventing abuse and inefficient use of state property.",
+      "tsytaty": [
+        "do not allow abuse or inefficient use of state and municipal property"
+      ],
+      "redaktsiia": "Edition of 23 October 2026, pursuant to Law No. 4903-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/1700-18",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026; article text identical to our snapshot dated 30.05.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZPK-44": {
+      "id": "ZPK-44",
+      "akt": "Law of Ukraine on Prevention of Corruption, 14 October 2014, No. 1700-VII",
+      "punkt": "Article 44(1), (3)",
+      "korotko": "Officials must refrain from carrying out unlawful management decisions and instructions and notify the head of the body in writing. Included for authors of new scenarios, rather than starter examples.",
+      "tsytaty": [
+        "refrain from carrying out management decisions or instructions if they conflict with the law"
+      ],
+      "redaktsiia": "Edition of 23 October 2026, pursuant to Law No. 4903-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/1700-18",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026; identical to our snapshot dated 30.05.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZPK-53-6": {
+      "id": "ZPK-53-6",
+      "akt": "Law of Ukraine on Prevention of Corruption, 14 October 2014, No. 1700-VII",
+      "punkt": "Article 53(6)",
+      "korotko": "Public officials discovering a corruption offence must act within their powers to stop it and notify a specially authorised entity in writing within 24 hours. This is an official's duty, rather than a cadet's duty.",
+      "tsytaty": [
+        "must, within their powers, take measures to stop the offence and immediately, within 24 hours, notify a specially authorised anti-corruption entity in writing"
+      ],
+      "redaktsiia": "Edition of 23 October 2026, pursuant to Law No. 4903-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/1700-18",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026; identical to our snapshot dated 30.05.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZPK-53-1": {
+      "id": "ZPK-53-1",
+      "akt": "Law of Ukraine on Prevention of Corruption, 14 October 2014, No. 1700-VII",
+      "punkt": "Article 53-1(1), (2)",
+      "korotko": "Bodies must provide internal reporting channels. Reports, including anonymous ones, may be submitted via the Unified Whistleblower Reporting Portal and dedicated telephone lines.",
+      "tsytaty": [
+        "Reports, including anonymous reports, through internal channels concerning possible corruption or corruption-related offences or other breaches of this Law are submitted through the Unified Whistleblower Reporting Portal, accessible around the clock, and dedicated telephone lines"
+      ],
+      "redaktsiia": "Edition of 23 October 2026, pursuant to Law No. 4903-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/1700-18",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026; identical to our snapshot dated 30.05.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZPK-53-2": {
+      "id": "ZPK-53-2",
+      "akt": "Law of Ukraine on Prevention of Corruption, 14 October 2014, No. 1700-VII",
+      "punkt": "Article 53-2(1)",
+      "korotko": "Whistleblowers choose their own reporting channel: internal, regular or external.",
+      "tsytaty": [
+        "The whistleblower independently determines which channels to use to report possible corruption or corruption-related offences or other breaches of this Law: internal, regular or external channels"
+      ],
+      "redaktsiia": "Edition of 23 October 2026, pursuant to Law No. 4903-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/1700-18",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026; identical to our snapshot dated 30.05.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZPK-53-4": {
+      "id": "ZPK-53-4",
+      "akt": "Law of Ukraine on Prevention of Corruption, 14 October 2014, No. 1700-VII",
+      "punkt": "Article 53-4(1)",
+      "korotko": "Whistleblowers must not be dismissed, disciplined or subjected to other adverse measures because of a report.",
+      "tsytaty": [
+        "subjected to disciplinary liability or other adverse measures by the manager or employer"
+      ],
+      "redaktsiia": "Edition of 23 October 2026, pursuant to Law No. 4903-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/1700-18",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026; identical to our snapshot dated 30.05.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZPK-53-5": {
+      "id": "ZPK-53-5",
+      "akt": "Law of Ukraine on Prevention of Corruption, 14 October 2014, No. 1700-VII",
+      "punkt": "Article 53-5(1)",
+      "korotko": "A whistleblower's identity must not be disclosed to third parties uninvolved in verification or to persons concerned by the report.",
+      "tsytaty": [
+        "Disclosure of information about the whistleblower, their close persons or other data capable of identifying the whistleblower is prohibited"
+      ],
+      "redaktsiia": "Edition of 23 October 2026, pursuant to Law No. 4903-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/1700-18",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026; identical to our snapshot dated 30.05.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZAD-4": {
+      "id": "ZAD-4",
+      "akt": "Law of Ukraine on Academic Integrity, 18 December 2025, No. 4742-IX",
+      "punkt": "Article 4(2), (3)",
+      "korotko": "Academic integrity rests on honesty, trust, respect, fairness, responsibility, resilience and determination, with principles including avoidance of conflicts of interest.",
+      "tsytaty": [
+        "honesty of participants in academic activities towards themselves and others",
+        "avoidance of conflicts of interest"
+      ],
+      "redaktsiia": "Original edition of 18 December 2025; no amendments as of 10 November 2026; published in Holos Ukrainy on 31 January 2026; becomes operative six months after publication",
+      "posylannia": "https://zakon.rada.gov.ua/go/4742-20",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026; status: in force",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZAD-7": {
+      "id": "ZAD-7",
+      "akt": "Law of Ukraine on Academic Integrity, 18 December 2025, No. 4742-IX",
+      "punkt": "Article 7(1)",
+      "korotko": "Learners must complete assignments independently unless the rules permit assistance or aids, and must acknowledge sources.",
+      "tsytaty": [
+        "complete each educational assignment independently, except where it involves several participants or the assignment rules permit assistance from others or the use of supporting materials and tools"
+      ],
+      "redaktsiia": "Original edition of 18 December 2025; no amendments as of 10 November 2026",
+      "posylannia": "https://zakon.rada.gov.ua/go/4742-20",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZAD-8-4": {
+      "id": "ZAD-8-4",
+      "akt": "Law of Ukraine on Academic Integrity, 18 December 2025, No. 4742-IX",
+      "punkt": "Article 8(4)",
+      "korotko": "Authors using AI-generated material in academic work must disclose this and identify the generation method or software.",
+      "tsytaty": [
+        "If an academic work uses an object generated by artificial intelligence, the author must disclose this in the work, specifying the generation method and/or a link to the relevant computer program or its description"
+      ],
+      "redaktsiia": "Original edition of 18 December 2025; no amendments as of 10 November 2026",
+      "posylannia": "https://zakon.rada.gov.ua/go/4742-20",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZAD-9-2": {
+      "id": "ZAD-9-2",
+      "akt": "Law of Ukraine on Academic Integrity, 18 December 2025, No. 4742-IX",
+      "punkt": "Article 9(2)",
+      "korotko": "Academic assessment must follow criteria published in advance and take place without a conflict of interest or after the conflict has been managed.",
+      "tsytaty": [
+        "in the absence of a conflict of interest or after its management in accordance with the law"
+      ],
+      "redaktsiia": "Original edition of 18 December 2025; no amendments as of 10 November 2026",
+      "posylannia": "https://zakon.rada.gov.ua/go/4742-20",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZAD-17-3": {
+      "id": "ZAD-17-3",
+      "akt": "Law of Ukraine on Academic Integrity, 18 December 2025, No. 4742-IX",
+      "punkt": "Article 17(3)",
+      "korotko": "Academic integrity is presumed: a breach is established only through the procedure required by law or internal rules.",
+      "tsytaty": [
+        "(the principle of the presumption of academic integrity)"
+      ],
+      "redaktsiia": "Original edition of 18 December 2025; no amendments as of 10 November 2026",
+      "posylannia": "https://zakon.rada.gov.ua/go/4742-20",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZAD-24": {
+      "id": "ZAD-24",
+      "akt": "Law of Ukraine on Academic Integrity, 18 December 2025, No. 4742-IX",
+      "punkt": "Article 24(1)",
+      "korotko": "Academic plagiarism is presenting another person's result as one's own or reproducing their work without attribution.",
+      "tsytaty": [
+        "Academic plagiarism means publishing, in part or in full, a scientific or creative result obtained by another person or persons as a result of one's own academic activity"
+      ],
+      "redaktsiia": "Original edition of 18 December 2025; no amendments as of 10 November 2026",
+      "posylannia": "https://zakon.rada.gov.ua/go/4742-20",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZAD-27": {
+      "id": "ZAD-27",
+      "akt": "Law of Ukraine on Academic Integrity, 18 December 2025, No. 4742-IX",
+      "punkt": "Article 27(1)",
+      "korotko": "Fabrication is inventing data or facts about the results of one's own academic activity.",
+      "tsytaty": [
+        "Fabrication means a participant in academic activity inventing data or facts about the results of their own academic activity"
+      ],
+      "redaktsiia": "Original edition of 18 December 2025; no amendments as of 10 November 2026",
+      "posylannia": "https://zakon.rada.gov.ua/go/4742-20",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZAD-29": {
+      "id": "ZAD-29",
+      "akt": "Law of Ukraine on Academic Integrity, 18 December 2025, No. 4742-IX",
+      "punkt": "Article 29(1)",
+      "korotko": "Publishing AI-generated results as one's own without disclosure is a distinct academic integrity violation.",
+      "tsytaty": [
+        "Dishonest use of AI-generated results means publishing texts, images, models, data or other results generated by artificial intelligence as results of one's own academic activity without disclosing this in the academic work or accompanying materials"
+      ],
+      "redaktsiia": "Original edition of 18 December 2025; no amendments as of 10 November 2026",
+      "posylannia": "https://zakon.rada.gov.ua/go/4742-20",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZAD-31": {
+      "id": "ZAD-31",
+      "akt": "Law of Ukraine on Academic Integrity, 18 December 2025, No. 4742-IX",
+      "punkt": "Article 31(1), (2)",
+      "korotko": "Work completed without the required independence, including by another person, is treated as not completed.",
+      "tsytaty": [
+        "An assignment completed without the required independence is considered not completed and is not subject to assessment"
+      ],
+      "redaktsiia": "Original edition of 18 December 2025; no amendments as of 10 November 2026",
+      "posylannia": "https://zakon.rada.gov.ua/go/4742-20",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZAD-34": {
+      "id": "ZAD-34",
+      "akt": "Law of Ukraine on Academic Integrity, 18 December 2025, No. 4742-IX",
+      "punkt": "Article 34(1), (2)",
+      "korotko": "Inducement includes requests, persuasion, pressure and other encouragement. The person approached must refuse and notify the authorised body or officer no later than the next working day.",
+      "tsytaty": [
+        "Inducement to breach academic integrity means requests, persuasion, instructions, threats, coercion, pressure or any other encouragement to commit an academic integrity violation",
+        "A person induced to breach academic integrity must refuse and immediately, no later than the next working day, notify the authorised body or officer"
+      ],
+      "redaktsiia": "Original edition of 18 December 2025; no amendments as of 10 November 2026",
+      "posylannia": "https://zakon.rada.gov.ua/go/4742-20",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZAD-37-1": {
+      "id": "ZAD-37-1",
+      "akt": "Law of Ukraine on Academic Integrity, 18 December 2025, No. 4742-IX",
+      "punkt": "Article 37(1), (2)",
+      "korotko": "Anyone with evidence of a breach may notify the authorised body or officer. Reports are examined where they contain verifiable facts.",
+      "tsytaty": [
+        "has the right to report this in writing, on paper or electronically, to the authorised body or officer or the head of the educational institution"
+      ],
+      "redaktsiia": "Original edition of 18 December 2025; no amendments as of 10 November 2026",
+      "posylannia": "https://zakon.rada.gov.ua/go/4742-20",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZAD-38-2": {
+      "id": "ZAD-38-2",
+      "akt": "Law of Ukraine on Academic Integrity, 18 December 2025, No. 4742-IX",
+      "punkt": "Article 38(2)",
+      "korotko": "If a learner admits a breach, the authorised body or officer determines the sanction without the full review procedure.",
+      "tsytaty": [
+        "Where a learner admits having committed an academic integrity violation, the sanction is determined by the authorised body or officer"
+      ],
+      "redaktsiia": "Original edition of 18 December 2025; no amendments as of 10 November 2026",
+      "posylannia": "https://zakon.rada.gov.ua/go/4742-20",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "ZO-42": {
+      "id": "ZO-42",
+      "akt": "Law of Ukraine on Education, 5 September 2017, No. 2145-VIII",
+      "punkt": "Article 42",
+      "korotko": "All participants in education must observe academic integrity. The Academic Integrity Law defines its rules and violations. Article 42 was rewritten by Law No. 4742-IX; older guides listing violations under Article 42 are outdated.",
+      "tsytaty": [
+        "Every participant in the educational process must observe the values, principles and rules of academic integrity in their activities"
+      ],
+      "redaktsiia": "Edition of 13 October 2026, Law No. 5008-IX; Article 42 as amended by Law No. 4742-IX of 18 December 2025",
+      "posylannia": "https://zakon.rada.gov.ua/go/2145-19",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "SVS-30": {
+      "id": "SVS-30",
+      "akt": "Internal Service Regulations of the Armed Forces of Ukraine, approved by Law No. 548-XIV of 24 March 1999",
+      "punkt": "Article 30",
+      "korotko": "Subordinates must obey superiors' orders unconditionally, except manifestly criminal orders.",
+      "tsytaty": [
+        "A subordinate must obey the superior's orders unconditionally, except where a manifestly criminal order is given"
+      ],
+      "redaktsiia": "Edition of 18 March 2026, pursuant to Law No. 4797-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/548-14",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "SVS-36": {
+      "id": "SVS-36",
+      "akt": "Internal Service Regulations of the Armed Forces of Ukraine, approved by Law No. 548-XIV of 24 March 1999",
+      "punkt": "Article 36",
+      "korotko": "Commanders are responsible for their orders, their consequences and compliance with law. Those responsible for issuing or executing manifestly criminal orders incur liability.",
+      "tsytaty": [
+        "The commander or superior is responsible for the order issued, its consequences and its compliance with legislation"
+      ],
+      "redaktsiia": "Edition of 18 March 2026, pursuant to Law No. 4797-IX",
+      "posylannia": "https://zakon.rada.gov.ua/go/548-14",
+      "typ": "zakon",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "KMU-1195": {
+      "id": "KMU-1195",
+      "akt": "Cabinet of Ministers Resolution No. 1195 of 16 November 2011 on the transfer of gifts received for the state, the Autonomous Republic of Crimea, territorial communities and state or municipal institutions",
+      "punkt": "Paragraph 2 of the Procedure",
+      "korotko": "A gift received for the state or an institution must be transferred to the body within one month. This concerns gifts to the state under Article 23(3), rather than personal gifts.",
+      "tsytaty": [
+        "An authorised person who receives a gift must transfer it to the body within one month"
+      ],
+      "redaktsiia": "Edition of 22 June 2023, Resolution No. 623-2023",
+      "posylannia": "https://zakon.rada.gov.ua/go/1195-2011-п",
+      "typ": "postanova",
+      "status_zvirky": "zvireno",
+      "dzherelo_zvirky": "zakon.rada.gov.ua, printable text, retrieved 10.11.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "NAZK-MR2-8": {
+      "id": "NAZK-MR2-8",
+      "akt": "NACP Methodological Recommendations No. 2 of 12 January 2024 on conflicts of interest and anti-corruption restrictions",
+      "punkt": "Section 8, paragraphs 8.3–8.5; paragraph 14.3",
+      "korotko": "NACP guidance explains prohibited gifts regardless of value, permitted gifts and their conditions. A gift from a subordinate violates the rules regardless of its amount.",
+      "tsytaty": [
+        "Regardless of the gift's value, the director appears to have breached Article 23(1) because the donor is subordinate to the recipient"
+      ],
+      "redaktsiia": "Section 8 and paragraph 14.3 published 12 January 2024; marked current on NACP wiki; snapshot of 29 September 2026",
+      "posylannia": "https://wiki.nazk.gov.ua/category/konflikt-interesiv/",
+      "typ": "rekomendatsii-nazk",
+      "status_zvirky": "zvireno-rekomendatsiinyi",
+      "dzherelo_zvirky": "our NACP wiki snapshot dated 29.09.2026; category page accessible on 10.11.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "NAZK-R4-194": {
+      "id": "NAZK-R4-194",
+      "akt": "NACP Clarification No. 4 of 13 November 2023 on financial control measures",
+      "punkt": "Question 194: Who is a military official?",
+      "korotko": "A military official occupies a post with organisational, managerial, administrative or economic duties, or is specifically authorised to perform them. Service members who are superiors by virtue of their position are military officials.",
+      "tsytaty": [
+        "service members who are superiors by virtue of their official position are military officials"
+      ],
+      "redaktsiia": "Published 13 November 2023; marked current on NACP wiki; snapshot of 28 September 2026",
+      "posylannia": "https://wiki.nazk.gov.ua/category/deklaruvannya/",
+      "typ": "rozjasnennia-nazk",
+      "status_zvirky": "zvireno-rekomendatsiinyi",
+      "dzherelo_zvirky": "our NACP wiki snapshot dated 28.09.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "OECD-0435": {
+      "id": "OECD-0435",
+      "akt": "OECD Recommendation of the Council on Public Integrity, OECD/LEGAL/0435, adopted 26 January 2017",
+      "punkt": "Paragraphs 8(b) and 9",
+      "korotko": "The OECD recommends training in ethical dilemma analysis and an open organisational culture where dilemmas can be discussed and concerns safely reported. This explains the simulator's purpose; it is not Ukrainian law.",
+      "tsytaty": [
+        "develop essential skills for the analysis of ethical dilemmas",
+        "encouraging an open culture where ethical dilemmas, public integrity concerns, and errors can be discussed freely"
+      ],
+      "redaktsiia": "Compendium of OECD Legal Instruments, retrieved 10 November 2026",
+      "posylannia": "https://legalinstruments.oecd.org/en/instruments/OECD-LEGAL-0435",
+      "typ": "mizhnarodna-rekomendatsiia",
+      "status_zvirky": "zvireno-rekomendatsiinyi",
+      "dzherelo_zvirky": "PDF https://legalinstruments.oecd.org/public/doc/353/353.en.pdf, retrieved 10.11.2026",
+      "data_zvirky": "2026-11-10"
+    },
+    "KUPAP-172-5": {
+      "id": "KUPAP-172-5",
+      "akt": "Code of Ukraine on Administrative Offences",
+      "punkt": "Article 172-5: Breach of statutory restrictions on gifts",
+      "korotko": "NACP Guidance No. 2, paragraph 8.5, discusses administrative liability for Article 23 violations. The current Code could not be retrieved from zakon.rada.gov.ua on 10 November 2026; the server returned only a version predating 7 May 2017. Scenarios do not state penalty amounts.",
+      "tsytaty": [],
+      "redaktsiia": "Not established",
+      "posylannia": "https://zakon.rada.gov.ua/go/80731-10",
+      "typ": "kodeks",
+      "status_zvirky": "ne-zvireno",
+      "dzherelo_zvirky": "—",
+      "data_zvirky": "2026-11-10"
+    }
+  }
+}
