@@ -100,6 +100,9 @@ try {
       .variantId,
     'A'
   );
+  await request('/api/progress',{scenarioId:'S06',pathway:[{nodeId:'V1',variantId:'A'},{nodeId:'V2',variantId:'E1'},{nodeId:'V6',variantId:'J1'}]},cookie);
+  const completed=(await(await request('/api/progress',null,cookie)).json()).S06;assert.ok(completed.completedAt);
+  await request('/api/progress',{scenarioId:'S06',pathway:completed.pathway,notes:'note'},cookie);assert.equal((await(await request('/api/progress',null,cookie)).json()).S06.completedAt,completed.completedAt);
   const bob = await request('/api/auth/register', {
     login: 'other-alias',
     password: 'secure-pass'
@@ -199,6 +202,8 @@ try {
     assert.equal(state.room.discussionIndex, 1);
     assert.ok(!JSON.stringify(state.room).includes(token));
     assert.ok(!('hostSecret' in state.room));
+    pending = wait(two,m => m.room?.showLive === false); send(host,{type:'SET_LIVE',showLive:false}); const hidden=await pending; assert.deepEqual(hidden.room.votes,{}); assert.equal(hidden.room.totalVotes,2);
+    pending=wait(two,m=>m.room?.showLive===true);send(host,{type:'SET_LIVE',showLive:true});assert.deepEqual((await pending).room.votes,{A:1,B:1});
     one.close();
     const rejoined = await connect();
     pending = wait(rejoined, (m) => m.room);
@@ -213,19 +218,22 @@ try {
     pending = wait(host, (m) => m.room?.phase === 'results');
     send(host, { type: 'SHOW_RESULTS' });
     await pending;
-    pending = wait(host, (m) => m.room?.phase === 'feedback');
+    pending = wait(
+      host,
+      (m) => m.room?.phase === 'feedback' && m.room.selectedVariantId === 'B'
+    );
+    send(host, { type: 'DISCUSS', variantId: 'B' });
+    await pending;
+    pending = wait(host, (m) => m.room?.selectedVariantId === 'A');
     send(host, { type: 'DISCUSS', variantId: 'A' });
     await pending;
     pending = wait(two, (m) => m.room?.currentNodeId === 'V2');
     send(host, { type: 'NEXT_STAGE', nextNodeId: 'V8' });
     state = await pending;
-    assert.equal(state.room.phase, 'briefing');
+    assert.equal(state.room.phase, 'voting');
     assert.equal(state.room.totalVotes, 0);
     assert.equal(state.hasVoted, false);
     for (const variantId of ['E1', 'J1']) {
-      pending = wait(host, (m) => m.room?.phase === 'voting');
-      send(host, { type: 'OPEN_VOTING' });
-      await pending;
       pending = wait(host, (m) => m.room?.phase === 'results');
       send(host, { type: 'SHOW_RESULTS' });
       await pending;
@@ -234,7 +242,7 @@ try {
       await pending;
       pending = wait(
         host,
-        (m) => m.room?.phase === 'briefing' || m.room?.phase === 'finished'
+        (m) => m.room?.phase === 'voting' || m.room?.phase === 'finished'
       );
       send(host, { type: 'NEXT_STAGE' });
       state = await pending;

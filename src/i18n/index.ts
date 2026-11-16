@@ -69,7 +69,7 @@ export const translations = {
       applicabilityTitle: "На кого поширюються норми:",
       adviceTitle: "Практичні поради щодо доброчесності:",
       restartBtn: "Пройти заново іншим шляхом",
-      privacyBanner: "Ваші відповіді збережено виключно локально у вашому браузері й нікому не передаються.",
+      privacyBanner: "Гостьовий прогрес зберігається у браузері. Після входу прогрес доступний лише вам на сервері-хості.",
       exportScormBtn: "Завантажити пакет для LMS (SCORM 1.2)"
     },
     cids: {
@@ -138,7 +138,7 @@ export const translations = {
     },
     footer: {
       disclaimer: "«Симулятор етичних дилем» є виключно навчальним інструментом для розбору моральних компромісів та запобігання корупції в секторі безпеки і оборони України. Симулятор категорично не призначений для атестації, оцінювання чи профілювання військовослужбовців або персоналу.",
-      zeroPii: "Zero-PII & Privacy: жодні персональні дані не збираються. Одиночний прогрес зберігається лише у вашому браузері.",
+      zeroPii: "Zero-PII: не вводьте особисті дані. Гостьовий прогрес зберігається у браузері; прогрес акаунта — приватно на сервері-хості.",
       copyright: "Розроблено для IV Хакатона з питань виховання доброчесності та запобігання корупції (Завдання 1)."
     }
   },
@@ -210,7 +210,7 @@ export const translations = {
       applicabilityTitle: "Norm Applicability:",
       adviceTitle: "Integrity Takeaways & Advice:",
       restartBtn: "Replay with Different Choices",
-      privacyBanner: "Your choices are saved exclusively in your local browser and never transmitted.",
+      privacyBanner: "Guest progress stays in your browser. When signed in, progress is stored privately on this host.",
       exportScormBtn: "Export SCORM 1.2 Package"
     },
     cids: {
@@ -279,7 +279,7 @@ export const translations = {
     },
     footer: {
       disclaimer: "The 'Ethical Dilemmas Simulator' is exclusively an educational instrument for analyzing ethical trade-offs and preventing corruption in Ukraine's defense sector. It is strictly not intended for testing, grading, or profiling personnel.",
-      zeroPii: "Zero-PII & Privacy: No personal identifiable information is gathered. Solo progress remains strictly in your browser.",
+      zeroPii: "Zero-PII: do not enter personal information. Guest progress stays in your browser; account progress is private on this host.",
       copyright: "Built for the IV Hackathon on Integrity and Corruption Prevention (Task 1)."
     }
   }

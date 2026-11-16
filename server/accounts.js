@@ -1,3 +1,14 @@
+import { readdirSync, readFileSync } from 'node:fs';
+const scenarioNodes = new Map(
+  readdirSync(new URL('../stsenarii/', import.meta.url))
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => {
+      const s = JSON.parse(
+        readFileSync(new URL('../stsenarii/' + f, import.meta.url), 'utf8')
+      );
+      return [s.id, s.vuzly];
+    })
+);
 import {
   randomBytes,
   scryptSync,
@@ -187,12 +198,28 @@ export async function installAccounts(app, directory) {
         return res.status(400).json({ error: 'invalidProgress' });
       await update((d) => {
         d.progress[id] ||= {};
+        const previous = d.progress[id][scenarioId];
+        const changed =
+          JSON.stringify(previous?.pathway) !== JSON.stringify(pathway);
+        const last = pathway[pathway.length - 1];
+        const complete =
+          last &&
+          scenarioNodes
+            .get(scenarioId)
+            ?.find((n) => n.id === last.nodeId)
+            ?.varianty.find((v) => v.id === last.variantId)?.nastupnyi_vuzol ===
+            null;
+        const now = new Date().toISOString();
         d.progress[id][scenarioId] = {
           pathway: pathway.map((p) => ({
             nodeId: p.nodeId,
             variantId: p.variantId
           })),
-          notes: notes ?? d.progress[id][scenarioId]?.notes ?? ''
+          notes: notes ?? previous?.notes ?? '',
+          updatedAt: changed ? now : previous?.updatedAt || now,
+          ...(complete
+            ? { completedAt: (!changed && previous?.completedAt) || now }
+            : {})
         };
       });
       res.json({ ok: true });
