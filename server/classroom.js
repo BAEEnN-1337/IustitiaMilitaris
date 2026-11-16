@@ -15,13 +15,17 @@ export function installClassroom(server, directory) {
   const send = (ws, data) => {
     if (ws.readyState === 1) ws.send(JSON.stringify(data));
   };
-  const publicRoom = (room) => ({
+  const publicRoom = (room, role) => ({
     code: room.code,
     scenarioId: room.scenarioId,
     currentNodeId: room.currentNodeId,
     phase: room.phase,
     selectedVariantId: room.selectedVariantId,
-    votes: room.votes,
+    votes:
+      room.phase === 'voting' && role === 'student' && !room.showLive
+        ? {}
+        : room.votes,
+    showLive: room.showLive,
     totalVotes: Object.values(room.votes).reduce((a, b) => a + b, 0),
     participantsCount: new Set(
       [...room.clients].filter((c) => c.role === 'student').map((c) => c.token)
@@ -33,7 +37,7 @@ export function installClassroom(server, directory) {
     for (const ws of room.clients)
       send(ws, {
         type: 'ROOM_UPDATE',
-        room: publicRoom(room),
+        room: publicRoom(room, ws.role),
         hasVoted: room.voters.has(ws.token)
       });
   };
@@ -76,6 +80,7 @@ export function installClassroom(server, directory) {
             scenarioId: data.scenarioId,
             currentNodeId: scenarios.get(data.scenarioId).pochatkovyi_vuzol,
             phase: 'briefing',
+            showLive: true,
             hostSecret: randomBytes(32).toString('hex'),
             clients: new Set([ws]),
             voters: new Set(),
@@ -152,13 +157,18 @@ export function installClassroom(server, directory) {
           send(ws, { type: 'ERROR', error: 'forbidden' });
           return;
         }
+        if (data.type === 'SET_LIVE') {
+          room.showLive = Boolean(data.showLive);
+          broadcast(room);
+          return;
+        }
         if (data.type === 'OPEN_VOTING' && room.phase === 'briefing')
           room.phase = 'voting';
         else if (data.type === 'SHOW_RESULTS' && room.phase === 'voting')
           room.phase = 'results';
         else if (
           data.type === 'DISCUSS' &&
-          room.phase === 'results' &&
+          ['results', 'feedback'].includes(room.phase) &&
           node.varianty.some((v) => v.id === data.variantId)
         ) {
           room.selectedVariantId = data.variantId;
@@ -176,7 +186,7 @@ export function installClassroom(server, directory) {
           if (!variant.nastupnyi_vuzol) room.phase = 'finished';
           else {
             room.currentNodeId = variant.nastupnyi_vuzol;
-            room.phase = 'briefing';
+            room.phase = 'voting';
             room.votes = {};
             room.voters.clear();
             room.index = 0;

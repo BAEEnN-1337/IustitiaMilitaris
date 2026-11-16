@@ -1,3 +1,8 @@
+import { allScenarios } from '../data/scenarios';
+import { localizeScenario } from '../i18n/content';
+import { DecisionProfile, resolvePath } from './DecisionProfile';
+import { translations } from '../i18n';
+import themes from '../i18n/themes.json';
 import React, { useEffect, useState } from 'react';
 import labels from '../i18n/accounts.json';
 import type { Language } from '../i18n';
@@ -9,18 +14,29 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
   const [confirm, setConfirm] = useState('');
   const [user, setUser] = useState<string | null>(null);
   const [error, setError] = useState('');
+  const [savedId, setSavedId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState<
     Record<
       string,
-      { pathway: { nodeId: string; variantId: string }[]; notes: string }
+      {
+        pathway: { nodeId: string; variantId: string }[];
+        notes: string;
+        updatedAt?: string;
+        completedAt?: string;
+      }
     >
   >({});
   async function load() {
     const r = await fetch('/api/auth/me');
+    if (!r.ok) throw Error();
     const data = await r.json();
     setUser(data.user?.login || null);
-    if (data.user) setProgress(await (await fetch('/api/progress')).json());
+    if (data.user) {
+      const response = await fetch('/api/progress');
+      if (!response.ok) throw Error();
+      setProgress(await response.json());
+    }
   }
   useEffect(() => {
     load().catch(() => setError('serverError'));
@@ -52,84 +68,270 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
       setBusy(false);
     }
   }
+  const records = Object.entries(progress).flatMap(([id, entry]) => {
+    const source = allScenarios.find((s) => s.id === id);
+    if (!source) return [];
+    const scenario = localizeScenario(source, lang),
+      steps = resolvePath(scenario, entry.pathway);
+    const complete =
+      steps.length > 0 &&
+      steps[steps.length - 1].variant.nastupnyi_vuzol === null;
+    return [{ id, entry, scenario, steps, complete }];
+  });
+  const completed = records.filter((r) => r.complete);
+  const recent = records
+    .map((r) => r.entry.completedAt || r.entry.updatedAt)
+    .filter((date): date is string => Boolean(date))
+    .sort()
+    .slice(-1)[0];
+  const date = (value?: string) =>
+    value && Number.isFinite(Date.parse(value))
+      ? new Intl.DateTimeFormat(lang === 'en' ? 'en-GB' : 'uk-UA', {
+          dateStyle: 'medium',
+          timeStyle: 'short'
+        }).format(new Date(value))
+      : t.unknownDate;
   return (
-    <section className="max-w-xl mx-auto p-6 space-y-4">
-      <h1 className="text-2xl">{t.title}</h1>
+    <section className={`page-shell ${user ? '' : '!max-w-xl'}`}>
+      <header className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          {user && (
+            <span
+              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-xl font-bold text-emerald-300"
+              aria-hidden="true"
+            >
+              {user.slice(0, 2).toUpperCase()}
+            </span>
+          )}
+          <div>
+            <h1 className="text-2xl font-bold text-white">{user || t.title}</h1>
+            {user && <span className="badge mt-2">{t.localBadge}</span>}
+          </div>
+        </div>
+        {user && (
+          <div className="flex flex-wrap gap-2">
+            <button className="action" onClick={onExit}>
+              {t.home}
+            </button>
+            <button
+              className="action-ghost"
+              onClick={async () => {
+                try {
+                  const response = await fetch('/api/auth/logout', {
+                    method: 'POST'
+                  });
+                  if (!response.ok) throw Error();
+                  setUser(null);
+                  setProgress({});
+                  setError('');
+                } catch {
+                  setError('serverError');
+                }
+              }}
+            >
+              {t.logout}
+            </button>
+          </div>
+        )}
+      </header>
       {error && (
-        <p role="alert">{t[error as keyof typeof t] || t.serverError}</p>
+        <p className="notice" role="status">
+          {t[error as keyof typeof t] || t.serverError}
+        </p>
       )}
       {user ? (
         <>
-          <p>{user}</p>
-          <h2>{t.progress}</h2>
-          <ul>
-            {Object.keys(progress).map((id) => (
-              <li key={id} className="space-y-2 py-4">
-                <h3>{id}</h3>
-                <p>
-                  {progress[id].pathway
-                    .map((step) => `${step.nodeId}: ${step.variantId}`)
-                    .join(' → ')}
-                </p>
-                <label>
-                  {t.notes}
-                  <textarea
-                    className="block w-full bg-navy-800 p-3"
-                    maxLength={4000}
-                    value={progress[id].notes}
-                    onChange={(e) =>
-                      setProgress({
-                        ...progress,
-                        [id]: { ...progress[id], notes: e.target.value }
-                      })
-                    }
-                  />
-                </label>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[
+              [
+                t.completedCount,
+                `${completed.length} / ${allScenarios.length}`
+              ],
+              [
+                t.teamCount,
+                `${completed.filter((r) => ['S06', 'S07', 'S08'].includes(r.id)).length} / 3`
+              ],
+              [t.lastPlayed, date(recent)]
+            ].map(([label, value]) => (
+              <div className="surface space-y-3" key={label}>
+                <p className="text-sm text-slate-400">{label}</p>
+                <p className="text-xl font-bold text-white">{value}</p>
+              </div>
+            ))}
+          </div>
+          <h2 className="text-xl font-bold">{t.progress}</h2>
+          {!records.length && <p className="surface">{t.empty}</p>}
+          {records.map(({ id, entry, scenario, steps, complete }) => (
+            <article key={id} className="surface space-y-5">
+              <header className="flex flex-wrap justify-between items-start gap-3">
+                <div>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    <span className="badge">{id}</span>
+                    <span className="badge">
+                      {themes[lang][scenario.tema as keyof typeof themes.en] ||
+                        scenario.tema}
+                    </span>
+                    <span
+                      className={`badge ${complete ? '!border-emerald-500/30 !text-emerald-300' : '!text-amber-300'}`}
+                    >
+                      {complete ? t.completed : t.inProgress}
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-bold text-white">
+                    {scenario.nazva}
+                  </h3>
+                </div>
+                <time
+                  className="text-xs text-slate-400"
+                  dateTime={entry.completedAt || entry.updatedAt}
+                >
+                  {date(entry.completedAt || entry.updatedAt)}
+                </time>
+              </header>
+              <div
+                className="flex flex-wrap gap-2 items-center"
+                aria-label={t.path}
+              >
+                {steps.map((step, i) => (
+                  <React.Fragment key={i}>
+                    {i > 0 && (
+                      <span aria-hidden="true" className="text-slate-500">
+                        →
+                      </span>
+                    )}
+                    <span className="badge font-mono">
+                      {step.nodeId}: {step.variantId}
+                    </span>
+                  </React.Fragment>
+                ))}
+              </div>
+              <details className="surface-muted">
+                <summary className="cursor-pointer text-sm text-cyan-300">
+                  {t.path}
+                </summary>
+                <ol className="mt-3 space-y-3 text-sm text-slate-300">
+                  {steps.map((step, i) => (
+                    <li key={i}>
+                      <strong>
+                        {step.nodeId}: {step.variantId}
+                      </strong>{' '}
+                      — {step.variant.tekst}
+                    </li>
+                  ))}
+                </ol>
+              </details>
+              <DecisionProfile
+                scenario={scenario}
+                path={entry.pathway}
+                lang={lang}
+              />
+              <p className="text-xs text-slate-400">
+                {translations[lang].reflection.profileNotice}
+              </p>
+              <label className="block space-y-2 text-sm font-medium">
+                {t.notes}
+                <textarea
+                  className="field mt-2 min-h-28"
+                  maxLength={4000}
+                  value={entry.notes}
+                  onChange={(e) => {
+                    setSavedId(null);
+                    setProgress({
+                      ...progress,
+                      [id]: { ...entry, notes: e.target.value }
+                    });
+                  }}
+                />
+              </label>
+              <div className="flex flex-wrap gap-3">
                 <button
+                  className="action-primary"
+                  disabled={busy}
                   onClick={async () => {
+                    setBusy(true);
+                    setError('');
                     try {
                       const response = await fetch('/api/progress', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                           scenarioId: id,
-                          ...progress[id]
+                          pathway: entry.pathway,
+                          notes: entry.notes
                         })
                       });
                       if (!response.ok) throw Error();
-                      setError('saved');
+                      setError('');
+                      setSavedId(id);
+                    } catch {
+                      setError('serverError');
+                    } finally {
+                      setBusy(false);
+                    }
+                  }}
+                >
+                  {busy ? t.saving : t.save}
+                </button>
+                {savedId === id && (
+                  <span
+                    className="self-center text-sm text-emerald-300"
+                    role="status"
+                  >
+                    {t.saved}
+                  </span>
+                )}
+                <button
+                  className="action"
+                  onClick={async () => {
+                    try {
+                      const response = await fetch('/api/progress', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ scenarioId: id, pathway: [] })
+                      });
+                      if (!response.ok) throw Error();
+                      window.location.assign(`/scenarios/${id}`);
                     } catch {
                       setError('serverError');
                     }
                   }}
                 >
-                  {t.save}
+                  {t.replay}
                 </button>
-              </li>
-            ))}
-          </ul>
-          <button
-            onClick={async () => {
-              await fetch('/api/auth/logout', { method: 'POST' });
-              setUser(null);
-              setProgress({});
-            }}
-          >
-            {t.logout}
-          </button>
+              </div>
+            </article>
+          ))}
         </>
       ) : (
-        <>
-          <div className="flex gap-4">
-            <button onClick={() => setRegister(false)}>{t.login}</button>
-            <button onClick={() => setRegister(true)}>{t.register}</button>
+        <div className="surface space-y-5">
+          <div
+            className="grid grid-cols-2 gap-2 rounded-xl bg-navy-950 p-1"
+            role="tablist"
+            aria-label={t.title}
+          >
+            {[false, true].map((mode) => (
+              <button
+                key={String(mode)}
+                role="tab"
+                aria-selected={register === mode}
+                className={
+                  register === mode ? 'action-primary' : 'action-ghost'
+                }
+                onClick={() => {
+                  setRegister(mode);
+                  setError('');
+                }}
+              >
+                {mode ? t.register : t.login}
+              </button>
+            ))}
           </div>
-          <p>{t.notice}</p>
+          <p className="notice">{t.notice}</p>
           <form onSubmit={submit} className="space-y-4">
-            <label className="block">
+            <label className="block text-sm font-medium">
               {t.alias}
               <input
-                className="block w-full bg-navy-800 p-3"
+                className="field mt-2"
                 autoComplete="username"
                 value={login}
                 onChange={(e) => setLogin(e.target.value)}
@@ -137,10 +339,10 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
                 pattern="[a-zA-Z0-9_-]{3,32}"
               />
             </label>
-            <label className="block">
+            <label className="block text-sm font-medium">
               {t.password}
               <input
-                className="block w-full bg-navy-800 p-3"
+                className="field mt-2"
                 type="password"
                 autoComplete={register ? 'new-password' : 'current-password'}
                 minLength={6}
@@ -151,10 +353,10 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
               />
             </label>
             {register && (
-              <label className="block">
+              <label className="block text-sm font-medium">
                 {t.confirm}
                 <input
-                  className="block w-full bg-navy-800 p-3"
+                  className="field mt-2"
                   type="password"
                   autoComplete="new-password"
                   value={confirm}
@@ -163,11 +365,15 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
                 />
               </label>
             )}
-            <button disabled={busy}>{register ? t.register : t.login}</button>
+            <button className="action-primary w-full" disabled={busy}>
+              {register ? t.register : t.login}
+            </button>
           </form>
-        </>
+          <button className="action w-full" onClick={onExit}>
+            {t.guest}
+          </button>
+        </div>
       )}
-      <button onClick={onExit}>{t.guest}</button>
     </section>
   );
 }

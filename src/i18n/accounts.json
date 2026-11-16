@@ -20,7 +20,19 @@
     "home": "До каталогу",
     "notes": "Мої нотатки",
     "save": "Зберегти",
-    "saved": "Збережено"
+    "saved": "Збережено",
+    "localBadge": "Локальний акаунт · Zero-PII",
+    "completed": "Завершено",
+    "inProgress": "У процесі",
+    "completedCount": "Пройдено сценаріїв",
+    "teamCount": "Сценарії команди",
+    "lastPlayed": "Останнє проходження",
+    "unknownDate": "Дату не збережено",
+    "empty": "Збережених проходжень ще немає. Оберіть сценарій у каталозі.",
+    "path": "Маршрут рішень",
+    "replay": "Пройти ще раз іншим шляхом →",
+    "theme": "Тема",
+    "saving": "Збереження…"
   },
   "en": {
     "title": "Local account",
@@ -43,6 +55,18 @@
     "home": "Back to catalog",
     "notes": "My notes",
     "save": "Save",
-    "saved": "Saved"
+    "saved": "Saved",
+    "localBadge": "Local account · Zero-PII",
+    "completed": "Completed",
+    "inProgress": "In progress",
+    "completedCount": "Scenarios completed",
+    "teamCount": "Team scenarios",
+    "lastPlayed": "Last played",
+    "unknownDate": "Date not recorded",
+    "empty": "No saved attempts yet. Choose a scenario from the catalog.",
+    "path": "Decision pathway",
+    "replay": "Replay with different choices →",
+    "theme": "Theme",
+    "saving": "Saving…"
   }
 }
