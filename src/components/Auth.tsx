@@ -110,9 +110,6 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
         </div>
         {user && (
           <div className="flex flex-wrap gap-2">
-            <button className="action" onClick={onExit}>
-              {t.home}
-            </button>
             <button
               className="action-ghost"
               onClick={async () => {

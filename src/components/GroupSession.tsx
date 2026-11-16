@@ -1,3 +1,11 @@
+import {
+  Dossier,
+  ValueConflict,
+  StageStepper,
+  Consequence,
+  Radar
+} from './BriefingDesign';
+import designLabels from '../i18n/design.json';
 import { DecisionProfile } from './DecisionProfile';
 import themes from '../i18n/themes.json';
 import { CidsHelperModal } from './CidsHelperModal';
@@ -44,6 +52,7 @@ export function GroupSession({
   host?: boolean;
 }) {
   const t = labels[lang];
+
   const [cidsOpen, setCidsOpen] = useState(false);
   const [room, setRoom] = useState<State | null>(null);
   const [code, setCode] = useState(initialCode);
@@ -56,6 +65,17 @@ export function GroupSession({
   const [qr, setQr] = useState('');
   const [link, setLink] = useState('');
   const [projector, setProjector] = useState(false);
+  useEffect(() => {
+    document.body.dataset.projector = String(projector);
+    const exit = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setProjector(false);
+    };
+    window.addEventListener('keydown', exit);
+    return () => {
+      delete document.body.dataset.projector;
+      window.removeEventListener('keydown', exit);
+    };
+  }, [projector]);
   const [norm, setNorm] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const socket = useRef<WebSocket | null>(null);
@@ -289,11 +309,8 @@ export function GroupSession({
   );
   return (
     <section
-      className={`page-shell ${projector ? '!max-w-none sm:!px-12 text-lg' : ''}`}
+      className={`page-shell projector-session ${projector ? '!max-w-none sm:!px-12 text-lg' : ''}`}
     >
-      <button className="action-ghost" onClick={onExit}>
-        ← {t.back}
-      </button>
       {message && (
         <p className="notice" role="status">
           {t[message as keyof typeof t]}
@@ -388,7 +405,7 @@ export function GroupSession({
                   className="action"
                   onClick={() => setProjector(!projector)}
                 >
-                  {t.projector}
+                  {projector ? designLabels[lang].exitProjector : t.projector}
                 </button>
                 <button
                   className="action-danger"
@@ -444,6 +461,38 @@ export function GroupSession({
           {room.phase === 'finished' ? (
             <div className="surface space-y-5 animate-fadeIn">
               <h2 className="text-xl font-bold">{t.summary}</h2>
+              <div className="grid gap-5 md:grid-cols-2 items-start">
+                <div className="surface-muted space-y-3">
+                  <h3 className="font-semibold">{t.path}</h3>
+                  <ol className="flex flex-wrap gap-2">
+                    {room.history.map((h, i) => (
+                      <li className="badge font-mono" key={i}>
+                        {h.nodeId} → {h.selectedVariantId}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+                <Radar
+                  lang={lang}
+                  count={room.history.length}
+                  scores={room.history.reduce(
+                    (acc, h) => {
+                      const v = scenario.vuzly
+                        .find((n) => n.id === h.nodeId)
+                        ?.varianty.find((v) => v.id === h.selectedVariantId);
+                      if (v)
+                        for (const key of [
+                          'dobrochesnist',
+                          'efektyvnist',
+                          'dovira'
+                        ] as const)
+                          acc[key] += v.baly[key];
+                      return acc;
+                    },
+                    { dobrochesnist: 0, efektyvnist: 0, dovira: 0 }
+                  )}
+                />
+              </div>
               <p className="notice">
                 {t.mostDivided}:{' '}
                 {room.history
@@ -497,9 +546,9 @@ export function GroupSession({
                   <p className="text-slate-300 leading-relaxed">
                     {scenario.kontekst}
                   </p>
-                  <p className="surface-muted leading-relaxed">
+                  <Dossier scenario={scenario} lang={lang}>
                     {scenario.sytuatsiia}
-                  </p>
+                  </Dossier>
                   <div className="grid gap-3 sm:grid-cols-2">
                     {scenario.diiovi_osoby.map((r) => (
                       <div className="surface-muted" key={r.id}>
@@ -511,12 +560,11 @@ export function GroupSession({
                   <div className="space-y-3">
                     {scenario.tsinnosti_v_konflikti.map((c, i) => (
                       <div className="surface-muted" key={i}>
-                        <h3 className="font-semibold text-amber-200">
-                          {c.tsinnist_a} ↔ {c.tsinnist_b}
-                        </h3>
-                        <p className="mt-2 text-sm text-slate-300">
-                          {c.poiasnennia}
-                        </p>
+                        <ValueConflict
+                          a={c.tsinnist_a}
+                          b={c.tsinnist_b}
+                          explanation={c.poiasnennia}
+                        />
                       </div>
                     ))}
                   </div>
@@ -541,9 +589,20 @@ export function GroupSession({
                     <h2 className="text-xl font-bold text-white">
                       {node.zapytannia}
                     </h2>
-                    <p className="text-slate-300 leading-relaxed">
+                    <StageStepper
+                      scenario={scenario}
+                      nodeId={node.id}
+                      completed={room.history.length}
+                      lang={lang}
+                    />
+                    <Dossier
+                      scenario={scenario}
+                      lang={lang}
+                      nodeId={node.id}
+                      index={room.history.length + 1}
+                    >
                       {node.tekst || scenario.sytuatsiia}
-                    </p>
+                    </Dossier>
                     <button
                       className="action"
                       onClick={() => setCidsOpen(true)}
@@ -628,6 +687,11 @@ export function GroupSession({
                       <h2 className="font-bold text-xl">{t.results}</h2>
                       <p className="notice">
                         {t.index}: <strong>{room.discussionIndex}</strong>
+                        {room.discussionIndex >= 0.8 && (
+                          <span className="badge ml-2 !text-amber-300">
+                            {designLabels[lang].discussion}
+                          </span>
+                        )}
                       </p>
                       {chart(room.votes, node.varianty, true)}
                       <ul className="list-disc pl-5 space-y-2 text-sm text-slate-300">
@@ -646,18 +710,12 @@ export function GroupSession({
                         {variant.id} · {variant.tekst}
                       </h2>
                       <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="surface-muted">
-                          <h3 className="font-bold text-emerald-300 mb-2">
-                            {t.immediate}
-                          </h3>
-                          <p>{variant.naslidky.odrazu}</p>
-                        </div>
-                        <div className="surface-muted">
-                          <h3 className="font-bold text-amber-200 mb-2">
-                            {t.later}
-                          </h3>
-                          <p>{variant.naslidky.vidkladeni}</p>
-                        </div>
+                        <Consequence title={t.immediate}>
+                          {variant.naslidky.odrazu}
+                        </Consequence>
+                        <Consequence delayed title={t.later}>
+                          {variant.naslidky.vidkladeni}
+                        </Consequence>
                       </div>
                       <BalanceIndicators
                         scores={variant.baly}

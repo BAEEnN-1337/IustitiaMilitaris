@@ -36,11 +36,14 @@ const root = path.resolve(__dirname, '..'),
     await fs.mkdir(artifacts, { recursive: true });
     const errors = [];
     const base = 'http://127.0.0.1:18420';
-    async function context(lang, width) {
+    async function context(lang, width, theme = 'dark') {
       const c = await browser.newContext({ viewport: { width, height: 900 } });
       await c.addInitScript(
-        (l) => localStorage.setItem('eds-language', l),
-        lang
+        ({ lang, theme }) => {
+          localStorage.setItem('eds-language', lang);
+          localStorage.setItem('eds-theme', theme);
+        },
+        { lang, theme }
       );
       return c;
     }
@@ -62,161 +65,174 @@ const root = path.resolve(__dirname, '..'),
         assert.ok(css.padding >= 12 && css.radius >= 6, JSON.stringify(css));
       }
     }
-    for (const lang of ['uk', 'en'])
-      for (const width of [375, 1280]) {
-        const c = await context(lang, width),
-          host = await c.newPage();
-        host.on('pageerror', (e) => errors.push(e.message));
-        await host.goto(base + '/auth');
-        await host
-          .getByRole('tab', { name: a[lang].register, exact: true })
-          .click();
-        await host
-          .getByLabel(a[lang].alias, { exact: true })
-          .fill('alias-' + lang + '-' + width);
-        await host
-          .getByLabel(a[lang].password, { exact: true })
-          .fill('strong-test-pass');
-        await host
-          .getByLabel(a[lang].confirm, { exact: true })
-          .fill('strong-test-pass');
-        await styled(host);
-        await host.locator('form button').click();
-        await host
-          .getByRole('heading', { name: a[lang].progress, exact: true })
-          .waitFor();
-        await host.request.post(base + '/api/progress', {
-          data: {
-            scenarioId: 'S06',
-            pathway: [
-              { nodeId: 'V1', variantId: 'A' },
-              { nodeId: 'V2', variantId: 'E1' },
-              { nodeId: 'V6', variantId: 'J1' }
-            ],
-            notes: ''
-          }
-        });
-        await host.reload();
-        await host.getByText('1 / 8', { exact: true }).waitFor();
-        await host.getByText('1 / 3', { exact: true }).waitFor();
-        await host
-          .getByLabel(a[lang].notes, { exact: true })
-          .fill('A private reflection');
-        await host
-          .getByRole('button', { name: a[lang].save, exact: true })
-          .click();
-        await host.getByText(a[lang].saved, { exact: true }).waitFor();
-        await styled(host);
-        await host.evaluate(() => scrollTo(0, 0));
-        await host.screenshot({
-          path: path.join(artifacts, `profile-${lang}-${width}.png`),
-          fullPage: true
-        });
-        await host.goto(base + '/classroom');
-        await styled(host);
-        await host.goto(base + '/classroom/host/new?scenario=S06');
-        await host
-          .getByRole('button', { name: g[lang].start, exact: true })
-          .waitFor();
-        const join = new URL(
-          await host.locator('a[href*="/classroom/join/"]').getAttribute('href')
-        ).pathname;
-        const c1 = await context(lang, 375),
-          c2 = await context(lang, 375),
-          one = await c1.newPage(),
-          two = await c2.newPage();
-        await one.goto(base + join);
-        await two.goto(base + join);
-        await one.getByText(g[lang].waiting, { exact: true }).waitFor();
-        await two.getByText(g[lang].waiting, { exact: true }).waitFor();
-        await host
-          .getByRole('button', { name: g[lang].start, exact: true })
-          .click();
-        for (const [index, choice] of ['A', 'E1', 'J1'].entries()) {
-          const buttons = one.locator('main button.action.w-full');
-          await buttons.first().waitFor();
-          await buttons.first().click();
-          await two.locator('main button.action.w-full').nth(1).click();
-          await one.getByText(g[lang].voted, { exact: false }).waitFor();
-          const chart = host.getByTestId('vote-chart');
-          await chart.getByText(/50%/).first().waitFor();
-          const bar = await chart
-            .locator('.meter-fill')
-            .first()
-            .evaluate((el) => el.style.width);
-          assert.equal(bar, '50%');
-          await styled(host);
-          await styled(one);
-          if (index === 0) {
-            await host
-              .getByRole('button', { name: g[lang].hideLive, exact: true })
-              .click();
-            await host.getByText(g[lang].hidden, { exact: true }).waitFor();
-            await host
-              .getByRole('button', { name: g[lang].showLive, exact: true })
-              .click();
-            await host
-              .getByRole('button', { name: g[lang].projector, exact: true })
-              .click();
-            await styled(host);
-            await host.evaluate(() => scrollTo(0, 0));
-            await host.screenshot({
-              path: path.join(artifacts, `host-${lang}-${width}.png`),
-              fullPage: true
-            });
-          }
+    for (const theme of ['dark', 'light'])
+      for (const lang of ['uk', 'en'])
+        for (const width of [375, 1280]) {
+          const c = await context(lang, width, theme),
+            host = await c.newPage();
+          host.on('pageerror', (e) => errors.push(e.message));
+          await host.goto(base + '/auth');
           await host
-            .getByRole('button', { name: g[lang].results, exact: true })
+            .getByRole('tab', { name: a[lang].register, exact: true })
             .click();
-          if (index === 0) {
+          await host
+            .getByLabel(a[lang].alias, { exact: true })
+            .fill('alias-' + theme + '-' + lang + '-' + width);
+          await host
+            .getByLabel(a[lang].password, { exact: true })
+            .fill('strong-test-pass');
+          await host
+            .getByLabel(a[lang].confirm, { exact: true })
+            .fill('strong-test-pass');
+          await styled(host);
+          await host.locator('form button').click();
+          await host
+            .getByRole('heading', { name: a[lang].progress, exact: true })
+            .waitFor();
+          await host.request.post(base + '/api/progress', {
+            data: {
+              scenarioId: 'S06',
+              pathway: [
+                { nodeId: 'V1', variantId: 'A' },
+                { nodeId: 'V2', variantId: 'E1' },
+                { nodeId: 'V6', variantId: 'J1' }
+              ],
+              notes: ''
+            }
+          });
+          await host.reload();
+          await host.getByText('1 / 8', { exact: true }).waitFor();
+          await host.getByText('1 / 3', { exact: true }).waitFor();
+          await host
+            .getByLabel(a[lang].notes, { exact: true })
+            .fill('A private reflection');
+          await host
+            .getByRole('button', { name: a[lang].save, exact: true })
+            .click();
+          await host.getByText(a[lang].saved, { exact: true }).waitFor();
+          await styled(host);
+          await host.evaluate(() => scrollTo(0, 0));
+          await host.screenshot({
+            path: path.join(artifacts, `profile-${theme}-${lang}-${width}.png`),
+            fullPage: true
+          });
+          await host.goto(base + '/classroom');
+          await styled(host);
+          await host.goto(base + '/classroom/host/new?scenario=S06');
+          await host
+            .getByRole('button', { name: g[lang].start, exact: true })
+            .waitFor();
+          const join = new URL(
+            await host
+              .locator('a[href*="/classroom/join/"]')
+              .getAttribute('href')
+          ).pathname;
+          const c1 = await context(lang, 375, theme),
+            c2 = await context(lang, 375, theme),
+            one = await c1.newPage(),
+            two = await c2.newPage();
+          await one.goto(base + join);
+          await two.goto(base + join);
+          await one.getByText(g[lang].waiting, { exact: true }).waitFor();
+          await two.getByText(g[lang].waiting, { exact: true }).waitFor();
+          await host
+            .getByRole('button', { name: g[lang].start, exact: true })
+            .click();
+          for (const [index, choice] of ['A', 'E1', 'J1'].entries()) {
+            const buttons = one.locator('main button.action.w-full');
+            await buttons.first().waitFor();
+            await buttons.first().click();
+            await two.locator('main button.action.w-full').nth(1).click();
+            await one.getByText(g[lang].voted, { exact: false }).waitFor();
+            const chart = host.getByTestId('vote-chart');
+            await chart.getByText(/50%/).first().waitFor();
+            const bar = await chart
+              .locator('.meter-fill')
+              .first()
+              .evaluate((el) => el.style.width);
+            assert.equal(bar, '50%');
+            await styled(host);
+            await styled(one);
+            if (index === 0) {
+              await host
+                .getByRole('button', { name: g[lang].hideLive, exact: true })
+                .click();
+              await host.getByText(g[lang].hidden, { exact: true }).waitFor();
+              await host
+                .getByRole('button', { name: g[lang].showLive, exact: true })
+                .click();
+              await host
+                .getByRole('button', { name: g[lang].projector, exact: true })
+                .click();
+              await styled(host);
+              await host.evaluate(() => scrollTo(0, 0));
+              await host.screenshot({
+                path: path.join(
+                  artifacts,
+                  `host-${theme}-${lang}-${width}.png`
+                ),
+                fullPage: true
+              });
+            }
+            await host
+              .getByRole('button', { name: g[lang].results, exact: true })
+              .click();
+            if (index === 0) {
+              await host
+                .getByRole('button', {
+                  name: new RegExp('^' + g[lang].discuss + ' B')
+                })
+                .click();
+            }
             await host
               .getByRole('button', {
-                name: new RegExp('^' + g[lang].discuss + ' B')
+                name: new RegExp(
+                  '^' + g[lang].discuss + ' ' + choice + '(?: |$)'
+                )
+              })
+              .click();
+            await one
+              .locator('main article')
+              .filter({
+                has: one.getByRole('heading', {
+                  name: new RegExp('^' + choice + ' ·')
+                })
+              })
+              .waitFor();
+            await host
+              .getByRole('button', {
+                name:
+                  index < 2
+                    ? new RegExp('^' + g[lang].nextNode)
+                    : g[lang].finish,
+                exact: index === 2
               })
               .click();
           }
           await host
-            .getByRole('button', {
-              name: new RegExp('^' + g[lang].discuss + ' ' + choice + '(?: |$)')
-            })
-            .click();
-          await one
-            .locator('main article')
-            .filter({
-              has: one.getByRole('heading', {
-                name: new RegExp('^' + choice + ' ·')
-              })
-            })
+            .getByRole('heading', { name: g[lang].summary, exact: true })
             .waitFor();
+          await one
+            .getByRole('heading', { name: g[lang].summary, exact: true })
+            .waitFor();
+          await styled(host);
+          await host.getByTestId('radar').waitFor();
+          await one.getByTestId('radar').waitFor();
           await host
-            .getByRole('button', {
-              name:
-                index < 2 ? new RegExp('^' + g[lang].nextNode) : g[lang].finish,
-              exact: index === 2
-            })
+            .getByRole('button', { name: g[lang].close, exact: true })
             .click();
+          await one.getByText(g[lang].ended, { exact: true }).waitFor();
+          await c.close();
+          await c1.close();
+          await c2.close();
+          console.log(
+            'PASS',
+            theme,
+            lang,
+            width,
+            'profile styling/KPI/notes; instructor+2 guests: V1→V2→V6, 50% live chart, hide, projector, reselect terminal option, feedback, summary'
+          );
         }
-        await host
-          .getByRole('heading', { name: g[lang].summary, exact: true })
-          .waitFor();
-        await one
-          .getByRole('heading', { name: g[lang].summary, exact: true })
-          .waitFor();
-        await styled(host);
-        await host
-          .getByRole('button', { name: g[lang].close, exact: true })
-          .click();
-        await one.getByText(g[lang].ended, { exact: true }).waitFor();
-        await c.close();
-        await c1.close();
-        await c2.close();
-        console.log(
-          'PASS',
-          lang,
-          width,
-          'profile styling/KPI/notes; instructor+2 guests: V1→V2→V6, 50% live chart, hide, projector, reselect terminal option, feedback, summary'
-        );
-      }
     assert.deepEqual(errors, []);
   } finally {
     if (browser) await browser.close();

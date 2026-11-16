@@ -1,159 +1,116 @@
-import accountLabels from '../i18n/accounts.json';
-import { ui } from '../i18n/ui';
-import React from 'react';
-import { Shield, BookOpen, Users, Compass, Wrench, Globe, Wifi } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Shield, Sun, Moon, UserRound, Wifi, WifiOff } from 'lucide-react';
 import { Language, translations } from '../i18n';
-
+import labels from '../i18n/design.json';
 interface NavbarProps {
   onAuth?: () => void;
   currentView: 'catalog' | 'solo' | 'classroom' | 'builder' | 'norms';
-  setCurrentView: (view: 'catalog' | 'solo' | 'classroom' | 'builder' | 'norms') => void;
+  setCurrentView: (
+    view: 'catalog' | 'solo' | 'classroom' | 'builder' | 'norms'
+  ) => void;
   lang: Language;
   setLang: (lang: Language) => void;
 }
-
-export const Navbar: React.FC<NavbarProps> = ({ currentView, setCurrentView, lang, setLang, onAuth }) => {
-  const t = translations[lang];
-
+export const Navbar = ({
+  currentView,
+  setCurrentView,
+  lang,
+  setLang,
+  onAuth
+}: NavbarProps) => {
+  const t = labels[lang];
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem('eds-theme') === 'light' ? 'light' : 'dark';
+    } catch {
+      return 'dark';
+    }
+  });
+  const [online, setOnline] = useState(navigator.onLine);
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    try {
+      localStorage.setItem('eds-theme', theme);
+    } catch {}
+  }, [theme]);
+  useEffect(() => {
+    const update = () => setOnline(navigator.onLine);
+    window.addEventListener('online', update);
+    window.addEventListener('offline', update);
+    return () => {
+      window.removeEventListener('online', update);
+      window.removeEventListener('offline', update);
+    };
+  }, []);
+  const views = ['catalog', 'classroom', 'builder', 'norms'] as const;
   return (
-    <header className="sticky top-0 z-40 bg-navy-900/90 backdrop-blur border-b border-navy-700">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-wrap items-center justify-between gap-2 min-h-16 py-3">
-          <div 
-            className="flex items-center gap-2 cursor-pointer group"
-            onClick={() => setCurrentView('catalog')}
-          >
-            <div className="w-10 h-10 shrink-0 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 group-hover:scale-105 transition-transform">
-              <Shield className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="font-bold text-base sm:text-lg text-white tracking-tight flex flex-wrap items-center gap-2">
-                {t.appTitle}
-                <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded bg-navy-800 text-emerald-400 border border-emerald-500/30">
-                  {ui(lang, 'm32')}{' '}</span>
-              </div>
-              <div className="text-xs text-slate-400 hidden sm:block">
-                {t.appSubtitle}
-              </div>
-            </div>
-          </div>
-          <nav className="hidden xl:flex items-center space-x-1 lg:space-x-2">
-            <button
-              onClick={() => setCurrentView('catalog')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex flex-wrap items-center gap-2 ${
-                currentView === 'catalog'
-                  ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-navy-800'
-              }`}
-            >
-              <Compass className="w-4 h-4" />
-              {t.nav.catalog}
-            </button>
-            <button
-              onClick={() => setCurrentView('classroom')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex flex-wrap items-center gap-2 ${
-                currentView === 'classroom'
-                  ? 'bg-indigo-500/15 text-indigo-300 border border-indigo-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-navy-800'
-              }`}
-            >
-              <Users className="w-4 h-4" />
-              {t.nav.classroom}
-            </button>
-            <button
-              onClick={() => setCurrentView('builder')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex flex-wrap items-center gap-2 ${
-                currentView === 'builder'
-                  ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-navy-800'
-              }`}
-            >
-              <Wrench className="w-4 h-4" />
-              {t.nav.builder}
-            </button>
-            <button
-              onClick={() => setCurrentView('norms')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex flex-wrap items-center gap-2 ${
-                currentView === 'norms'
-                  ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/30'
-                  : 'text-slate-300 hover:text-white hover:bg-navy-800'
-              }`}
-            >
-              <BookOpen className="w-4 h-4" />
-              {t.nav.norms}
-            </button>
-          </nav>
-          <div className="flex flex-wrap items-center gap-2 shrink-0">
-            <button onClick={onAuth} className="px-2 py-1 text-xs rounded border border-navy-700">{accountLabels[lang].title}</button>
-            <div 
-              className="hidden 2xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-navy-800 border border-emerald-500/20 text-xs text-slate-300"
-              title={t.nav.offlineDesc}
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-              <Wifi className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-[11px] font-medium text-emerald-300">{t.nav.offlineReady}</span>
-            </div>
-            <div className="flex items-center bg-navy-800 border border-navy-700 rounded-lg p-0.5 text-xs font-semibold">
-              <button
-                onClick={() => setLang('uk')}
-                className={`px-2.5 py-1 rounded-md transition-colors ${
-                  lang === 'uk'
-                    ? 'bg-emerald-600 text-white shadow'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                {ui(lang, 'm33')}{' '}</button>
-              <button
-                onClick={() => setLang('en')}
-                className={`px-2.5 py-1 rounded-md transition-colors ${
-                  lang === 'en'
-                    ? 'bg-emerald-600 text-white shadow'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                ENG
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="xl:hidden flex border-t border-navy-800 bg-navy-950 px-2 py-1 justify-around text-xs gap-1">
+    <header className="site-header sticky top-0 z-40 border-b border-navy-700 bg-navy-900/95 backdrop-blur">
+      <div className="header-row">
         <button
+          className="header-brand"
           onClick={() => setCurrentView('catalog')}
-          className={`py-1.5 px-2 rounded font-medium flex flex-col items-center ${
-            currentView === 'catalog' || currentView === 'solo' ? 'text-emerald-400' : 'text-slate-400'
-          }`}
         >
-          <Compass className="w-4 h-4 mb-0.5" />
-          {t.nav.catalog}
+          <Shield className="h-7 w-7 shrink-0 text-emerald-400" />
+          <span>{translations[lang].appTitle}</span>
         </button>
-        <button
-          onClick={() => setCurrentView('classroom')}
-          className={`py-1.5 px-2 rounded font-medium flex flex-col items-center ${
-            currentView === 'classroom' ? 'text-indigo-400' : 'text-slate-400'
-          }`}
-        >
-          <Users className="w-4 h-4 mb-0.5" />
-          {t.nav.classroom}
-        </button>
-        <button
-          onClick={() => setCurrentView('builder')}
-          className={`py-1.5 px-2 rounded font-medium flex flex-col items-center ${
-            currentView === 'builder' ? 'text-amber-400' : 'text-slate-400'
-          }`}
-        >
-          <Wrench className="w-4 h-4 mb-0.5" />
-          {t.nav.builder}
-        </button>
-        <button
-          onClick={() => setCurrentView('norms')}
-          className={`py-1.5 px-2 rounded font-medium flex flex-col items-center ${
-            currentView === 'norms' ? 'text-cyan-400' : 'text-slate-400'
-          }`}
-        >
-          <BookOpen className="w-4 h-4 mb-0.5" />
-          {t.nav.norms}
-        </button>
+        <nav className="header-nav" aria-label={translations[lang].appTitle}>
+          {views.map((view) => (
+            <button
+              key={view}
+              aria-current={
+                currentView === view ||
+                (currentView === 'solo' && view === 'catalog')
+                  ? 'page'
+                  : undefined
+              }
+              className={`header-tab ${currentView === view ? 'bg-navy-800 text-emerald-300' : 'text-slate-300'}`}
+              onClick={() => setCurrentView(view)}
+            >
+              {t[view]}
+            </button>
+          ))}
+        </nav>
+        <div className="header-tools">
+          <span
+            className={`flex items-center gap-1 text-xs ${online ? 'text-emerald-400' : 'text-amber-400'}`}
+            role="status"
+            aria-label={online ? t.online : t.offline}
+            title={online ? t.online : t.offline}
+          >
+            {online ? <Wifi size={14} /> : <WifiOff size={14} />}
+            <span className="hidden 2xl:inline">
+              {online ? t.online : t.offline}
+            </span>
+          </span>
+          <button
+            className="header-icon"
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            aria-label={theme === 'dark' ? t.light : t.dark}
+            title={theme === 'dark' ? t.light : t.dark}
+          >
+            {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+          </button>
+          <div className="flex rounded-lg border border-navy-700 p-0.5">
+            {(['uk', 'en'] as const).map((l) => (
+              <button
+                key={l}
+                className={`rounded px-2 py-1 text-xs font-semibold ${lang === l ? 'bg-emerald-600 text-white' : 'text-slate-400'}`}
+                aria-pressed={lang === l}
+                onClick={() => setLang(l)}
+              >
+                {l === 'uk' ? 'УКР' : 'ENG'}
+              </button>
+            ))}
+          </div>
+          <button
+            className="header-icon"
+            onClick={onAuth}
+            aria-label={t.account}
+            title={t.account}
+          >
+            <UserRound size={18} />
+          </button>
+        </div>
       </div>
     </header>
   );

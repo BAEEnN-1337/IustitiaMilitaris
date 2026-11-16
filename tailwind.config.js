@@ -1,20 +1,34 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
-        navy: {
-          950: '#070b14',
-          900: '#0c1424',
-          850: '#111b2f',
-          800: '#17233c',
-          700: '#223456',
-          600: '#324a77',
-        },
+        navy: Object.fromEntries(
+          [600, 700, 750, 800, 850, 900, 950].map((n) => [
+            n,
+            `rgb(var(--navy-${n}) / <alpha-value>)`
+          ])
+        ),
+        ...Object.fromEntries(
+          [
+            'slate',
+            'emerald',
+            'amber',
+            'rose',
+            'cyan',
+            'indigo',
+            'purple',
+            'blue'
+          ].map((p) => [
+            p,
+            Object.fromEntries(
+              [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950].map(
+                (n) => [n, `rgb(var(--${p}-${n}) / <alpha-value>)`]
+              )
+            )
+          ])
+        ),
         integrity: {
           gold: '#f59e0b',
           emerald: '#10b981',
@@ -24,9 +38,9 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif']
       }
-    },
+    }
   },
-  plugins: [],
-}
+  plugins: []
+};

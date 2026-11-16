@@ -22,12 +22,13 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
   if (!scenario.vuzly || scenario.vuzly.length === 0) {
     return (
       <div className="p-8 text-center text-slate-500 text-sm">
-        {ui(lang, 'm27')}{' '}</div>
+        {ui(lang, 'm27')}{' '}
+      </div>
     );
   }
 
   // Calculate layers (stages) via BFS from pochatkovyi_vuzol
-  const vuzlyMap = new Map(scenario.vuzly.map(v => [v.id, v]));
+  const vuzlyMap = new Map(scenario.vuzly.map((v) => [v.id, v]));
   const levels: Record<string, number> = {};
   const queue: { id: string; lvl: number }[] = [];
 
@@ -65,7 +66,9 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
     levelGroups[lvl].push(nodeId);
   }
 
-  const sortedLevels = Object.keys(levelGroups).map(Number).sort((a, b) => a - b);
+  const sortedLevels = Object.keys(levelGroups)
+    .map(Number)
+    .sort((a, b) => a - b);
 
   // Layout parameters
   const colWidth = 240;
@@ -92,7 +95,12 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
   const svgHeight = Math.max(260, (maxRow + 1) * rowHeight);
 
   // Edges
-  const edges: { from: string; to: string; label: string; isVisited: boolean }[] = [];
+  const edges: {
+    from: string;
+    to: string;
+    label: string;
+    isVisited: boolean;
+  }[] = [];
   for (const node of scenario.vuzly) {
     for (const v of node.varianty || []) {
       if (v.nastupnyi_vuzol && nodePositions[v.nastupnyi_vuzol]) {
@@ -110,7 +118,11 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
 
   return (
     <div className="w-full overflow-x-auto bg-navy-950/80 rounded-xl border border-navy-800 p-4">
-      <svg width={svgWidth} height={svgHeight} className="mx-auto block select-none">
+      <svg
+        width={svgWidth}
+        height={svgHeight}
+        className="mx-auto block select-none"
+      >
         <defs>
           <marker
             id="arrow"
@@ -121,7 +133,7 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
             markerHeight="6"
             orient="auto-start-reverse"
           >
-            <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b" />
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="rgb(var(--slate-400))" />
           </marker>
           <marker
             id="arrow-active"
@@ -132,7 +144,7 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
             markerHeight="6"
             orient="auto-start-reverse"
           >
-            <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981" />
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--graph-positive)" />
           </marker>
         </defs>
         {edges.map((e, idx) => {
@@ -153,14 +165,20 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
               <path
                 d={pathD}
                 fill="none"
-                stroke={e.isVisited ? '#10b981' : '#334155'}
+                stroke={
+                  e.isVisited
+                    ? 'var(--graph-positive)'
+                    : 'rgb(var(--slate-500))'
+                }
                 strokeWidth={e.isVisited ? 2.5 : 1.5}
                 markerEnd={e.isVisited ? 'url(#arrow-active)' : 'url(#arrow)'}
               />
               <text
                 x={midX}
                 y={(startY + endY) / 2 - 4}
-                fill={e.isVisited ? '#34d399' : '#94a3b8'}
+                fill={
+                  e.isVisited ? 'var(--graph-positive)' : 'var(--graph-ink)'
+                }
                 fontSize="10"
                 fontWeight="bold"
                 textAnchor="middle"
@@ -177,29 +195,30 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
 
           const isCurrent = node.id === currentNodeId;
           const isVisited = visitedNodeIds.includes(node.id);
-          const isUnreachable = unreachableNodeIds.includes(node.id) || levels[node.id] === 99;
+          const isUnreachable =
+            unreachableNodeIds.includes(node.id) || levels[node.id] === 99;
           const isStart = node.id === scenario.pochatkovyi_vuzol;
 
-          let strokeColor = '#3b82f6';
-          let fillColor = '#0f172a';
-          let textColor = '#cbd5e1';
+          let strokeColor = 'rgb(var(--blue-400))';
+          let fillColor = 'var(--graph-surface)';
+          let textColor = 'var(--graph-ink)';
 
           if (isCurrent) {
-            strokeColor = '#10b981';
+            strokeColor = 'var(--graph-positive)';
             fillColor = 'rgba(16, 185, 129, 0.2)';
-            textColor = '#34d399';
+            textColor = 'var(--graph-positive)';
           } else if (isVisited) {
-            strokeColor = '#10b981';
+            strokeColor = 'var(--graph-positive)';
             fillColor = 'rgba(16, 185, 129, 0.1)';
-            textColor = '#a7f3d0';
+            textColor = 'var(--graph-positive)';
           } else if (isUnreachable) {
-            strokeColor = '#ef4444';
+            strokeColor = 'var(--graph-negative)';
             fillColor = 'rgba(239, 68, 68, 0.15)';
-            textColor = '#fca5a5';
+            textColor = 'var(--graph-negative)';
           } else if (isStart) {
-            strokeColor = '#f59e0b';
+            strokeColor = 'var(--graph-warning)';
             fillColor = 'rgba(245, 158, 11, 0.15)';
-            textColor = '#fde68a';
+            textColor = 'var(--graph-warning)';
           }
 
           return (
@@ -219,12 +238,35 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
                 strokeWidth={isCurrent ? 2.5 : 1.5}
                 strokeDasharray={isUnreachable ? '4 2' : 'none'}
               />
-              <foreignObject x={pos.x + 8} y={pos.y + 8} width={nodeWidth - 16} height={nodeHeight - 16}>
-                <button type="button" onClick={e => { e.stopPropagation(); onSelectNode?.(node.id); }}
-                  style={{ color: textColor, width: '100%', height: '100%', overflowY: 'auto', overflowWrap: 'anywhere' }}
-                  className="text-xs text-center p-1 rounded focus-visible:outline focus-visible:outline-2">
+              <foreignObject
+                x={pos.x + 8}
+                y={pos.y + 8}
+                width={nodeWidth - 16}
+                height={nodeHeight - 16}
+              >
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSelectNode?.(node.id);
+                  }}
+                  style={{
+                    color: textColor,
+                    width: '100%',
+                    height: '100%',
+                    overflowY: 'auto',
+                    overflowWrap: 'anywhere'
+                  }}
+                  className="text-xs text-center p-1 rounded focus-visible:outline focus-visible:outline-2"
+                >
                   <strong className="block">{node.id}</strong>
-                  <span className="block mt-1 text-slate-400">{isStart ? ui(lang, 'm28') : isUnreachable ? ui(lang, 'm29') : ui(lang, 'm30', node.varianty?.length || 0)}</span>
+                  <span className="block mt-1 text-slate-400">
+                    {isStart
+                      ? ui(lang, 'm28')
+                      : isUnreachable
+                        ? ui(lang, 'm29')
+                        : ui(lang, 'm30', node.varianty?.length || 0)}
+                  </span>
                 </button>
               </foreignObject>
             </g>
