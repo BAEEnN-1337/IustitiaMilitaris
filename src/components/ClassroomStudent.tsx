@@ -114,7 +114,6 @@ export const ClassroomStudent: React.FC<ClassroomStudentProps> = ({
 
   return (
     <div className="max-w-md mx-auto px-4 py-8">
-      {/* Top back button */}
       <button
         onClick={onExit}
         className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors mb-6"
@@ -122,8 +121,6 @@ export const ClassroomStudent: React.FC<ClassroomStudentProps> = ({
         <ArrowLeft className="w-4 h-4" />
         {t.briefing.backToCatalog}
       </button>
-
-      {/* Screen 1: Enter Room Code */}
       {!room ? (
         <div className="p-6 sm:p-8 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl space-y-5 text-center">
           <div className="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center mx-auto">
@@ -177,7 +174,6 @@ export const ClassroomStudent: React.FC<ClassroomStudentProps> = ({
       ) : (
         /* Screen 2: Student Vote Interface */
         <div className="p-5 sm:p-6 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl space-y-5">
-          {/* Room Header */}
           <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-navy-800 text-xs">
             <span className="font-mono text-slate-400">
               {ui(lang, 'm24')}{' '}<strong className="text-emerald-400">{room.code}</strong>
@@ -186,8 +182,6 @@ export const ClassroomStudent: React.FC<ClassroomStudentProps> = ({
               {ui(lang, 'm25')}{' '}{room.currentNodeId}
             </span>
           </div>
-
-          {/* Question */}
           {currentNode && (
             <div className="space-y-2">
               <h2 className="text-base sm:text-lg font-bold text-white leading-snug">
@@ -200,8 +194,6 @@ export const ClassroomStudent: React.FC<ClassroomStudentProps> = ({
               )}
             </div>
           )}
-
-          {/* Voting Options */}
           {currentNode && (
             <div className="space-y-2.5">
               {currentNode.varianty.map((v) => {
@@ -236,8 +228,6 @@ export const ClassroomStudent: React.FC<ClassroomStudentProps> = ({
               })}
             </div>
           )}
-
-          {/* Post-Vote Notice */}
           {votedVariantId && (
             <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex flex-wrap items-center gap-2">
               <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-400" />

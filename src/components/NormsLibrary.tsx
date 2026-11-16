@@ -43,7 +43,6 @@ export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-      {/* Header */}
       <div className="p-6 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
@@ -62,8 +61,6 @@ export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
         <div className="text-xs font-mono text-cyan-300 px-3 py-1.5 rounded-lg bg-navy-800 border border-navy-700 shrink-0">
           {ui(lang, 'm42')}{' '}{normyData.data_stanu} {ui(lang, 'm43')}{' '}</div>
       </div>
-
-      {/* Filter and Search Bar */}
       <div className="p-4 rounded-xl bg-navy-900 border border-navy-800 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
@@ -90,8 +87,6 @@ export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
           </select>
         </div>
       </div>
-
-      {/* Norms Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filteredNorms.map((norm) => {
           const isVerified = norm.status_zvirky === 'zvireno';
@@ -145,8 +140,6 @@ export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
           );
         })}
       </div>
-
-      {/* Norm Detail Modal */}
       <NormDetailModal
         norm={activeNorm}
         onClose={() => setActiveNorm(null)}

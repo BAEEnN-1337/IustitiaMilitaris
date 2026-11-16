@@ -1562,7 +1562,7 @@
               "efektyvnist": -1,
               "dovira": -2
             },
-            "chomu_taki_baly": "A complete betrayal of professional duty, undermining troops' faith in fairness and legality in the Armed Forces.",
+            "chomu_taki_baly": "Silence leaves the subordinate without support and undermines trust in the corruption prevention service.",
             "zvorotnyi_zviazok": "Encouraging acceptance of forged statements destroys the whistleblowing function and makes the officer morally complicit in a criminal offence (Article 42 of the Law; Article 36 of the Internal Service Regulations).",
             "normy": [
               "ZPK-42",
@@ -1657,8 +1657,8 @@
               "efektyvnist": -2,
               "dovira": -2
             },
-            "chomu_taki_baly": "Professional reputation collapses, with a criminal conviction for complicity in concealing corruption.",
-            "zvorotnyi_zviazok": "Defending an account known to be false leads to criminal disaster (Articles 22 and 42), destroying your standing as an officer and legal professional.",
+            "chomu_taki_baly": "Concealing known facts worsens the position during the investigation.",
+            "zvorotnyi_zviazok": "Defending a false account obstructs the investigation and creates a risk of liability for concealment (Articles 22 and 42).",
             "normy": [
               "ZPK-22",
               "ZPK-42"
@@ -1684,7 +1684,7 @@
               "efektyvnist": 2,
               "dovira": 2
             },
-            "chomu_taki_baly": "Legality, operational effectiveness and personnel's strong moral trust align.",
+            "chomu_taki_baly": "Supplies are restored, records are transparent and troops see the audit's practical result.",
             "zvorotnyi_zviazok": "Integrity leadership means both stopping corruption (Articles 27 and 28) and addressing its frontline consequences, demonstrating the authorised officer's effectiveness (NACP Clarification No. 4, question 194).",
             "normy": [
               "ZPK-28",
@@ -1753,7 +1753,7 @@
               "efektyvnist": -1,
               "dovira": -2
             },
-            "chomu_taki_baly": "Complete surrender to a corrupt system, destroying the purpose of the anti-corruption post.",
+            "chomu_taki_baly": "Failing to respond leaves the theft scheme unchecked.",
             "zvorotnyi_zviazok": "Misguided loyalty to a commander's authority at the expense of the law turns the authorised officer into a cover for crime (Articles 22 and 42; Article 36 of the Internal Service Regulations).",
             "normy": [
               "ZPK-22",
@@ -1782,7 +1782,7 @@
               "dovira": 1
             },
             "chomu_taki_baly": "Remorse does not restore the lost post, but helps other officers avoid the same trap.",
-            "zvorotnyi_zviazok": "The price of compromise: attempting to conceal misconduct for the sake of peace within the unit leads to criminal liability (Article 42; Article 36 of the Internal Service Regulations).",
+            "zvorotnyi_zviazok": "Concealing misconduct to keep peace in the unit does not remove its consequences. Truthful reporting and responsibility for orders remain essential (Article 42; Article 36 of the Internal Service Regulations).",
             "normy": [
               "ZPK-42",
               "SVS-36"
@@ -1802,7 +1802,7 @@
               "dovira": -2
             },
             "chomu_taki_baly": "An inability to reflect and unwillingness to acknowledge an obvious breach of the law.",
-            "zvorotnyi_zviazok": "Refusing to acknowledge deliberate document forgery demonstrates complete unfitness for public service (Articles 42 and 44).",
+            "zvorotnyi_zviazok": "Denying known facts does not correct forged records or restore trust (Articles 42 and 44).",
             "normy": [
               "ZPK-42",
               "ZPK-44"
@@ -2053,7 +2053,7 @@
               "efektyvnist": 2,
               "dovira": 2
             },
-            "chomu_taki_baly": "An excellent combination of knowledge of civil-military mechanisms under martial law, decisiveness and fully lawful action.",
+            "chomu_taki_baly": "Lawfully available transport is obtained and ammunition arrives on time.",
             "zvorotnyi_zviazok": "Using official military transport duty mechanisms and military administration cooperation (Article 42; Article 36 of the Internal Service Regulations) demonstrates that an integrity-minded commander can find a lawful solution even under immense time pressure.",
             "normy": [
               "ZPK-42",
@@ -2267,7 +2267,7 @@
               "dovira": 2
             },
             "chomu_taki_baly": "Turning combat experience into systematic institutional procedures for management with integrity.",
-            "zvorotnyi_zviazok": "Excellent military management: overcoming a crisis through lawful action establishes resilient standards for the whole unit (Article 42; NACP Clarification No. 4, question 194; Article 36 of the Internal Service Regulations).",
+            "zvorotnyi_zviazok": "Record arrangements with military administrations and CIMIC in a protocol so the next commander has a usable procedure (Article 42; NACP Clarification No. 4, question 194; Article 36 of the Internal Service Regulations).",
             "normy": [
               "ZPK-42",
               "NAZK-R4-194",
@@ -2381,7 +2381,7 @@
               "efektyvnist": -2,
               "dovira": -2
             },
-            "chomu_taki_baly": "Legal nihilism and the commander's moral collapse.",
+            "chomu_taki_baly": "Disregarding the law increases risks to civilians and liability for orders issued.",
             "zvorotnyi_zviazok": "Contempt for civilians and the law is incompatible with being an officer of the Armed Forces of Ukraine (Article 22; Article 36 of the Internal Service Regulations).",
             "normy": [
               "ZPK-22",
@@ -2578,7 +2578,7 @@
               "efektyvnist": -1,
               "dovira": -1
             },
-            "chomu_taki_baly": "Passive evasion of moral duty lets wrongdoing prevail when those empowered to resist silently leave.",
+            "chomu_taki_baly": "Withdrawing without disclosing pressure removes you from voting but does not protect the procedure from interference.",
             "zvorotnyi_zviazok": "Withdrawing under a false pretext without disclosing improper pressure is conformity. The Law requires active management of conflicts of interest and reporting of pressure (Articles 28 and 44).",
             "normy": [
               "ZPK-28",
@@ -2719,8 +2719,8 @@
               "efektyvnist": -2,
               "dovira": -2
             },
-            "chomu_taki_baly": "Complete moral and legal disaster: defending a lie to the end destroys the officer's character.",
-            "zvorotnyi_zviazok": "A complete loss of honour. Serving another person's private interest (Articles 1 and 28) leads to a criminal conviction.",
+            "chomu_taki_baly": "Denying recorded instructions obstructs the investigation and undermines trust in your account.",
+            "zvorotnyi_zviazok": "Assessment serving another person's private interest compromises impartial selection. Provide a truthful account during the investigation (Articles 1 and 28).",
             "normy": [
               "ZPK-1",
               "ZPK-28"
@@ -2841,7 +2841,7 @@
               "efektyvnist": 1,
               "dovira": 1
             },
-            "chomu_taki_baly": "A firm moral lesson from mistakes returns the officer to genuine integrity.",
+            "chomu_taki_baly": "Acknowledging mistakes helps resist informal arrangements in future.",
             "zvorotnyi_zviazok": "Understanding favouritism's corrosive effects (Articles 1 and 28) protects against future career tragedies.",
             "normy": [
               "ZPK-1",
@@ -2909,8 +2909,8 @@
               "efektyvnist": -2,
               "dovira": -2
             },
-            "chomu_taki_baly": "Total moral insensitivity and inability to be honest even after judgment.",
-            "zvorotnyi_zviazok": "The complete collapse of the officer's character (Article 41).",
+            "chomu_taki_baly": "Shifting responsibility does not explain your own selection decisions.",
+            "zvorotnyi_zviazok": "Focus on your actions and ways to address their consequences, rather than blaming those who reported misconduct (Article 41).",
             "normy": [
               "ZPK-41"
             ],

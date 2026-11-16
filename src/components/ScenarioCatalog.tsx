@@ -83,14 +83,13 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
     return (
       <div 
         key={s.id}
-        className={`flex flex-col justify-between rounded-xl bg-navy-900 border transition-all duration-300 hover:shadow-xl hover:translate-y-[-2px] ${
+        className={`flex flex-col justify-between rounded-xl bg-navy-900 border transition-all duration-200 hover:shadow-xl hover:translate-y-[-2px] ${
           isTeam 
             ? 'border-emerald-500/30 hover:border-emerald-500/60 shadow-emerald-950/20' 
             : 'border-navy-700 hover:border-navy-600'
         }`}
       >
         <div className="p-5 sm:p-6 space-y-3.5">
-          {/* Top Row: Badges */}
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex flex-wrap items-center gap-2">
               <span className={`font-mono text-xs font-bold px-2.5 py-1 rounded-md border ${
@@ -116,8 +115,6 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
               </span>
             </div>
           </div>
-
-          {/* Title & Preview */}
           <div>
             <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-emerald-400 transition-colors leading-snug">
               {s.nazva}
@@ -126,10 +123,7 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
               {s.sytuatsiia}
             </p>
           </div>
-
-          {/* Verification, AI, Source Badges */}
           <div className="pt-2 border-t border-navy-800 flex flex-wrap items-center gap-2 text-[11px]">
-            {/* Verification Status */}
             <span 
               className={`inline-flex items-center gap-1 px-2 py-0.5 rounded border ${
                 isVerified 
@@ -141,8 +135,6 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
               {isVerified ? <ShieldCheck className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
               {isVerified ? t.catalog.verified : t.catalog.unverified}
             </span>
-
-            {/* AI badge */}
             {s.shi.vykorystano && (
               <span 
                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/30"
@@ -151,8 +143,6 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
                 <Sparkles className="w-3 h-3" />
                 {ui(lang, 'm194')}{' '}</span>
             )}
-
-            {/* Source */}
             <span 
               className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-navy-800 text-slate-400 border border-navy-700"
               title={s.dzherelo_vypadku.opys}
@@ -161,15 +151,11 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
               {['вигаданий', 'fictional'].includes(s.dzherelo_vypadku.typ) ? t.catalog.fictional : t.catalog.anonymized}
             </span>
           </div>
-
-          {/* Audience Preview */}
           <div className="text-[11px] text-slate-400">
             <span className="text-slate-400 font-semibold">{t.catalog.audience}: </span>
             <span className="">{s.audytoriia.join(', ')}</span>
           </div>
         </div>
-
-        {/* Action Buttons */}
         <div className="p-4 bg-navy-950/70 border-t border-navy-800/80 rounded-b-xl flex flex-wrap items-center justify-between gap-2">
           <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
             <button
@@ -207,7 +193,6 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
-      {/* Hero Header */}
       <div className="text-center max-w-3xl mx-auto space-y-3">
         <div className="inline-flex flex-wrap items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
           <Award className="w-4 h-4" />
@@ -218,8 +203,6 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
         <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
           {t.appSubtitle}{ui(lang, 'm198')}{' '}</p>
       </div>
-
-      {/* Filter and Search Bar */}
       <div className="p-4 rounded-xl bg-navy-900 border border-navy-800 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
@@ -249,8 +232,6 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
           </select>
         </div>
       </div>
-
-      {/* SECTION 1: Team Scenarios (3+ stages) */}
       <div className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-emerald-500/30 pb-3">
           <div>
@@ -280,8 +261,6 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
           </div>
         )}
       </div>
-
-      {/* SECTION 2: Organizer Starter Examples (2 stages) */}
       <div className="space-y-4 pt-6 border-t border-navy-800">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-navy-800 pb-3">
           <div>

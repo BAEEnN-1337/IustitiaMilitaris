@@ -1,6 +1,6 @@
 import { localizeScenario } from '../i18n/content';
 import { ui, localizeMessage } from '../i18n/ui';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import QRCode from 'qrcode';
 import { 
   Users, Play, Square, ArrowRight, ShieldCheck, 
@@ -124,30 +124,8 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
 
   const currentNode = scenario.vuzly.find(v => v.id === room?.currentNodeId);
 
-  // If server is not running, provide Mock offline facilitator mode so that demo works 100% anytime!
-  const isMock = !ws || ws.readyState !== WebSocket.OPEN;
-
-  const handleStartMockRoom = () => {
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    const mockRoom: RoomState = {
-      code,
-      scenarioId: scenario.id,
-      currentNodeId: scenario.pochatkovyi_vuzol,
-      votingActive: true,
-      votes: { 'A': 14, 'B': 18, 'C': 4 },
-      totalVotes: 36,
-      participantsCount: 36,
-      history: [],
-      discussionIndex: 0.78,
-      createdAt: Date.now()
-    };
-    setRoom(mockRoom);
-    setStatusMessage('');
-  };
-
   return (
-    <div className={`transition-all duration-300 ${isProjectorMode ? 'bg-black text-white p-6 sm:p-12' : 'max-w-6xl mx-auto px-4 sm:px-6 py-8'}`}>
-      {/* Top Bar */}
+    <div className={`transition-all duration-200 ${isProjectorMode ? 'bg-black text-white p-6 sm:p-12' : 'max-w-6xl mx-auto px-4 sm:px-6 py-8'}`}>
       <div className="flex flex-wrap items-center justify-between gap-4 pb-4 mb-6 border-b border-navy-800">
         <div className="flex items-center gap-3">
           <button
@@ -166,8 +144,6 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
             </p>
           </div>
         </div>
-
-        {/* Projector Mode Toggle */}
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setIsProjectorMode(!isProjectorMode)}
@@ -190,26 +166,16 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
           </button>
         </div>
       </div>
-
-      {/* Offline server warning fallback */}
       {statusMessage && !room && (
         <div className="p-6 rounded-xl bg-navy-900 border border-amber-500/30 text-center space-y-4">
           <AlertCircle className="w-8 h-8 text-amber-400 mx-auto" />
           <div className="text-sm text-slate-200">{localizeMessage(statusMessage, lang)}</div>
-          <button
-            onClick={handleStartMockRoom}
-            className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition-colors"
-          >
-            {ui(lang, 'm8')}{' '}</button>
+
         </div>
       )}
-
-      {/* Main Facilitator Dashboard */}
       {room && currentNode && (
         <div className="space-y-6">
-          {/* Room Header Strip: Code, QR, Participants, Voting State */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-5 rounded-2xl bg-navy-900 border border-navy-750 shadow-xl">
-            {/* Room Code */}
             <div className="p-3.5 rounded-xl bg-navy-950 border border-navy-800 text-center">
               <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
                 {t.classroom.roomCodeLabel}
@@ -218,8 +184,6 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
                 {room.code}
               </span>
             </div>
-
-            {/* Participants Count */}
             <div className="p-3.5 rounded-xl bg-navy-950 border border-navy-800 text-center flex flex-col justify-center">
               <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
                 {t.classroom.participantsLabel}
@@ -229,8 +193,6 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
                 {room.participantsCount || 0}
               </span>
             </div>
-
-            {/* Voting Control */}
             <div className="p-3.5 rounded-xl bg-navy-950 border border-navy-800 flex flex-col justify-center gap-2">
               <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
                 <span className="text-slate-400">{ui(lang, 'm9')}{' '}</span>
@@ -261,8 +223,6 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
                 )}
               </button>
             </div>
-
-            {/* QR Code for smartphone join */}
             <div className="p-2.5 rounded-xl bg-navy-950 border border-navy-800 flex items-center justify-center">
               {qrDataUrl ? (
                 <div className="text-center">
@@ -274,8 +234,6 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
               )}
             </div>
           </div>
-
-          {/* Current Stage Question & Projector Display */}
           <div className="p-6 sm:p-8 rounded-2xl bg-navy-900 border border-navy-700 shadow-2xl space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="font-mono text-xs font-bold px-3 py-1 rounded bg-navy-800 text-emerald-400 border border-emerald-500/30">
@@ -295,8 +253,6 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
             <h2 className={`font-extrabold text-white leading-tight ${isProjectorMode ? 'text-2xl sm:text-3xl' : 'text-xl'}`}>
               {currentNode.zapytannia}
             </h2>
-
-            {/* Voting Distribution & Options */}
             <div className="space-y-4">
               {currentNode.varianty.map((v) => {
                 const count = room.votes[v.id] || 0;
@@ -313,7 +269,7 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
                         : 'border-navy-800 bg-navy-950/70 hover:bg-navy-850'
                     }`}
                   >
-                    <div className="flex items-start justify-between gap-3 gap-3 mb-2">
+                    <div className="flex items-start justify-between gap-3 mb-2">
                       <div className="flex items-start gap-3">
                         <span className="w-7 h-7 rounded-lg bg-navy-800 border border-navy-700 text-emerald-300 font-bold flex items-center justify-center text-xs shrink-0">
                           {v.id}
@@ -330,11 +286,9 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
                           {count} {ui(lang, 'm15')}{' '}</span>
                       </div>
                     </div>
-
-                    {/* Progress Bar */}
                     <div className="w-full bg-navy-900 h-2.5 rounded-full overflow-hidden border border-navy-750">
                       <div
-                        className="h-full bg-emerald-500 rounded-full transition-all duration-500"
+                        className="h-full bg-emerald-500 rounded-full transition-[width] duration-200"
                         style={{ width: `${percent}%` }}
                       />
                     </div>
@@ -342,8 +296,6 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
                 );
               })}
             </div>
-
-            {/* Discussion Index Banner */}
             <div className="p-4 rounded-xl bg-navy-950 border border-navy-800 flex flex-col sm:flex-row items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <div className="p-2.5 rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30">
@@ -361,8 +313,6 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
                 {room.discussionIndex || 0} / 1.0
               </div>
             </div>
-
-            {/* Discussion Facilitation Questions */}
             {scenario.pytannia_dlia_obhovorennia && scenario.pytannia_dlia_obhovorennia.length > 0 && (
               <div className="p-4 rounded-xl bg-navy-950/80 border border-navy-800 space-y-2">
                 <div className="text-xs font-bold text-indigo-400 uppercase tracking-wider flex flex-wrap items-center gap-2">
@@ -376,8 +326,6 @@ export const ClassroomFacilitator: React.FC<ClassroomFacilitatorProps> = ({
                 </ul>
               </div>
             )}
-
-            {/* Advance to Selected Path */}
             <div className="pt-4 border-t border-navy-800 flex flex-col sm:flex-row items-center justify-between gap-3">
               <div className="text-xs text-slate-400">
                 {selectedVariantForAdvance ? (
