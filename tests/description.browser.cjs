@@ -49,6 +49,7 @@ const root = path.resolve(__dirname, '..'),
         );
         const p = await c.newPage();
         await p.goto('http://127.0.0.1:18496/');
+        await p.evaluate(() => document.fonts.ready);
         const cards = p.locator('.scenario-card');
         const starts = await cards.evaluateAll((els) =>
           els.map((el) => ({
@@ -76,12 +77,47 @@ const root = path.resolve(__dirname, '..'),
                 .textContent()
             ).trim(),
             original = (lang === 'uk' ? uk : en)[id].sytuatsiia;
-          assert.ok(Array.from(preview).length <= 350);
+          assert.ok(Array.from(preview).length <= 390);
+          const typography = await desc
+            .locator('p')
+            .first()
+            .evaluate((el) => {
+              const css = getComputedStyle(el);
+              const range = document.createRange();
+              range.selectNodeContents(
+                el.querySelector('.description-preview')
+              );
+              return {
+                align: css.textAlign,
+                height: el.getBoundingClientRect().height,
+                line: parseFloat(css.lineHeight),
+                bottom: range.getBoundingClientRect().bottom,
+                boxBottom: el.getBoundingClientRect().bottom
+              };
+            });
+          assert.equal(typography.align, 'left');
+          assert.ok(
+            Math.abs(typography.height - typography.line * 7) < 1,
+            JSON.stringify(typography)
+          );
+          assert.ok(typography.bottom <= typography.boxBottom + 1);
           assert.equal(
             preview + ((await popup.count()) ? await popup.textContent() : ''),
             original
           );
+          const descriptionBounds = await desc.boundingBox();
+          const titleBounds = await card
+            .locator('.scenario-card-title')
+            .boundingBox();
+          assert.ok(Math.abs(descriptionBounds.x - titleBounds.x) < 1);
           if (await popup.count()) {
+            const marker = await desc.getByRole('button').boundingBox();
+            const box = await desc
+              .locator('.description-preview-box')
+              .boundingBox();
+            assert.ok(
+              Math.abs(marker.y + marker.height - box.y - box.height) < 1
+            );
             await desc.evaluate((e) => e.scrollIntoView({ block: 'center' }));
             await p.mouse.move(0, 0);
             await p.evaluate(() =>
@@ -133,6 +169,24 @@ const root = path.resolve(__dirname, '..'),
             () => document.documentElement.scrollWidth > innerWidth
           ),
           false
+        );
+        await p.setViewportSize({
+          width: width === 360 ? 1280 : 360,
+          height: 900
+        });
+        await p.waitForFunction(() =>
+          [...document.querySelectorAll('.description-preview-box')].every(
+            (el) => {
+              const range = document.createRange();
+              range.selectNodeContents(
+                el.querySelector('.description-preview')
+              );
+              return (
+                range.getBoundingClientRect().bottom <=
+                el.getBoundingClientRect().bottom + 1
+              );
+            }
+          )
         );
         await c.close();
         console.log(

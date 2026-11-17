@@ -89,7 +89,7 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
             : 'border-steel-700 hover:border-steel-600'
         }`}
       >
-        <div className="scenario-card-content flex flex-1 flex-col p-5 sm:p-6 gap-3.5">
+        <div className="scenario-card-content flex flex-1 flex-col p-5 sm:p-6 gap-0">
           <div className="scenario-card-description space-y-3.5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex flex-wrap items-center gap-2">
@@ -123,7 +123,7 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
             <ScenarioDescription text={s.sytuatsiia} lang={lang} />
           </div>
           </div>
-          <div className="scenario-card-metadata mt-auto space-y-2">
+          <div className="scenario-card-metadata mt-3 pt-3 border-t border-steel-700/30 space-y-2">
           <CaseMetadata scenario={s} lang={lang} />
           <div className="text-[11px] text-steel-300">
             <span className="text-steel-300 font-semibold">{t.catalog.audience}: </span>
