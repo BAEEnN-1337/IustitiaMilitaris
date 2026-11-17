@@ -27,7 +27,7 @@ export const CidsHelperModal: React.FC<CidsHelperModalProps> = ({ isOpen, onClos
   };
 
   return (
-    <AnimatedOverlay isOpen={isOpen} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm overflow-y-auto">
+    <AnimatedOverlay onClose={onClose} isOpen={isOpen} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm overflow-y-auto">
       <div role="dialog" aria-modal="true" aria-label={ui(lang, 'closeDialog')}
         className="steel-panel animate-fadeIn relative w-full max-w-3xl bg-obsidian-850 border border-steel-700 rounded-sm shadow-2xl p-6 sm:p-8 my-8 text-steel-100 max-h-[85dvh] overflow-y-auto"
         onClick={e => e.stopPropagation()}
