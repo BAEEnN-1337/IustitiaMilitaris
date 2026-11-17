@@ -207,7 +207,7 @@
     background-color: var(--bg-canvas);
     color: var(--text-primary);
     font-family:
-      'Plus Jakarta Sans',
+      'IBM Plex Sans',
       system-ui,
       -apple-system,
       sans-serif;
@@ -346,7 +346,7 @@
   border-radius: 2px;
   background: var(--bg-input);
   color: var(--text-primary);
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
 }
 .im-field::placeholder {
   color: var(--text-muted);
@@ -383,7 +383,7 @@
   line-height: 1.15;
 }
 .im-section-title {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.06em;
