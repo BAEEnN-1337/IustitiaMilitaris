@@ -741,7 +741,29 @@ body,
 
 .case-badge { min-width: 0; overflow: visible; }
 .case-badge > span:not([role="tooltip"]) { min-width: 0; overflow-wrap: anywhere; }
-.case-badge:is(:hover, :focus) { z-index: 60; border-color: var(--border-strong); outline-color: var(--accent-ice); }
+.case-badge:hover { z-index: 60; border-color: var(--border-strong); }
 .case-badge-tooltip { max-width: calc(100vw - 32px); }
 .case-badge:first-child > .case-badge-tooltip { left: 0; transform: none; }
 .case-badge:last-child > .case-badge-tooltip { left: auto; right: 0; transform: none; }
+
+.case-badge-tooltip {
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 8px;
+  transition: opacity 200ms ease-out, translate 200ms ease-out, visibility 0s linear 200ms;
+}
+@media (hover: hover) {
+  .case-badge:hover > .case-badge-tooltip {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+    transition-delay: 0s;
+  }
+  /* Cancel the previous exit immediately when another marker is hovered. */
+  body:has(.case-badge:hover) .case-badge:not(:hover) > .case-badge-tooltip {
+    opacity: 0;
+    visibility: hidden;
+    translate: 0 8px;
+    transition: none;
+  }
+}
