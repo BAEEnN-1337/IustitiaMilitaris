@@ -200,7 +200,7 @@ export function GroupSession({
   const variant = node?.varianty.find((v) => v.id === room?.selectedVariantId);
   const send = (type: string, variantId?: string, showLive?: boolean) => {
     if (socket.current?.readyState === WebSocket.OPEN)
-      socket.current.send(JSON.stringify({ type, variantId, showLive }));
+      socket.current.send(JSON.stringify({ type, variantId, showLive, ...(host ? { hostSecret: sessionStorage.getItem('room-host-' + activeCode.current) } : {}) }));
   };
   const totalVotes = (votes: Record<string, number>) =>
     Object.values(votes).reduce((a, b) => a + b, 0);

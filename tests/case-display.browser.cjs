@@ -30,7 +30,7 @@ async function solo(page,source,lang,branch=0) {
   }
   await page.locator('svg.select-none').waitFor();
   await readable(page,lang);
-  for(const step of steps) await page.getByText(source.vuzly.find(n=>n.id===step.nodeId).varianty.find(v=>v.id===step.variantId).tekst,{exact:true}).waitFor();
+  for(const step of steps) await page.getByText(source.vuzly.find(n=>n.id===step.nodeId).varianty.find(v=>v.id===step.variantId).tekst,{exact:true}).last().waitFor();
   return reached;
 }
 (async()=>{

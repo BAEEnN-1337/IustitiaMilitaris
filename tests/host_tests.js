@@ -143,9 +143,11 @@ try {
   await request('/api/auth/logout', {}, cookie);
   assert.equal((await request('/api/progress', null, cookie)).status, 401);
   const sockets = [];
+  const hostSecrets = new WeakMap();
   const connect = async () => {
     const ws = new WebSocket(`ws://127.0.0.1:${port}/ws`);
     sockets.push(ws);
+    ws.on('message', raw => { const message = JSON.parse(raw); if (message.type === 'ROOM_CREATED') hostSecrets.set(ws, message.hostSecret); });
     await new Promise((resolve, reject) => {
       ws.once('open', resolve);
       ws.once('error', reject);
@@ -168,7 +170,7 @@ try {
       };
       ws.on('message', listener);
     });
-  const send = (ws, data) => ws.send(JSON.stringify(data));
+  const send = (ws, data) => ws.send(JSON.stringify({ ...data, ...(hostSecrets.has(ws) ? { hostSecret: hostSecrets.get(ws) } : {}) }));
   try {
     const host = await connect();
     let pending = wait(host, (m) => m.type === 'ROOM_CREATED');
