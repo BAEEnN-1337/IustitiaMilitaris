@@ -2,8 +2,7 @@ import {
   Dossier,
   ValueConflict,
   StageStepper,
-  Consequence,
-  Radar
+  Consequence
 } from './BriefingDesign';
 import { localizeNorm, localizeScenario } from '../i18n/content';
 import { ui } from '../i18n/ui';
@@ -258,7 +257,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
       <div className="flex flex-wrap items-center justify-between gap-2 pb-4 mb-6 border-b border-obsidian-800">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="im-tag font-mono text-xs font-bold px-2 py-0.5 rounded-sm bg-obsidian-800 text-status-success border border-steel-700">
+          <span className="im-tag font-mono text-xs font-bold px-2 py-0.5 rounded-sm bg-obsidian-800 text-justice-gold border border-steel-700">
             {scenario.id}
           </span>
           <span className="text-xs text-steel-300 font-medium">
@@ -273,7 +272,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
         >
           <div className="steel-panel p-6 sm:p-8 rounded-sm bg-obsidian-850 border border-steel-700 shadow-xl space-y-6">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-status-success">
+              <span className="text-xs font-bold uppercase tracking-wider text-justice-gold">
                 {t.briefing.title}
               </span>
               <h1 className="im-title font-serif text-xl sm:text-2xl font-extrabold text-white mt-1">
@@ -296,7 +295,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
             </div>
             <div className="space-y-3">
               <h2 className="im-title font-serif text-sm font-bold text-steel-300 uppercase tracking-wider flex flex-wrap items-center gap-2">
-                <User className="w-4 h-4 text-status-success" />
+                <User className="w-4 h-4 text-justice-gold" />
                 {t.briefing.rolesTitle}
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -305,7 +304,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                     key={role.id}
                     className={`p-3.5 rounded-sm border transition-all ${
                       role.hravets
-                        ? 'bg-status-success/10 border-status-success/50 shadow-sm'
+                        ? 'bg-justice-gold/10 border-justice-gold/50 shadow-sm'
                         : 'bg-obsidian-950 border-obsidian-800'
                     }`}
                   >
@@ -314,7 +313,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                         {role.rol}
                       </span>
                       {role.hravets && (
-                        <span className="im-tag text-[10px] font-bold px-2 py-0.5 rounded-sm bg-status-success/20 text-status-success border border-status-success/30">
+                        <span className="im-tag text-[10px] font-bold px-2 py-0.5 rounded-sm bg-justice-gold/20 text-justice-gold border border-justice-gold/30">
                           {t.briefing.playerBadge}
                         </span>
                       )}
@@ -360,7 +359,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
             </div>
             <button
               onClick={handleStartFromBriefing}
-              className="im-primary w-full py-3.5 px-6 rounded-sm bg-status-success hover:bg-status-success text-white font-bold text-sm sm:text-base transition-all shadow-lg shadow-panel flex items-center justify-center gap-2"
+              className="im-primary w-full py-3.5 px-6 rounded-sm bg-justice-gold hover:bg-justice-gold text-white font-bold text-sm sm:text-base transition-all shadow-lg shadow-panel flex items-center justify-center gap-2"
             >
               <span>{t.briefing.startScenario}</span>
               <ArrowRight className="w-5 h-5" />
@@ -375,7 +374,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-steel-300">
-              <span className="im-tag px-2.5 py-1 rounded-sm bg-obsidian-800 text-status-success border border-status-success/30 font-mono">
+              <span className="im-tag px-2.5 py-1 rounded-sm bg-obsidian-800 text-justice-gold border border-justice-gold/30 font-mono">
                 {currentNode.id}
               </span>
               <span>
@@ -436,7 +435,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                       <span
                         className={`im-tag w-7 h-7 rounded-sm flex items-center justify-center font-bold text-xs shrink-0 ${
                           isSelected
-                            ? 'bg-status-success text-obsidian-950'
+                            ? 'bg-justice-gold text-obsidian-950'
                             : 'bg-obsidian-800 text-steel-300 border border-steel-700'
                         }`}
                       >
@@ -455,7 +454,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
               disabled={!pendingVariant}
               className={`im-primary w-full py-3 px-6 rounded-sm font-bold text-sm sm:text-base transition-all flex items-center justify-center gap-2 ${
                 pendingVariant
-                  ? 'bg-status-success hover:bg-status-success text-white shadow-lg cursor-pointer'
+                  ? 'bg-justice-gold hover:bg-justice-gold text-white shadow-lg cursor-pointer'
                   : 'bg-obsidian-800 text-steel-400 border border-steel-700 cursor-not-allowed'
               }`}
             >
@@ -482,10 +481,10 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
           />
           <div className="steel-panel p-6 sm:p-8 rounded-sm bg-obsidian-850 border border-steel-700 shadow-xl space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-obsidian-800">
-              <span className="text-xs font-bold uppercase tracking-wider text-status-success">
+              <span className="text-xs font-bold uppercase tracking-wider text-justice-gold">
                 {t.feedback.title}
               </span>
-              <span className="im-tag font-mono text-xs font-bold px-2 py-0.5 rounded-sm bg-status-success/20 text-status-success border border-status-success/30">
+              <span className="im-tag font-mono text-xs font-bold px-2 py-0.5 rounded-sm bg-justice-gold/20 text-justice-gold border border-justice-gold/30">
                 {ui(lang, 'm215')} {selectedVariant.id}
               </span>
             </div>
@@ -502,8 +501,8 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
               explanation={selectedVariant.chomu_taki_baly}
               lang={lang}
             />
-            <div className="p-4 rounded-sm bg-obsidian-950 border-l-4 border-status-success text-xs sm:text-sm text-steel-100 leading-relaxed">
-              <strong className="text-status-success block mb-1">
+            <div className="p-4 rounded-sm bg-obsidian-950 border-l-4 border-justice-gold text-xs sm:text-sm text-steel-100 leading-relaxed">
+              <strong className="text-justice-gold block mb-1">
                 {t.feedback.analysisTitle}
               </strong>
               {selectedVariant.zvorotnyi_zviazok}
@@ -537,7 +536,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
             )}
             <button
               onClick={handleNextStep}
-              className="im-primary w-full py-3.5 px-6 rounded-sm bg-status-success hover:bg-status-success text-white font-bold text-sm sm:text-base transition-all shadow-lg flex items-center justify-center gap-2"
+              className="im-primary w-full py-3.5 px-6 rounded-sm bg-justice-gold hover:bg-justice-gold text-white font-bold text-sm sm:text-base transition-all shadow-lg flex items-center justify-center gap-2"
             >
               <span>
                 {selectedVariant.nastupnyi_vuzol
@@ -557,33 +556,28 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
           <div className="steel-panel p-6 sm:p-8 rounded-sm bg-obsidian-850 border border-steel-700 shadow-xl space-y-6">
             <div className="border-b border-obsidian-800 pb-3 flex flex-wrap items-center justify-between gap-2">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-status-success">
+                <span className="text-xs font-bold uppercase tracking-wider text-justice-gold">
                   {t.reflection.title}
                 </span>
                 <h1 className="im-title font-serif text-xl sm:text-2xl font-extrabold text-white mt-1">
                   {scenario.nazva}
                 </h1>
               </div>
-              <span className="im-tag px-3 py-1 rounded-sm bg-status-success/20 text-status-success border border-status-success/30 text-xs font-semibold">
+              <span className="im-tag px-3 py-1 rounded-sm bg-justice-gold/20 text-justice-gold border border-justice-gold/30 text-xs font-semibold">
                 {ui(lang, 'm216')}{' '}
               </span>
             </div>
-            <div className="grid gap-5 lg:grid-cols-2 items-start">
+            <div className="w-full space-y-5">
               <div className="space-y-2">
                 <h3 className="im-section-title text-sm font-bold text-steel-300 uppercase tracking-wider flex flex-wrap items-center gap-2">
-                  <Layers className="w-4 h-4 text-status-success" />
+                  <Layers className="w-4 h-4 text-justice-gold" />
                   {t.reflection.pathwayTitle}
                 </h3>
                 <DecisionTreeSvg
                   scenario={scenario}
                   visitedNodeIds={pathway.map((p) => p.nodeId)}
                 />
-              </div>{' '}
-              <Radar
-                scores={cumulativeScores}
-                count={pathway.length}
-                lang={lang}
-              />
+              </div>
             </div>
             <div className="space-y-2">
               {pathway.map((p, idx) => (
@@ -592,7 +586,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                   className="p-3.5 rounded-sm bg-obsidian-950 border border-obsidian-800 flex items-start justify-between gap-3 text-xs sm:text-sm"
                 >
                   <div>
-                    <span className="font-mono font-bold text-status-success mr-2">
+                    <span className="font-mono font-bold text-justice-gold mr-2">
                       {ui(lang, 'm217')} {p.nodeId}
                     </span>
                     <span className="font-semibold text-white">
@@ -601,7 +595,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                     <p className="text-steel-300 mt-1">{p.variant.tekst}</p>
                   </div>
                   <div className="flex items-center gap-1 font-mono text-[11px] shrink-0 ml-4">
-                    <span className="text-status-success">
+                    <span className="text-justice-gold">
                       {ui(lang, 'm219')}{' '}
                       {p.variant.baly.dobrochesnist > 0
                         ? `+${p.variant.baly.dobrochesnist}`
@@ -655,14 +649,14 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                     key={idx}
                     className="flex items-start gap-2 text-xs sm:text-sm text-steel-100"
                   >
-                    <CheckCircle2 className="w-4 h-4 text-status-success shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-justice-gold shrink-0 mt-0.5" />
                     <span>{advice}</span>
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="p-3.5 rounded-sm bg-status-success/10 border border-status-success/25 text-xs text-status-success flex flex-wrap items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-status-success shrink-0" />
+            <div className="p-3.5 rounded-sm bg-justice-gold/10 border border-justice-gold/25 text-xs text-justice-gold flex flex-wrap items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-justice-gold shrink-0" />
               <span>{t.reflection.privacyBanner}</span>
             </div>
             <div className="pt-4 border-t border-obsidian-800 flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -670,14 +664,14 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 onClick={handleRestart}
                 className="im-secondary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-sm bg-obsidian-800 hover:bg-steel-700 text-white font-semibold text-xs transition-colors border border-steel-700"
               >
-                <RotateCcw className="w-4 h-4 text-status-success" />
+                <RotateCcw className="w-4 h-4 text-justice-gold" />
                 {t.reflection.restartBtn}
               </button>
 
               <button
                 onClick={handleExportScorm}
                 disabled={isExportingScorm}
-                className="im-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-sm bg-status-success hover:bg-status-success text-white font-semibold text-xs transition-colors shadow-md"
+                className="im-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-sm bg-justice-gold hover:bg-justice-gold text-white font-semibold text-xs transition-colors shadow-md"
               >
                 <Download className="w-4 h-4" />
                 {isExportingScorm

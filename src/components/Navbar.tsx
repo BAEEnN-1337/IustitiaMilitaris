@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Shield, Sun, Moon, UserRound, Wifi, WifiOff } from 'lucide-react';
+import { Shield, Sun, Moon, UserRound } from 'lucide-react';
 import { Language, translations } from '../i18n';
 import labels from '../i18n/design.json';
 interface NavbarProps {
@@ -72,12 +72,12 @@ export const Navbar = ({
         </nav>
         <div className="header-tools">
           <span
-            className={`flex items-center gap-1 text-xs ${online ? 'text-status-success' : 'text-status-warning'}`}
+            className={`flex items-center gap-1 text-xs ${online ? 'text-steel-300' : 'text-steel-400'}`}
             role="status"
             aria-label={online ? t.online : t.offline}
             title={online ? t.online : t.offline}
           >
-            {online ? <Wifi size={14} /> : <WifiOff size={14} />}
+            <span className="network-dot" aria-hidden="true" />
             <span className="hidden 2xl:inline">
               {online ? t.online : t.offline}
             </span>

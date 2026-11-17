@@ -2,8 +2,7 @@ import {
   Dossier,
   ValueConflict,
   StageStepper,
-  Consequence,
-  Radar
+  Consequence
 } from './BriefingDesign';
 import designLabels from '../i18n/design.json';
 import { DecisionProfile } from './DecisionProfile';
@@ -236,12 +235,12 @@ export function GroupSession({
           variant?.id === v.id || (!variant && leader?.id === v.id);
         return (
           <article
-            className={`surface-muted space-y-3 ${selected ? '!border-status-success/40' : ''}`}
+            className={`surface-muted space-y-3 ${selected ? '!border-justice-gold/40' : ''}`}
             key={v.id}
           >
             <div className="flex justify-between gap-3">
               <p className="text-sm">
-                <strong className="text-status-success">{v.id}</strong> · {v.tekst}
+                <strong className="text-justice-gold">{v.id}</strong> · {v.tekst}
               </p>
               <span className="badge shrink-0 font-mono">
                 {percent}% · {count}
@@ -297,7 +296,7 @@ export function GroupSession({
                 </h4>
               </div>
               <a
-                className="action-primary w-full"
+                className="action w-full border-steel-700 text-steel-300 hover:border-steel-600 hover:text-steel-100"
                 href={`/classroom/host/new?scenario=${s.id}`}
               >
                 {t.host} →
@@ -461,7 +460,7 @@ export function GroupSession({
           {room.phase === 'finished' ? (
             <div className="surface space-y-5 animate-fadeIn">
               <h2 className="im-title font-serif text-xl font-bold">{t.summary}</h2>
-              <div className="grid gap-5 md:grid-cols-2 items-start">
+              <div className="w-full space-y-5">
                 <div className="surface-muted space-y-3">
                   <h3 className="im-section-title font-semibold">{t.path}</h3>
                   <ol className="flex flex-wrap gap-2">
@@ -472,26 +471,7 @@ export function GroupSession({
                     ))}
                   </ol>
                 </div>
-                <Radar
-                  lang={lang}
-                  count={room.history.length}
-                  scores={room.history.reduce(
-                    (acc, h) => {
-                      const v = scenario.vuzly
-                        .find((n) => n.id === h.nodeId)
-                        ?.varianty.find((v) => v.id === h.selectedVariantId);
-                      if (v)
-                        for (const key of [
-                          'dobrochesnist',
-                          'efektyvnist',
-                          'dovira'
-                        ] as const)
-                          acc[key] += v.baly[key];
-                      return acc;
-                    },
-                    { dobrochesnist: 0, efektyvnist: 0, dovira: 0 }
-                  )}
-                />
+
               </div>
               <p className="notice">
                 {t.mostDivided}:{' '}
@@ -552,7 +532,7 @@ export function GroupSession({
                   <div className="grid gap-3 sm:grid-cols-2">
                     {scenario.diiovi_osoby.map((r) => (
                       <div className="surface-muted" key={r.id}>
-                        <h3 className="im-section-title font-bold text-status-success">{r.rol}</h3>
+                        <h3 className="im-section-title font-bold text-justice-gold">{r.rol}</h3>
                         <p className="mt-2 text-sm text-steel-300">{r.opys}</p>
                       </div>
                     ))}

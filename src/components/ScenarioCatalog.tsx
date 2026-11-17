@@ -85,7 +85,7 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
         key={s.id}
         className={`steel-panel flex flex-col justify-between rounded-sm bg-obsidian-850 border transition-all duration-200 hover:shadow-xl hover:border-tactical-ice/60 ${
           isTeam
-            ? 'border-status-success/30 hover:border-status-success/60 shadow-status-success/20'
+            ? 'border-justice-gold/30 hover:border-justice-gold/60 shadow-justice-gold/20'
             : 'border-steel-700 hover:border-steel-600'
         }`}
       >
@@ -94,7 +94,7 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
             <div className="flex flex-wrap items-center gap-2">
               <span className={`im-tag font-mono text-xs font-bold px-2.5 py-1 rounded-sm border ${
                 isTeam
-                  ? 'bg-status-success/20 text-status-success border-status-success/40'
+                  ? 'bg-justice-gold/20 text-justice-gold border-justice-gold/40'
                   : 'bg-obsidian-800 text-steel-300 border-steel-700'
               }`}>
                 {s.id}
@@ -116,7 +116,7 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
             </div>
           </div>
           <div>
-            <h3 className="im-scenario-title font-serif text-base sm:text-lg font-bold text-white group-hover:text-status-success transition-colors leading-snug">
+            <h3 className="im-scenario-title font-serif text-base sm:text-lg font-bold text-white group-hover:text-justice-gold transition-colors leading-snug">
               {s.nazva}
             </h3>
             <p className="text-xs text-steel-300 mt-2  leading-relaxed">
@@ -127,7 +127,7 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
             <span 
               className={`im-tag inline-flex items-center gap-1 px-2 py-0.5 rounded-sm border ${
                 isVerified
-                  ? 'bg-status-success/10 text-status-success border-status-success/30'
+                  ? 'bg-justice-gold/10 text-justice-gold border-justice-gold/30'
                   : 'bg-status-warning/10 text-status-warning border-status-warning/30'
               }`}
               title={s.perevirka_zmistu.prymitka}
@@ -160,14 +160,14 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
           <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
             <button
               onClick={() => onStartSolo(s)}
-              className="im-primary flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-sm bg-status-success hover:bg-status-success text-white font-semibold text-xs transition-colors shadow-sm"
+              className="im-primary flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-sm bg-justice-gold hover:bg-justice-gold text-white font-semibold text-xs transition-colors shadow-sm"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               {t.catalog.startSolo}
             </button>
             <button
               onClick={() => onStartClassroom(s)}
-              className="im-secondary flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-sm bg-obsidian-800 hover:bg-steel-700 text-tactical-ice hover:text-white border border-tactical-ice/30 font-medium text-xs transition-colors"
+              className="im-secondary flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-sm bg-obsidian-800 hover:bg-obsidian-850 text-steel-300 hover:text-steel-100 border border-steel-700 hover:border-steel-600 font-medium text-xs transition-colors"
             >
               <Users className="w-3.5 h-3.5" />
               {t.catalog.startClassroom}
@@ -177,7 +177,7 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
           <button
             onClick={() => handleExportScorm(s)}
             disabled={downloadingId === s.id}
-            className="im-secondary w-full sm:w-auto inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-sm bg-obsidian-850 hover:bg-obsidian-800 text-steel-300 hover:text-steel-100 border border-steel-700 text-[11px] font-medium transition-colors"
+            className="im-secondary w-full sm:w-auto inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-sm bg-obsidian-800 hover:bg-obsidian-850 text-steel-300 hover:text-steel-100 border border-steel-700 hover:border-steel-600 text-[11px] font-medium transition-colors"
             title={ui(lang, 'm195')}
           >
             <Download className="w-3.5 h-3.5" />
@@ -194,7 +194,7 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
       <div className="text-center max-w-3xl mx-auto space-y-3">
-        <div className="inline-flex flex-wrap items-center gap-2 px-3 py-1 rounded-sm bg-status-success/10 border border-status-success/30 text-status-success text-xs font-semibold">
+        <div className="inline-flex flex-wrap items-center gap-2 px-3 py-1 rounded-sm bg-obsidian-850/80 border border-steel-700 text-steel-300 font-mono text-xs">
           <Award className="w-4 h-4" />
           {ui(lang, 'm197')}{' '}</div>
         <h1 className="im-title font-serif text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -211,7 +211,7 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
             placeholder={ui(lang, 'm199')}
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm pl-9 pr-4 py-2 text-xs text-white placeholder-steel-300 focus:outline-none focus:border-status-success"
+            className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm pl-9 pr-4 py-2 text-xs text-white placeholder-steel-300 focus:outline-none focus:border-justice-gold"
           />
         </div>
 
@@ -220,7 +220,7 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
           <select
             value={selectedTheme}
             onChange={e => setSelectedTheme(e.target.value)}
-            className="im-field bg-obsidian-950 border border-steel-700 text-steel-100 rounded-sm px-3 py-1.5 focus:outline-none focus:border-status-success text-xs"
+            className="im-field bg-obsidian-950 border border-steel-700 text-steel-100 rounded-sm px-3 py-1.5 focus:outline-none focus:border-justice-gold text-xs"
           >
             <option value="all">{ui(lang, 'm200')}{' '}</option>
             <option value="vykryvach">{ui(lang, 'm201')}{' '}</option>
@@ -233,14 +233,14 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
         </div>
       </div>
       <div className="space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-status-success/30 pb-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-justice-gold/30 pb-3">
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="im-title font-serif text-lg sm:text-xl font-bold text-white flex flex-wrap items-center gap-2">
-                <Award className="w-5 h-5 text-status-success" />
+                <Award className="w-5 h-5 text-justice-gold" />
                 {t.catalog.teamScenariosTitle}
               </h2>
-              <span className="im-tag px-2 py-0.5 rounded-sm text-[11px] font-bold bg-status-success/20 text-status-success border border-status-success/30">
+              <span className="im-tag px-2 py-0.5 rounded-sm text-[11px] font-bold bg-tactical-ice/10 text-tactical-ice border border-tactical-ice/30 font-mono">
                 {ui(lang, 'm207')}{' '}</span>
             </div>
             <p className="text-xs text-steel-300 mt-1">

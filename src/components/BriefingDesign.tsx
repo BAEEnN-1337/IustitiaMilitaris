@@ -2,7 +2,7 @@ import React from "react";
 import { Scale, Crosshair, Clock3 } from "lucide-react";
 import { Language, translations } from "../i18n";
 import labels from "../i18n/design.json";
-import type { Scenario, Scores } from "../types";
+import type { Scenario } from "../types";
 export function Dossier({
   scenario,
   lang,
@@ -26,7 +26,7 @@ export function Dossier({
           {nodeId ? ` · ${nodeId}` : ""}
         </span>
         {role && (
-          <span className="badge !text-status-success">
+          <span className="badge !text-justice-gold">
             {translations[lang].briefing.playerBadge}: {role.rol}
           </span>
         )}
@@ -92,7 +92,7 @@ export function StageStepper({
         <li
           key={i}
           aria-current={i === completed ? "step" : undefined}
-          className={`badge ${i === completed ? "!border-status-success !text-status-success" : ""}`}
+          className={`badge ${i === completed ? "!border-justice-gold !text-justice-gold" : ""}`}
         >
           <span>
             {i + 1}.{" "}
@@ -129,86 +129,5 @@ export function Consequence({
       </h3>
       <div className="text-sm leading-relaxed text-steel-100">{children}</div>
     </section>
-  );
-}
-export function Radar({
-  scores,
-  count,
-  lang,
-}: {
-  scores: Scores;
-  count: number;
-  lang: Language;
-}) {
-  const t = labels[lang],
-    axes = ["dobrochesnist", "efektyvnist", "dovira"] as const,
-    ends = [
-      [160, 60],
-      [247, 210],
-      [73, 210],
-    ],
-    center = [160, 160];
-  const point = (i: number, ratio: number) => [
-    center[0] + (ends[i][0] - center[0]) * ratio,
-    center[1] + (ends[i][1] - center[1]) * ratio,
-  ];
-  return (
-    <figure className="surface-muted space-y-3" data-testid="radar">
-      <figcaption className="font-semibold">{t.balance}</figcaption>
-      <svg
-        viewBox="0 0 320 285"
-        className="w-full max-w-sm mx-auto text-steel-300"
-        role="img"
-        aria-label={t.balance}
-      >
-        <title>{t.balance}</title>
-        {[0.25, 0.5, 0.75, 1].map((r) => (
-          <polygon
-            key={r}
-            points={axes.map((_, i) => point(i, r).join(",")).join(" ")}
-            fill="none"
-            stroke="currentColor"
-            strokeOpacity="0.45"
-          />
-        ))}
-        {ends.map(([x, y], i) => (
-          <line key={i} x1={160} y1={160} x2={x} y2={y} stroke="currentColor" />
-        ))}
-        <polygon
-          points={axes
-            .map((axis, i) =>
-              point(
-                i,
-                Math.max(
-                  0,
-                  Math.min(1, (scores[axis] / Math.max(1, count) + 2) / 4),
-                ),
-              ).join(","),
-            )
-            .join(" ")}
-          fill="rgb(var(--emerald-500) / 0.18)"
-          stroke="rgb(var(--emerald-400))"
-          strokeWidth="2"
-        />
-        {axes.map((axis, i) => (
-          <foreignObject
-            key={axis}
-            x={[95, 222, 0][i]}
-            y={[4, 218, 218][i]}
-            width={i === 0 ? 130 : 98}
-            height={62}
-          >
-            <div className="text-center text-xs text-steel-100 leading-relaxed">
-              {translations[lang].dimensions[axis]}
-              <strong className="block">
-                {scores[axis] > 0 ? "+" : ""}
-                {scores[axis]}
-              </strong>
-            </div>
-          </foreignObject>
-        ))}
-      </svg>
-      <p className="text-xs text-steel-300">{t.radarNotice}</p>
-    </figure>
   );
 }

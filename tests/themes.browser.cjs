@@ -110,7 +110,7 @@ function contrast(a, b) {
               const dialog = p.getByRole('dialog');
               await dialog.waitFor();
               const colors = await dialog
-                .locator('.bg-cyan-950')
+                .locator('.bg-obsidian-800').first()
                 .evaluate((el) => [
                   getComputedStyle(el).color,
                   getComputedStyle(el).backgroundColor
@@ -217,31 +217,20 @@ function contrast(a, b) {
                 })
                 .click();
           }
-          await p.getByTestId('radar').waitFor();
+          assert.equal(await p.getByTestId('radar').count(), 0);
           await check();
-          const bounds = await p
-            .getByTestId('radar')
-            .locator('foreignObject')
-            .evaluateAll((els) =>
-              els.every(
-                (el) =>
-                  Number(el.getAttribute('x')) >= 0 &&
-                  Number(el.getAttribute('x')) +
-                    Number(el.getAttribute('width')) <=
-                    320
-              )
-            );
-          assert.ok(bounds);
+          const graph = p.locator('svg.select-none');
+          assert.equal(await graph.count(), 1);
+          assert.ok(await graph.evaluate(el => {
+            const container = el.parentElement;
+            const card = container.parentElement.parentElement;
+            return Math.abs(container.getBoundingClientRect().width - card.getBoundingClientRect().width) < 2;
+          }));
           await p.evaluate(() => scrollTo(0, 0));
           await p.screenshot({
             path: `${root}/test-results/themes/summary-${theme}-${lang}-${width}.png`,
             fullPage: true
           });
-          if (theme === 'light' && lang === 'en' && width === 1280) {
-            await p.getByTestId('radar').screenshot({
-              path: root + '/test-results/themes/radar-light.png'
-            });
-          }
           await p.goto(base + '/classroom/host/new?scenario=S06');
           await p
             .getByRole('button', { name: group[lang].start, exact: true })
@@ -261,7 +250,7 @@ function contrast(a, b) {
             theme,
             lang,
             width,
-            'routes, contrast, one-row header, poles, stepper, radar, projector/Esc'
+            'routes, contrast, one-row header, poles, stepper, full-width reflection without radar, projector/Esc'
           );
           await context.close();
         }
