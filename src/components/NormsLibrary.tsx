@@ -43,42 +43,42 @@ export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-      <div className="p-6 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="steel-panel p-6 rounded-sm bg-obsidian-850 border border-steel-700 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <div className="p-2 rounded-lg bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
+            <div className="p-2 rounded-sm bg-tactical-ice/20 text-tactical-ice border border-tactical-ice/30">
               <BookOpen className="w-5 h-5" />
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-white">
+            <h1 className="im-title font-serif text-xl sm:text-2xl font-bold text-white">
               {normyData.nazva}
             </h1>
           </div>
-          <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
+          <p className="text-xs text-steel-300 mt-1 max-w-2xl leading-relaxed">
             {normyData.prymitka}
           </p>
         </div>
 
-        <div className="text-xs font-mono text-cyan-300 px-3 py-1.5 rounded-lg bg-navy-800 border border-navy-700 shrink-0">
+        <div className="text-xs font-mono text-tactical-ice px-3 py-1.5 rounded-sm bg-obsidian-800 border border-steel-700 shrink-0">
           {ui(lang, 'm42')}{' '}{normyData.data_stanu} {ui(lang, 'm43')}{' '}</div>
       </div>
-      <div className="p-4 rounded-xl bg-navy-900 border border-navy-800 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
+      <div className="steel-panel p-4 rounded-sm bg-obsidian-850 border border-obsidian-800 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+          <Search className="w-4 h-4 text-steel-300 absolute left-3 top-3" />
           <input
             type="text"
             placeholder={ui(lang, 'm44')}
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full bg-navy-950 border border-navy-700 rounded-lg pl-9 pr-4 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500"
+            className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm pl-9 pr-4 py-2 text-xs text-white placeholder-steel-300 focus:outline-none focus:border-tactical-ice"
           />
         </div>
 
         <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto text-xs">
-          <span className="text-slate-400">{ui(lang, 'm45')}{' '}</span>
+          <span className="text-steel-300">{ui(lang, 'm45')}{' '}</span>
           <select
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value)}
-            className="bg-navy-950 border border-navy-700 text-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:border-cyan-500 text-xs"
+            className="im-field bg-obsidian-950 border border-steel-700 text-steel-100 rounded-sm px-3 py-1.5 focus:outline-none focus:border-tactical-ice text-xs"
           >
             <option value="all">{ui(lang, 'm46')}{' '}</option>
             <option value="zvireno">{ui(lang, 'm47')}{' '}</option>
@@ -97,40 +97,40 @@ export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
             <div
               key={norm.id}
               onClick={() => setActiveNorm(norm)}
-              className="p-5 rounded-xl bg-navy-900 border border-navy-800 hover:border-cyan-500/40 hover:bg-navy-850 transition-all cursor-pointer flex flex-col justify-between space-y-3"
+              className="steel-panel p-5 rounded-sm bg-obsidian-850 border border-obsidian-800 hover:border-tactical-ice/40 hover:bg-obsidian-850 transition-all cursor-pointer flex flex-col justify-between space-y-3"
             >
               <div className="space-y-2">
                 <div className="flex flex-wrap items-center justify-between gap-2 gap-2">
-                  <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
+                  <span className="im-tag font-mono text-xs font-bold px-2 py-0.5 rounded-sm bg-obsidian-800 text-tactical-ice border border-tactical-ice">
                     {norm.id}
                   </span>
-                  <span className={`text-[11px] px-2 py-0.5 rounded-full border flex items-center gap-1 font-medium ${
-                    isVerified 
-                      ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30' 
-                      : isRecommended 
-                      ? 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30'
-                      : 'bg-amber-500/10 text-amber-300 border-amber-500/30'
+                  <span className={`im-tag text-[11px] px-2 py-0.5 rounded-sm border flex items-center gap-1 font-medium ${
+                    isVerified
+                      ? 'bg-status-success/10 text-status-success border-status-success/30'
+                      : isRecommended
+                      ? 'bg-tactical-ice/10 text-tactical-ice border-tactical-ice/30'
+                      : 'bg-status-warning/10 text-status-warning border-status-warning/30'
                   }`}>
                     {isVerified ? <CheckCircle2 className="w-3 h-3" /> : <AlertTriangle className="w-3 h-3" />}
                     {isVerified ? ui(lang, 'm50') : isRecommended ? ui(lang, 'm51') : ui(lang, 'm52')}
                   </span>
                 </div>
 
-                <h3 className="font-bold text-sm text-white ">
+                <h3 className="im-section-title font-bold text-sm text-white ">
                   {norm.akt}
                 </h3>
-                <div className="text-xs text-slate-400 font-medium">
+                <div className="text-xs text-steel-300 font-medium">
                   {norm.punkt}
                 </div>
-                <p className="text-xs text-slate-300  leading-relaxed">
+                <p className="text-xs text-steel-300  leading-relaxed">
                   {norm.korotko}
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-navy-800 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400">
+              <div className="pt-2 border-t border-obsidian-800 flex flex-wrap items-center justify-between gap-2 text-[11px] text-steel-300">
                 <span>{norm.redaktsiia}</span>
                 {usedInScenarios.length > 0 && (
-                  <span className="flex items-center gap-1 text-emerald-400 font-mono">
+                  <span className="flex items-center gap-1 text-status-success font-mono">
                     <Tag className="w-3 h-3" />
                     {usedInScenarios.join(', ')}
                   </span>

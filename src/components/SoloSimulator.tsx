@@ -256,12 +256,12 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
-      <div className="flex flex-wrap items-center justify-between gap-2 pb-4 mb-6 border-b border-navy-800">
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-4 mb-6 border-b border-obsidian-800">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-navy-800 text-emerald-400 border border-navy-700">
+          <span className="im-tag font-mono text-xs font-bold px-2 py-0.5 rounded-sm bg-obsidian-800 text-status-success border border-steel-700">
             {scenario.id}
           </span>
-          <span className="text-xs text-slate-300 font-medium">
+          <span className="text-xs text-steel-300 font-medium">
             {scenario.nazva}
           </span>
         </div>
@@ -271,23 +271,23 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
           key={`${scenario.id}:${phase}:${currentNodeId}`}
           className="space-y-6 animate-fadeIn"
         >
-          <div className="p-6 sm:p-8 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl space-y-6">
+          <div className="steel-panel p-6 sm:p-8 rounded-sm bg-obsidian-850 border border-steel-700 shadow-xl space-y-6">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+              <span className="text-xs font-bold uppercase tracking-wider text-status-success">
                 {t.briefing.title}
               </span>
-              <h1 className="text-xl sm:text-2xl font-extrabold text-white mt-1">
+              <h1 className="im-title font-serif text-xl sm:text-2xl font-extrabold text-white mt-1">
                 {scenario.nazva}
               </h1>
             </div>
-            <div className="p-4 rounded-xl bg-navy-950/80 border-l-4 border-indigo-500 text-sm text-slate-200 leading-relaxed">
-              <strong className="text-indigo-300 block mb-1">
+            <div className="p-4 rounded-sm bg-obsidian-950/80 border-l-4 border-tactical-ice text-sm text-steel-100 leading-relaxed">
+              <strong className="text-tactical-ice block mb-1">
                 {ui(lang, 'm214')}{' '}
               </strong>
               {scenario.kontekst}
             </div>
             <div className="space-y-2">
-              <h2 className="text-sm font-bold text-slate-300 uppercase tracking-wider">
+              <h2 className="im-title font-serif text-sm font-bold text-steel-300 uppercase tracking-wider">
                 {t.briefing.situationTitle}
               </h2>
               <Dossier scenario={scenario} lang={lang}>
@@ -295,18 +295,18 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
               </Dossier>
             </div>
             <div className="space-y-3">
-              <h2 className="text-sm font-bold text-slate-300 uppercase tracking-wider flex flex-wrap items-center gap-2">
-                <User className="w-4 h-4 text-emerald-400" />
+              <h2 className="im-title font-serif text-sm font-bold text-steel-300 uppercase tracking-wider flex flex-wrap items-center gap-2">
+                <User className="w-4 h-4 text-status-success" />
                 {t.briefing.rolesTitle}
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {scenario.diiovi_osoby.map((role) => (
                   <div
                     key={role.id}
-                    className={`p-3.5 rounded-xl border transition-all ${
+                    className={`p-3.5 rounded-sm border transition-all ${
                       role.hravets
-                        ? 'bg-emerald-500/10 border-emerald-500/50 shadow-sm'
-                        : 'bg-navy-950 border-navy-800'
+                        ? 'bg-status-success/10 border-status-success/50 shadow-sm'
+                        : 'bg-obsidian-950 border-obsidian-800'
                     }`}
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
@@ -314,25 +314,25 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                         {role.rol}
                       </span>
                       {role.hravets && (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                        <span className="im-tag text-[10px] font-bold px-2 py-0.5 rounded-sm bg-status-success/20 text-status-success border border-status-success/30">
                           {t.briefing.playerBadge}
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-slate-400 leading-relaxed">
+                    <p className="text-xs text-steel-300 leading-relaxed">
                       {role.opys}
                     </p>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="rounded-xl border border-navy-750 overflow-hidden bg-navy-950">
+            <div className="rounded-sm border border-steel-700 overflow-hidden bg-obsidian-950">
               <button
                 onClick={() => setShowValuesConflict(!showValuesConflict)}
-                className="w-full p-4 flex flex-wrap items-center justify-between gap-2 text-left text-sm font-semibold text-amber-300 hover:bg-navy-900 transition-colors"
+                className="im-secondary w-full p-4 flex flex-wrap items-center justify-between gap-2 text-left text-sm font-semibold text-status-warning hover:bg-obsidian-850 transition-colors"
               >
                 <span className="flex flex-wrap items-center gap-2">
-                  <Scale className="w-4 h-4 text-amber-400" />
+                  <Scale className="w-4 h-4 text-status-warning" />
                   {t.briefing.valuesConflictTitle}
                 </span>
                 {showValuesConflict ? (
@@ -342,11 +342,11 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 )}
               </button>
               {showValuesConflict && (
-                <div className="animate-fadeIn p-4 border-t border-navy-800 space-y-3 text-xs sm:text-sm">
+                <div className="animate-fadeIn p-4 border-t border-obsidian-800 space-y-3 text-xs sm:text-sm">
                   {scenario.tsinnosti_v_konflikti.map((c, idx) => (
                     <div
                       key={idx}
-                      className="p-3 rounded-lg bg-navy-900 border border-navy-800"
+                      className="steel-panel p-3 rounded-sm bg-obsidian-850 border border-obsidian-800"
                     >
                       <ValueConflict
                         a={c.tsinnist_a}
@@ -360,7 +360,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
             </div>
             <button
               onClick={handleStartFromBriefing}
-              className="w-full py-3.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm sm:text-base transition-all shadow-lg shadow-emerald-900/30 flex items-center justify-center gap-2"
+              className="im-primary w-full py-3.5 px-6 rounded-sm bg-status-success hover:bg-status-success text-white font-bold text-sm sm:text-base transition-all shadow-lg shadow-panel flex items-center justify-center gap-2"
             >
               <span>{t.briefing.startScenario}</span>
               <ArrowRight className="w-5 h-5" />
@@ -374,8 +374,8 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
           className="space-y-6 animate-fadeIn"
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-400">
-              <span className="px-2.5 py-1 rounded bg-navy-800 text-emerald-400 border border-emerald-500/30 font-mono">
+            <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-steel-300">
+              <span className="im-tag px-2.5 py-1 rounded-sm bg-obsidian-800 text-status-success border border-status-success/30 font-mono">
                 {currentNode.id}
               </span>
               <span>
@@ -384,14 +384,14 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
             </div>
             <button
               onClick={() => setIsCidsOpen(true)}
-              className="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-xs font-semibold transition-colors"
+              className="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 rounded-sm bg-status-warning/15 hover:bg-status-warning/25 text-status-warning border border-status-warning/30 text-xs font-semibold transition-colors"
             >
-              <Scale className="w-4 h-4 text-amber-400" />
+              <Scale className="w-4 h-4 text-status-warning" />
               {t.step.cidsHelperBtn}
             </button>
           </div>
 
-          <div className="p-6 sm:p-8 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl space-y-6">
+          <div className="steel-panel p-6 sm:p-8 rounded-sm bg-obsidian-850 border border-steel-700 shadow-xl space-y-6">
             <StageStepper
               scenario={scenario}
               nodeId={currentNodeId}
@@ -412,10 +412,10 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
             </Dossier>
 
             <div>
-              <h2 className="text-base sm:text-xl font-bold text-white leading-snug">
+              <h2 className="im-title font-serif text-base sm:text-xl font-bold text-white leading-snug">
                 {currentNode.zapytannia}
               </h2>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-steel-300 mt-1">
                 {t.step.selectPrompt}
               </p>
             </div>
@@ -426,18 +426,18 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                   <div
                     key={v.id}
                     onClick={() => setPendingVariant(v)}
-                    className={`p-4 sm:p-5 rounded-xl border cursor-pointer transition-all ${
+                    className={`steel-panel im-choice p-4 sm:p-5 rounded-sm border cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-emerald-500/15 border-emerald-500 text-white shadow-md shadow-emerald-950/40'
-                        : 'bg-navy-950/70 border-navy-800 text-slate-300 hover:bg-navy-850 hover:border-navy-700'
+                        ? 'bg-justice-gold/10 border-justice-gold border-l-[3px] border-l-justice-gold text-steel-100 shadow-md shadow-panel'
+                        : 'bg-obsidian-950/70 border-obsidian-800 text-steel-300 hover:bg-obsidian-850 hover:border-steel-700'
                     }`}
                   >
                     <div className="flex items-start gap-3">
                       <span
-                        className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 ${
+                        className={`im-tag w-7 h-7 rounded-sm flex items-center justify-center font-bold text-xs shrink-0 ${
                           isSelected
-                            ? 'bg-emerald-500 text-navy-950'
-                            : 'bg-navy-800 text-slate-300 border border-navy-700'
+                            ? 'bg-status-success text-obsidian-950'
+                            : 'bg-obsidian-800 text-steel-300 border border-steel-700'
                         }`}
                       >
                         {v.id}
@@ -453,10 +453,10 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
             <button
               onClick={handleConfirmDecision}
               disabled={!pendingVariant}
-              className={`w-full py-3 px-6 rounded-xl font-bold text-sm sm:text-base transition-all flex items-center justify-center gap-2 ${
+              className={`im-primary w-full py-3 px-6 rounded-sm font-bold text-sm sm:text-base transition-all flex items-center justify-center gap-2 ${
                 pendingVariant
-                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg cursor-pointer'
-                  : 'bg-navy-800 text-slate-500 border border-navy-700 cursor-not-allowed'
+                  ? 'bg-status-success hover:bg-status-success text-white shadow-lg cursor-pointer'
+                  : 'bg-obsidian-800 text-steel-400 border border-steel-700 cursor-not-allowed'
               }`}
             >
               <span>
@@ -480,12 +480,12 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
             completed={pathway.filter((p) => p.nodeId !== currentNodeId).length}
             lang={lang}
           />
-          <div className="p-6 sm:p-8 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-navy-800">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+          <div className="steel-panel p-6 sm:p-8 rounded-sm bg-obsidian-850 border border-steel-700 shadow-xl space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-obsidian-800">
+              <span className="text-xs font-bold uppercase tracking-wider text-status-success">
                 {t.feedback.title}
               </span>
-              <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              <span className="im-tag font-mono text-xs font-bold px-2 py-0.5 rounded-sm bg-status-success/20 text-status-success border border-status-success/30">
                 {ui(lang, 'm215')} {selectedVariant.id}
               </span>
             </div>
@@ -502,15 +502,15 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
               explanation={selectedVariant.chomu_taki_baly}
               lang={lang}
             />
-            <div className="p-4 rounded-xl bg-navy-950 border-l-4 border-emerald-500 text-xs sm:text-sm text-slate-200 leading-relaxed">
-              <strong className="text-emerald-400 block mb-1">
+            <div className="p-4 rounded-sm bg-obsidian-950 border-l-4 border-status-success text-xs sm:text-sm text-steel-100 leading-relaxed">
+              <strong className="text-status-success block mb-1">
                 {t.feedback.analysisTitle}
               </strong>
               {selectedVariant.zvorotnyi_zviazok}
             </div>
             {selectedVariant.normy && selectedVariant.normy.length > 0 && (
               <div className="space-y-2">
-                <div className="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+                <div className="text-xs font-bold text-tactical-ice uppercase tracking-wider flex items-center gap-1.5">
                   <BookOpen className="w-3.5 h-3.5" />
                   {t.feedback.normsTitle}
                 </div>
@@ -521,11 +521,11 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                       <button
                         key={normId}
                         onClick={() => openNormModal(normId)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-medium transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-tactical-ice/10 hover:bg-tactical-ice/20 text-tactical-ice border border-tactical-ice/30 text-xs font-medium transition-colors"
                       >
                         <span className="font-mono font-bold">{normId}</span>
                         {n && (
-                          <span className="text-[11px] text-slate-400 break-words">
+                          <span className="text-[11px] text-steel-300 break-words">
                             {n.punkt}
                           </span>
                         )}
@@ -537,7 +537,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
             )}
             <button
               onClick={handleNextStep}
-              className="w-full py-3.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm sm:text-base transition-all shadow-lg flex items-center justify-center gap-2"
+              className="im-primary w-full py-3.5 px-6 rounded-sm bg-status-success hover:bg-status-success text-white font-bold text-sm sm:text-base transition-all shadow-lg flex items-center justify-center gap-2"
             >
               <span>
                 {selectedVariant.nastupnyi_vuzol
@@ -554,24 +554,24 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
           key={`${scenario.id}:${phase}:${currentNodeId}`}
           className="space-y-6 animate-fadeIn"
         >
-          <div className="p-6 sm:p-8 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl space-y-6">
-            <div className="border-b border-navy-800 pb-3 flex flex-wrap items-center justify-between gap-2">
+          <div className="steel-panel p-6 sm:p-8 rounded-sm bg-obsidian-850 border border-steel-700 shadow-xl space-y-6">
+            <div className="border-b border-obsidian-800 pb-3 flex flex-wrap items-center justify-between gap-2">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+                <span className="text-xs font-bold uppercase tracking-wider text-status-success">
                   {t.reflection.title}
                 </span>
-                <h1 className="text-xl sm:text-2xl font-extrabold text-white mt-1">
+                <h1 className="im-title font-serif text-xl sm:text-2xl font-extrabold text-white mt-1">
                   {scenario.nazva}
                 </h1>
               </div>
-              <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-semibold">
+              <span className="im-tag px-3 py-1 rounded-sm bg-status-success/20 text-status-success border border-status-success/30 text-xs font-semibold">
                 {ui(lang, 'm216')}{' '}
               </span>
             </div>
             <div className="grid gap-5 lg:grid-cols-2 items-start">
               <div className="space-y-2">
-                <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider flex flex-wrap items-center gap-2">
-                  <Layers className="w-4 h-4 text-emerald-400" />
+                <h3 className="im-section-title text-sm font-bold text-steel-300 uppercase tracking-wider flex flex-wrap items-center gap-2">
+                  <Layers className="w-4 h-4 text-status-success" />
                   {t.reflection.pathwayTitle}
                 </h3>
                 <DecisionTreeSvg
@@ -589,31 +589,31 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
               {pathway.map((p, idx) => (
                 <div
                   key={idx}
-                  className="p-3.5 rounded-lg bg-navy-950 border border-navy-800 flex items-start justify-between gap-3 text-xs sm:text-sm"
+                  className="p-3.5 rounded-sm bg-obsidian-950 border border-obsidian-800 flex items-start justify-between gap-3 text-xs sm:text-sm"
                 >
                   <div>
-                    <span className="font-mono font-bold text-emerald-400 mr-2">
+                    <span className="font-mono font-bold text-status-success mr-2">
                       {ui(lang, 'm217')} {p.nodeId}
                     </span>
                     <span className="font-semibold text-white">
                       {ui(lang, 'm218')} {p.variant.id}:
                     </span>
-                    <p className="text-slate-300 mt-1">{p.variant.tekst}</p>
+                    <p className="text-steel-300 mt-1">{p.variant.tekst}</p>
                   </div>
                   <div className="flex items-center gap-1 font-mono text-[11px] shrink-0 ml-4">
-                    <span className="text-emerald-400">
+                    <span className="text-status-success">
                       {ui(lang, 'm219')}{' '}
                       {p.variant.baly.dobrochesnist > 0
                         ? `+${p.variant.baly.dobrochesnist}`
                         : p.variant.baly.dobrochesnist}
                     </span>
-                    <span className="text-amber-400 ml-1">
+                    <span className="text-status-warning ml-1">
                       {ui(lang, 'm220')}{' '}
                       {p.variant.baly.efektyvnist > 0
                         ? `+${p.variant.baly.efektyvnist}`
                         : p.variant.baly.efektyvnist}
                     </span>
-                    <span className="text-cyan-400 ml-1">
+                    <span className="text-tactical-ice ml-1">
                       {ui(lang, 'm221')}{' '}
                       {p.variant.baly.dovira > 0
                         ? `+${p.variant.baly.dovira}`
@@ -624,7 +624,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
               ))}
             </div>
             <div className="space-y-2">
-              <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider">
+              <h3 className="im-section-title text-sm font-bold text-steel-300 uppercase tracking-wider">
                 {t.reflection.profileTitle}
               </h3>
 
@@ -633,51 +633,51 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 lang={lang}
                 showExplanation={false}
               />
-              <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
+              <p className="text-[11px] text-steel-300 mt-1 leading-relaxed">
                 {t.reflection.profileNotice}
               </p>
             </div>
-            <div className="p-4 rounded-xl bg-navy-950 border border-navy-800 space-y-1.5 text-xs sm:text-sm">
-              <h3 className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
+            <div className="p-4 rounded-sm bg-obsidian-950 border border-obsidian-800 space-y-1.5 text-xs sm:text-sm">
+              <h3 className="im-section-title text-xs font-bold text-tactical-ice uppercase tracking-wider">
                 {t.reflection.applicabilityTitle}
               </h3>
-              <p className="text-slate-300 leading-relaxed">
+              <p className="text-steel-300 leading-relaxed">
                 {scenario.zastosovnist}
               </p>
             </div>
             <div className="space-y-2">
-              <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider">
+              <h3 className="im-section-title text-sm font-bold text-status-warning uppercase tracking-wider">
                 {t.reflection.adviceTitle}
               </h3>
               <ul className="space-y-2">
                 {scenario.porady.map((advice, idx) => (
                   <li
                     key={idx}
-                    className="flex items-start gap-2 text-xs sm:text-sm text-slate-200"
+                    className="flex items-start gap-2 text-xs sm:text-sm text-steel-100"
                   >
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-status-success shrink-0 mt-0.5" />
                     <span>{advice}</span>
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-xs text-emerald-300 flex flex-wrap items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <div className="p-3.5 rounded-sm bg-status-success/10 border border-status-success/25 text-xs text-status-success flex flex-wrap items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-status-success shrink-0" />
               <span>{t.reflection.privacyBanner}</span>
             </div>
-            <div className="pt-4 border-t border-navy-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="pt-4 border-t border-obsidian-800 flex flex-col sm:flex-row items-center justify-between gap-3">
               <button
                 onClick={handleRestart}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-navy-800 hover:bg-navy-700 text-white font-semibold text-xs transition-colors border border-navy-700"
+                className="im-secondary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-sm bg-obsidian-800 hover:bg-steel-700 text-white font-semibold text-xs transition-colors border border-steel-700"
               >
-                <RotateCcw className="w-4 h-4 text-emerald-400" />
+                <RotateCcw className="w-4 h-4 text-status-success" />
                 {t.reflection.restartBtn}
               </button>
 
               <button
                 onClick={handleExportScorm}
                 disabled={isExportingScorm}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition-colors shadow-md"
+                className="im-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-sm bg-status-success hover:bg-status-success text-white font-semibold text-xs transition-colors shadow-md"
               >
                 <Download className="w-4 h-4" />
                 {isExportingScorm

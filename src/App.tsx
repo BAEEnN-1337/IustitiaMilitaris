@@ -129,7 +129,7 @@ export const App: React.FC = () => {
 
   return (
     <LanguageContext.Provider value={lang}>
-      <div className="min-h-screen flex flex-col bg-navy-950 text-slate-100 selection:bg-emerald-600 selection:text-white">
+      <div className="min-h-screen flex flex-col bg-obsidian-950 text-steel-100 selection:bg-status-success selection:text-white">
         <Navbar
           onAuth={() => navigate('/auth')}
           currentView={
@@ -151,10 +151,10 @@ export const App: React.FC = () => {
             <nav
               id="breadcrumbs"
               aria-label={designLabels[lang].breadcrumbs}
-              className="max-w-6xl mx-auto px-4 sm:px-6 pt-4 flex flex-wrap items-center gap-2 text-xs text-slate-400"
+              className="max-w-6xl mx-auto px-4 sm:px-6 pt-4 flex flex-wrap items-center gap-2 text-xs text-steel-300"
             >
               <button
-                className="hover:text-emerald-300"
+                className="hover:text-status-success"
                 onClick={() => navigate('/')}
               >
                 {designLabels[lang].catalog}

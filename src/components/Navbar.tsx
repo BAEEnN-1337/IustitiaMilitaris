@@ -44,13 +44,13 @@ export const Navbar = ({
   }, []);
   const views = ['catalog', 'classroom', 'builder', 'norms'] as const;
   return (
-    <header className="site-header sticky top-0 z-40 border-b border-navy-700 bg-navy-900/95 backdrop-blur">
+    <header className="site-header sticky top-0 z-40 border-b border-steel-700 bg-obsidian-900/95 backdrop-blur-md">
       <div className="header-row">
         <button
           className="header-brand"
           onClick={() => setCurrentView('catalog')}
         >
-          <Shield className="h-7 w-7 shrink-0 text-emerald-400" />
+          <Shield className="h-7 w-7 shrink-0 text-justice-gold" />
           <span>{translations[lang].appTitle}</span>
         </button>
         <nav className="header-nav" aria-label={translations[lang].appTitle}>
@@ -63,7 +63,7 @@ export const Navbar = ({
                   ? 'page'
                   : undefined
               }
-              className={`header-tab ${currentView === view ? 'bg-navy-800 text-emerald-300' : 'text-slate-300'}`}
+              className={`header-tab ${currentView === view ? 'text-justice-gold border-justice-gold' : 'text-steel-300'}`}
               onClick={() => setCurrentView(view)}
             >
               {t[view]}
@@ -72,7 +72,7 @@ export const Navbar = ({
         </nav>
         <div className="header-tools">
           <span
-            className={`flex items-center gap-1 text-xs ${online ? 'text-emerald-400' : 'text-amber-400'}`}
+            className={`flex items-center gap-1 text-xs ${online ? 'text-status-success' : 'text-status-warning'}`}
             role="status"
             aria-label={online ? t.online : t.offline}
             title={online ? t.online : t.offline}
@@ -90,11 +90,11 @@ export const Navbar = ({
           >
             {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
           </button>
-          <div className="flex rounded-lg border border-navy-700 p-0.5">
+          <div className="flex rounded-sm border border-steel-700 p-0.5">
             {(['uk', 'en'] as const).map((l) => (
               <button
                 key={l}
-                className={`rounded px-2 py-1 text-xs font-semibold ${lang === l ? 'bg-emerald-600 text-white' : 'text-slate-400'}`}
+                className={`rounded-sm px-2 py-1 text-xs font-semibold ${lang === l ? 'bg-justice-gold/10 text-justice-gold' : 'text-steel-300'}`}
                 aria-pressed={lang === l}
                 onClick={() => setLang(l)}
               >

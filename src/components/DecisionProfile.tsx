@@ -35,7 +35,7 @@ export function DecisionProfile({
             <div className="flex flex-wrap justify-between gap-2 text-sm">
               <span>{translations[lang].dimensions[axis]}</span>
               <strong
-                className={value < 0 ? 'text-rose-300' : 'text-emerald-300'}
+                className={value < 0 ? 'text-status-danger' : 'text-status-success'}
               >
                 {value > 0 ? '+' : ''}
                 {value}

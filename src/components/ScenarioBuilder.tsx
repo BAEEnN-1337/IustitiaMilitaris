@@ -258,32 +258,32 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-      <div className="p-6 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="steel-panel p-6 rounded-sm bg-obsidian-850 border border-steel-700 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <div className="p-2 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30">
+            <div className="p-2 rounded-sm bg-status-warning/20 text-status-warning border border-status-warning/30">
               <Wrench className="w-5 h-5" />
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-white">
+            <h1 className="im-title font-serif text-xl sm:text-2xl font-bold text-white">
               {t.builder.title}
             </h1>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-steel-300 mt-1">
             {t.builder.subtitle}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
           <button
             onClick={runValidation}
-            className="px-3.5 py-2 rounded-lg bg-navy-800 hover:bg-navy-700 text-slate-200 border border-navy-700 font-semibold text-xs transition-colors flex items-center gap-1.5"
+            className="im-secondary px-3.5 py-2 rounded-sm bg-obsidian-800 hover:bg-steel-700 text-steel-100 border border-steel-700 font-semibold text-xs transition-colors flex items-center gap-1.5"
           >
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <ShieldCheck className="w-4 h-4 text-status-success" />
             {t.builder.validateBtn}
           </button>
 
           <button
             onClick={handleTestInSimulator}
-            className="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition-colors flex items-center gap-1.5 shadow"
+            className="im-primary px-3.5 py-2 rounded-sm bg-status-success hover:bg-status-success text-white font-semibold text-xs transition-colors flex items-center gap-1.5 shadow"
           >
             <Play className="w-4 h-4 fill-current" />
             {t.builder.testNowBtn}
@@ -291,13 +291,13 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
 
           <button
             onClick={handleDownloadJson}
-            className="px-3 py-2 rounded-lg bg-navy-850 hover:bg-navy-800 text-slate-300 border border-navy-700 text-xs font-medium transition-colors flex items-center gap-1.5"
+            className="im-secondary px-3 py-2 rounded-sm bg-obsidian-850 hover:bg-obsidian-800 text-steel-300 border border-steel-700 text-xs font-medium transition-colors flex items-center gap-1.5"
           >
             <Download className="w-4 h-4" />
             {t.builder.exportJsonBtn}
           </button>
 
-          <label className="px-3 py-2 rounded-lg bg-navy-850 hover:bg-navy-800 text-slate-300 border border-navy-700 text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer">
+          <label className="px-3 py-2 rounded-sm bg-obsidian-850 hover:bg-obsidian-800 text-steel-300 border border-steel-700 text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer">
             <Upload className="w-4 h-4" />
             {t.builder.importJsonBtn}
             <input type="file" accept=".json" onChange={handleImportJson} className="hidden" />
@@ -305,7 +305,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
 
           <button
             onClick={handleExportScorm}
-            className="px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition-colors flex items-center gap-1.5 shadow"
+            className="im-primary px-3 py-2 rounded-sm bg-tactical-ice hover:bg-tactical-ice text-white font-semibold text-xs transition-colors flex items-center gap-1.5 shadow"
           >
             <Download className="w-4 h-4" />
             SCORM 1.2
@@ -313,8 +313,8 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
         </div>
       </div>
       {validationErrors.length > 0 ? (
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs space-y-1">
-          <div className="font-bold flex flex-wrap items-center gap-2 text-rose-400">
+        <div className="p-4 rounded-sm bg-status-danger/10 border border-status-danger/30 text-status-danger text-xs space-y-1">
+          <div className="font-bold flex flex-wrap items-center gap-2 text-status-danger">
             <AlertTriangle className="w-4 h-4" />
             {ui(lang, 'm125')}{' '}{validationErrors.length} {ui(lang, 'm126')}{' '}</div>
           <ul className="list-disc pl-5 space-y-0.5">
@@ -324,12 +324,12 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
           </ul>
         </div>
       ) : (
-        <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex flex-wrap items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+        <div className="p-3.5 rounded-sm bg-status-success/10 border border-status-success/30 text-status-success text-xs flex flex-wrap items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-status-success" />
           <span>{ui(lang, 'm127')}{' '}</span>
         </div>
       )}
-      <div className="flex border-b border-navy-800 gap-1 overflow-x-auto text-xs font-semibold">
+      <div className="flex border-b border-obsidian-800 gap-1 overflow-x-auto text-xs font-semibold">
         {[
           { id: 'general', label: t.builder.mainInfoTab, icon: FileCode },
           { id: 'roles', label: t.builder.rolesTab, icon: User },
@@ -343,10 +343,10 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-4 py-2.5 rounded-t-lg transition-colors flex flex-wrap items-center gap-2 border-t border-x ${
+              className={`im-secondary px-4 py-2.5 rounded-sm transition-colors flex flex-wrap items-center gap-2 border-t border-x ${
                 isActive
-                  ? 'bg-navy-900 border-navy-700 text-emerald-400 font-bold'
-                  : 'bg-navy-950 border-transparent text-slate-400 hover:text-white'
+                  ? 'bg-obsidian-850 border-steel-700 text-status-success font-bold'
+                  : 'bg-obsidian-950 border-transparent text-steel-300 hover:text-white'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -355,56 +355,56 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
           );
         })}
       </div>
-      <div className="p-6 sm:p-8 rounded-2xl bg-navy-900 border border-navy-700 shadow-xl space-y-6">
+      <div className="steel-panel p-6 sm:p-8 rounded-sm bg-obsidian-850 border border-steel-700 shadow-xl space-y-6">
         {activeTab === 'general' && (
           <div className="space-y-4 text-xs">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-slate-300 font-bold mb-1">ID (S01..S99):</label>
+                <label className="block text-steel-300 font-bold mb-1">ID (S01..S99):</label>
                 <input
                   type="text"
                   value={scenario.id}
                   onChange={e => setScenario({ ...scenario, id: e.target.value })}
-                  className="w-full bg-navy-950 border border-navy-700 rounded-lg p-2.5 text-white"
+                  className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
                 />
               </div>
               <div>
-                <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm128')}{' '}</label>
+                <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm128')}{' '}</label>
                 <input
                   type="text"
                   value={scenario.versiia}
                   onChange={e => setScenario({ ...scenario, versiia: e.target.value })}
-                  className="w-full bg-navy-950 border border-navy-700 rounded-lg p-2.5 text-white"
+                  className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
                 />
               </div>
               <div>
-                <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm129')}{' '}</label>
+                <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm129')}{' '}</label>
                 <input
                   type="text"
                   value={scenario.data_stvorennia}
                   onChange={e => setScenario({ ...scenario, data_stvorennia: e.target.value })}
-                  className="w-full bg-navy-950 border border-navy-700 rounded-lg p-2.5 text-white"
+                  className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm130')}{' '}</label>
+              <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm130')}{' '}</label>
               <input
                 type="text"
                 value={scenario.nazva}
                 onChange={e => setScenario({ ...scenario, nazva: e.target.value })}
-                className="w-full bg-navy-950 border border-navy-700 rounded-lg p-2.5 text-white text-sm"
+                className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white text-sm"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm131')}{' '}</label>
+                <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm131')}{' '}</label>
                 <select
                   value={scenario.tema}
                   onChange={e => setScenario({ ...scenario, tema: e.target.value })}
-                  className="w-full bg-navy-950 border border-navy-700 rounded-lg p-2.5 text-white"
+                  className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
                 >
                   <option value="podarunok">{ui(lang, 'm132')}{' '}</option>
                   <option value="konflikt-interesiv">{ui(lang, 'm133')}{' '}</option>
@@ -420,45 +420,45 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
               </div>
 
               <div>
-                <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm142')}{' '}</label>
+                <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm142')}{' '}</label>
                 <input
                   type="number"
                   min={1}
                   max={90}
                   value={scenario.tryvalist_khv}
                   onChange={e => setScenario({ ...scenario, tryvalist_khv: parseInt(e.target.value) || 20 })}
-                  className="w-full bg-navy-950 border border-navy-700 rounded-lg p-2.5 text-white"
+                  className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm143')}{' '}</label>
+              <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm143')}{' '}</label>
               <textarea
                 rows={3}
                 value={scenario.kontekst}
                 onChange={e => setScenario({ ...scenario, kontekst: e.target.value })}
-                className="w-full bg-navy-950 border border-navy-700 rounded-lg p-2.5 text-white"
+                className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
               />
             </div>
 
             <div>
-              <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm144')}{' '}</label>
+              <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm144')}{' '}</label>
               <textarea
                 rows={4}
                 value={scenario.sytuatsiia}
                 onChange={e => setScenario({ ...scenario, sytuatsiia: e.target.value })}
-                className="w-full bg-navy-950 border border-navy-700 rounded-lg p-2.5 text-white"
+                className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
               />
             </div>
 
             <div>
-              <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm145')}{' '}</label>
+              <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm145')}{' '}</label>
               <textarea
                 rows={3}
                 value={scenario.zastosovnist}
                 onChange={e => setScenario({ ...scenario, zastosovnist: e.target.value })}
-                className="w-full bg-navy-950 border border-navy-700 rounded-lg p-2.5 text-white"
+                className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
               />
             </div>
           </div>
@@ -466,7 +466,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
         {activeTab === 'roles' && (
           <div className="space-y-4 text-xs">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="text-slate-400">
+              <span className="text-steel-300">
                 {ui(lang, 'm146')}{' '}</span>
               <button
                 onClick={() => {
@@ -478,7 +478,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                   };
                   setScenario({ ...scenario, diiovi_osoby: [...scenario.diiovi_osoby, newR] });
                 }}
-                className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold flex items-center gap-1.5"
+                className="im-primary px-3 py-1.5 rounded-sm bg-status-success hover:bg-status-success text-white font-semibold flex items-center gap-1.5"
               >
                 <Plus className="w-3.5 h-3.5" />
                 {ui(lang, 'm149')}{' '}</button>
@@ -486,7 +486,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
 
             <div className="space-y-3">
               {scenario.diiovi_osoby.map((role, rIdx) => (
-                <div key={role.id} className="p-4 rounded-xl bg-navy-950 border border-navy-800 space-y-3">
+                <div key={role.id} className="p-4 rounded-sm bg-obsidian-950 border border-obsidian-800 space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2 gap-3">
                     <div className="flex items-center gap-3">
                       <input
@@ -497,7 +497,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                           updated[rIdx].id = e.target.value;
                           setScenario({ ...scenario, diiovi_osoby: updated });
                         }}
-                        className="w-16 font-mono font-bold bg-navy-900 border border-navy-700 rounded p-1.5 text-center text-emerald-400"
+                        className="im-field w-16 font-mono font-bold bg-obsidian-850 border border-steel-700 rounded-sm p-1.5 text-center text-status-success"
                       />
                       <input
                         type="text"
@@ -508,12 +508,12 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                           updated[rIdx].rol = e.target.value;
                           setScenario({ ...scenario, diiovi_osoby: updated });
                         }}
-                        className="w-64 bg-navy-900 border border-navy-700 rounded p-1.5 text-white font-semibold"
+                        className="im-field w-64 bg-obsidian-850 border border-steel-700 rounded-sm p-1.5 text-white font-semibold"
                       />
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <label className="flex flex-wrap items-center gap-2 cursor-pointer text-slate-300">
+                      <label className="flex flex-wrap items-center gap-2 cursor-pointer text-steel-300">
                         <input
                           type="checkbox"
                           checked={!!role.hravets}
@@ -525,7 +525,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                             }));
                             setScenario({ ...scenario, diiovi_osoby: updated });
                           }}
-                          className="rounded text-emerald-500 focus:ring-0"
+                          className="rounded-sm text-status-success focus:ring-0"
                         />
                         <span>{ui(lang, 'm151')}{' '}</span>
                       </label>
@@ -537,7 +537,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                             diiovi_osoby: scenario.diiovi_osoby.filter((_, i) => i !== rIdx)
                           });
                         }}
-                        className="p-1 rounded text-slate-500 hover:text-rose-400"
+                        className="p-1 rounded-sm text-steel-400 hover:text-status-danger"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -553,7 +553,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                       updated[rIdx].opys = e.target.value;
                       setScenario({ ...scenario, diiovi_osoby: updated });
                     }}
-                    className="w-full bg-navy-900 border border-navy-700 rounded p-2 text-slate-200"
+                    className="im-field w-full bg-obsidian-850 border border-steel-700 rounded-sm p-2 text-steel-100"
                   />
                 </div>
               ))}
@@ -562,16 +562,16 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
         )}
         {activeTab === 'nodes' && (
           <div className="space-y-6 text-xs">
-            <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-navy-800">
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-obsidian-800">
               <div className="flex flex-wrap items-center gap-2 overflow-x-auto pb-1">
                 {scenario.vuzly.map((node, nIdx) => (
                   <button
                     key={node.id}
                     onClick={() => setSelectedNodeIdx(nIdx)}
-                    className={`px-3 py-1.5 rounded-lg font-mono font-bold transition-colors ${
+                    className={`im-primary px-3 py-1.5 rounded-sm font-mono font-bold transition-colors ${
                       selectedNodeIdx === nIdx
-                        ? 'bg-emerald-600 text-white'
-                        : 'bg-navy-950 text-slate-400 hover:text-white border border-navy-800'
+                        ? 'bg-status-success text-white'
+                        : 'bg-obsidian-950 text-steel-300 hover:text-white border border-obsidian-800'
                     }`}
                   >
                     {node.id}
@@ -581,16 +581,16 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
 
               <button
                 onClick={addNode}
-                className="px-3 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 text-emerald-300 font-semibold flex items-center gap-1.5 shrink-0"
+                className="im-secondary px-3 py-1.5 rounded-sm bg-obsidian-800 hover:bg-steel-700 text-status-success font-semibold flex items-center gap-1.5 shrink-0"
               >
                 <Plus className="w-3.5 h-3.5" />
                 {ui(lang, 'm153')}{' '}</button>
             </div>
             {scenario.vuzly[selectedNodeIdx] && (
-              <div className="p-5 rounded-xl bg-navy-950 border border-navy-800 space-y-4">
+              <div className="p-5 rounded-sm bg-obsidian-950 border border-obsidian-800 space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-3">
-                    <span className="font-mono text-sm font-bold text-emerald-400">
+                    <span className="font-mono text-sm font-bold text-status-success">
                       {ui(lang, 'm154')}{' '}</span>
                     <input
                       type="text"
@@ -600,20 +600,20 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                         updated[selectedNodeIdx].id = e.target.value;
                         setScenario({ ...scenario, vuzly: updated });
                       }}
-                      className="w-20 font-mono font-bold bg-navy-900 border border-navy-700 rounded p-1.5 text-center text-white"
+                      className="im-field w-20 font-mono font-bold bg-obsidian-850 border border-steel-700 rounded-sm p-1.5 text-center text-white"
                     />
                   </div>
 
                   <button
                     onClick={() => removeNode(selectedNodeIdx)}
-                    className="p-1 rounded text-slate-500 hover:text-rose-400 flex items-center gap-1"
+                    className="p-1 rounded-sm text-steel-400 hover:text-status-danger flex items-center gap-1"
                   >
                     <Trash2 className="w-4 h-4" />
                     {ui(lang, 'm155')}{' '}</button>
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-bold mb-1">
+                  <label className="block text-steel-300 font-bold mb-1">
                     {ui(lang, 'm156')}{' '}</label>
                   <textarea
                     rows={2}
@@ -623,12 +623,12 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                       updated[selectedNodeIdx].tekst = e.target.value;
                       setScenario({ ...scenario, vuzly: updated });
                     }}
-                    className="w-full bg-navy-900 border border-navy-700 rounded p-2 text-white"
+                    className="im-field w-full bg-obsidian-850 border border-steel-700 rounded-sm p-2 text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-bold mb-1">
+                  <label className="block text-steel-300 font-bold mb-1">
                     {ui(lang, 'm157')}{' '}</label>
                   <input
                     type="text"
@@ -638,15 +638,15 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                       updated[selectedNodeIdx].zapytannia = e.target.value;
                       setScenario({ ...scenario, vuzly: updated });
                     }}
-                    className="w-full bg-navy-900 border border-navy-700 rounded p-2 text-white font-semibold text-sm"
+                    className="im-field w-full bg-obsidian-850 border border-steel-700 rounded-sm p-2 text-white font-semibold text-sm"
                   />
                 </div>
-                <div className="space-y-4 pt-3 border-t border-navy-800">
-                  <span className="font-bold text-slate-300 uppercase tracking-wider block">
+                <div className="space-y-4 pt-3 border-t border-obsidian-800">
+                  <span className="font-bold text-steel-300 uppercase tracking-wider block">
                     {ui(lang, 'm158')}{' '}</span>
 
                   {scenario.vuzly[selectedNodeIdx].varianty.map((v, vIdx) => (
-                    <div key={v.id} className="p-4 rounded-xl bg-navy-900 border border-navy-750 space-y-3">
+                    <div key={v.id} className="steel-panel p-4 rounded-sm bg-obsidian-850 border border-steel-700 space-y-3">
                       <div className="flex flex-wrap items-center justify-between gap-2 gap-3">
                         <div className="flex flex-wrap items-center gap-2">
                           <input
@@ -658,9 +658,9 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                               updated[selectedNodeIdx].varianty[vIdx].id = e.target.value;
                               setScenario({ ...scenario, vuzly: updated });
                             }}
-                            className="w-16 font-mono font-bold bg-navy-950 border border-navy-700 rounded p-1.5 text-center text-emerald-400"
+                            className="im-field w-16 font-mono font-bold bg-obsidian-950 border border-steel-700 rounded-sm p-1.5 text-center text-status-success"
                           />
-                          <span className="text-slate-400">{ui(lang, 'm159')}{' '}</span>
+                          <span className="text-steel-300">{ui(lang, 'm159')}{' '}</span>
                           <input
                             type="text"
                             value={v.nastupnyi_vuzol || ''}
@@ -670,11 +670,11 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                               updated[selectedNodeIdx].varianty[vIdx].nastupnyi_vuzol = e.target.value.trim() || null;
                               setScenario({ ...scenario, vuzly: updated });
                             }}
-                            className="w-24 font-mono bg-navy-950 border border-navy-700 rounded p-1.5 text-center text-amber-400"
+                            className="im-field w-24 font-mono bg-obsidian-950 border border-steel-700 rounded-sm p-1.5 text-center text-status-warning"
                           />
                         </div>
                         <div className="flex flex-wrap items-center gap-2 text-xs">
-                          <label className="text-slate-400">{ui(lang, 'm161')}{' '}</label>
+                          <label className="text-steel-300">{ui(lang, 'm161')}{' '}</label>
                           <input
                             type="number"
                             min={-2}
@@ -685,9 +685,9 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                               updated[selectedNodeIdx].varianty[vIdx].baly.dobrochesnist = parseInt(e.target.value) || 0;
                               setScenario({ ...scenario, vuzly: updated });
                             }}
-                            className="w-12 bg-navy-950 border border-navy-700 rounded p-1 text-center font-bold text-emerald-400"
+                            className="im-field w-12 bg-obsidian-950 border border-steel-700 rounded-sm p-1 text-center font-bold text-status-success"
                           />
-                          <label className="text-slate-400">{ui(lang, 'm162')}{' '}</label>
+                          <label className="text-steel-300">{ui(lang, 'm162')}{' '}</label>
                           <input
                             type="number"
                             min={-2}
@@ -698,9 +698,9 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                               updated[selectedNodeIdx].varianty[vIdx].baly.efektyvnist = parseInt(e.target.value) || 0;
                               setScenario({ ...scenario, vuzly: updated });
                             }}
-                            className="w-12 bg-navy-950 border border-navy-700 rounded p-1 text-center font-bold text-amber-400"
+                            className="im-field w-12 bg-obsidian-950 border border-steel-700 rounded-sm p-1 text-center font-bold text-status-warning"
                           />
-                          <label className="text-slate-400">{ui(lang, 'm163')}{' '}</label>
+                          <label className="text-steel-300">{ui(lang, 'm163')}{' '}</label>
                           <input
                             type="number"
                             min={-2}
@@ -711,7 +711,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                               updated[selectedNodeIdx].varianty[vIdx].baly.dovira = parseInt(e.target.value) || 0;
                               setScenario({ ...scenario, vuzly: updated });
                             }}
-                            className="w-12 bg-navy-950 border border-navy-700 rounded p-1 text-center font-bold text-cyan-400"
+                            className="im-field w-12 bg-obsidian-950 border border-steel-700 rounded-sm p-1 text-center font-bold text-tactical-ice"
                           />
                         </div>
                       </div>
@@ -725,7 +725,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                           updated[selectedNodeIdx].varianty[vIdx].tekst = e.target.value;
                           setScenario({ ...scenario, vuzly: updated });
                         }}
-                        className="w-full bg-navy-950 border border-navy-700 rounded p-2 text-white"
+                        className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2 text-white"
                       />
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -738,7 +738,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                             updated[selectedNodeIdx].varianty[vIdx].naslidky.odrazu = e.target.value;
                             setScenario({ ...scenario, vuzly: updated });
                           }}
-                          className="bg-navy-950 border border-navy-700 rounded p-1.5 text-slate-200"
+                          className="im-field bg-obsidian-950 border border-steel-700 rounded-sm p-1.5 text-steel-100"
                         />
                         <input
                           type="text"
@@ -749,7 +749,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                             updated[selectedNodeIdx].varianty[vIdx].naslidky.vidkladeni = e.target.value;
                             setScenario({ ...scenario, vuzly: updated });
                           }}
-                          className="bg-navy-950 border border-navy-700 rounded p-1.5 text-slate-200"
+                          className="im-field bg-obsidian-950 border border-steel-700 rounded-sm p-1.5 text-steel-100"
                         />
                       </div>
                     </div>
@@ -761,18 +761,18 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
         )}
         {activeTab === 'verification' && (
           <div className="space-y-4 text-xs">
-            <h3 className="font-bold text-white uppercase tracking-wider">
+            <h3 className="im-section-title font-bold text-white uppercase tracking-wider">
               {ui(lang, 'm167')}{' '}</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm168')}{' '}</label>
+                <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm168')}{' '}</label>
                 <select
                   value={scenario.perevirka_zmistu.fakhivets_dzpk}
                   onChange={e => setScenario({
                     ...scenario,
                     perevirka_zmistu: { ...scenario.perevirka_zmistu, fakhivets_dzpk: e.target.value as any }
                   })}
-                  className="w-full bg-navy-950 border border-navy-700 rounded p-2 text-white"
+                  className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2 text-white"
                 >
                   <option value="не проведено">{ui(lang, 'm169')}{' '}</option>
                   <option value="проведено">{ui(lang, 'm170')}{' '}</option>
@@ -781,7 +781,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
               </div>
 
               <div>
-                <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm172')}{' '}</label>
+                <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm172')}{' '}</label>
                 <input
                   type="text"
                   value={scenario.perevirka_zmistu.khto || ''}
@@ -790,13 +790,13 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                     perevirka_zmistu: { ...scenario.perevirka_zmistu, khto: e.target.value || null }
                   })}
                   placeholder={ui(lang, 'm173')}
-                  className="w-full bg-navy-950 border border-navy-700 rounded p-2 text-white"
+                  className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2 text-white"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm174')}{' '}</label>
+              <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm174')}{' '}</label>
               <textarea
                 rows={2}
                 value={scenario.perevirka_zmistu.prymitka}
@@ -804,14 +804,14 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                   ...scenario,
                   perevirka_zmistu: { ...scenario.perevirka_zmistu, prymitka: e.target.value }
                 })}
-                className="w-full bg-navy-950 border border-navy-700 rounded p-2 text-white"
+                className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2 text-white"
               />
             </div>
 
-            <h3 className="font-bold text-white uppercase tracking-wider pt-4 border-t border-navy-800">
+            <h3 className="im-section-title font-bold text-white uppercase tracking-wider pt-4 border-t border-obsidian-800">
               {ui(lang, 'm175')}{' '}</h3>
             <div>
-              <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm176')}{' '}</label>
+              <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm176')}{' '}</label>
               <input
                 type="text"
                 value={scenario.shi.instrument || ''}
@@ -820,12 +820,12 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                   shi: { ...scenario.shi, instrument: e.target.value || null }
                 })}
                 placeholder="Claude (Anthropic) / Antigravity"
-                className="w-full bg-navy-950 border border-navy-700 rounded p-2 text-white"
+                className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2 text-white"
               />
             </div>
 
             <div>
-              <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm177')}{' '}</label>
+              <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm177')}{' '}</label>
               <textarea
                 rows={2}
                 value={scenario.shi.shcho_zrobleno}
@@ -833,12 +833,12 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                   ...scenario,
                   shi: { ...scenario.shi, shcho_zrobleno: e.target.value }
                 })}
-                className="w-full bg-navy-950 border border-navy-700 rounded p-2 text-white"
+                className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2 text-white"
               />
             </div>
 
             <div>
-              <label className="block text-slate-300 font-bold mb-1">{ui(lang, 'm178')}{' '}</label>
+              <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm178')}{' '}</label>
               <textarea
                 rows={2}
                 value={scenario.shi.perevirka_liudynoiu}
@@ -846,14 +846,14 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                   ...scenario,
                   shi: { ...scenario.shi, perevirka_liudynoiu: e.target.value }
                 })}
-                className="w-full bg-navy-950 border border-navy-700 rounded p-2 text-white"
+                className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2 text-white"
               />
             </div>
           </div>
         )}
         {activeTab === 'graph' && (
           <div className="space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
+            <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-steel-300">
               <span>{ui(lang, 'm179')}{' '}</span>
               <span className="font-mono">{scenario.vuzly.length} {ui(lang, 'm180')}{' '}</span>
             </div>
