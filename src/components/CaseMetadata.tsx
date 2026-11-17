@@ -1,31 +1,41 @@
-import React from 'react';
+import React, { useId } from 'react';
 import { AlertCircle, FileCheck, Sparkles } from 'lucide-react';
 import { Language } from '../i18n';
 import labels from '../i18n/caseBadges.json';
 import type { Scenario } from '../types';
 
+function MetadataBadge({ children, hint, color }: { children: React.ReactNode; hint: string; color: string }) {
+  const id = useId();
+  return (
+    <div tabIndex={0} aria-describedby={id} className={`case-badge group relative cursor-help w-full flex items-center justify-center gap-1 px-1.5 py-1 text-center font-mono text-[10px] sm:text-[11px] uppercase tracking-wider rounded-sm border border-steel-700/80 bg-obsidian-850/90 transition-colors ${color}`}>
+      {children}
+      <span id={id} role="tooltip" className="case-badge-tooltip group-hover:opacity-100 group-hover:visible group-focus:opacity-100 group-focus:visible opacity-0 invisible transition-all duration-150 absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 pointer-events-none w-52 sm:w-60 p-2.5 rounded-sm bg-obsidian-900 border border-steel-600 shadow-panel font-sans normal-case text-left text-[11px] text-steel-100 leading-snug tracking-normal">{hint}</span>
+    </div>
+  );
+}
+
 export function CaseMetadata({ scenario, lang }: { scenario: Scenario; lang: Language }) {
   const t = labels[lang];
   const fictional = ['вигаданий', 'fictional'].includes(scenario.dzherelo_vypadku.typ);
-  const source = /\bCIDS\b/i.test(scenario.dzherelo_vypadku.opys) ? t.cids : fictional ? t.training : t.practice;
+  const cids = /\bCIDS\b/i.test(scenario.dzherelo_vypadku.opys);
+  const source = cids ? t.cids : fictional ? t.training : t.practice;
   const verified = ['проведено', 'verified'].includes(scenario.perevirka_zmistu.fakhivets_dzpk);
-  const row = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-sm font-mono text-[10px] uppercase tracking-wider border border-steel-700/80 bg-obsidian-850/90 whitespace-nowrap';
   return (
-    <div className="case-metadata-strip flex flex-wrap items-center gap-1.5 sm:gap-2 mt-auto pt-3">
-      <div className={`${row} ${verified ? 'text-status-success' : 'text-status-warning'}`} title={scenario.perevirka_zmistu.prymitka}>
+    <div className="case-metadata-strip grid grid-cols-3 gap-1.5 w-full mt-auto pt-3 overflow-visible">
+      <MetadataBadge color={verified ? 'text-status-success' : 'text-status-warning'} hint={verified ? scenario.perevirka_zmistu.prymitka : t.draftHint}>
         <AlertCircle className="w-3 h-3 shrink-0" />
         <span>{verified ? t.verified : t.draft}</span>
-      </div>
+      </MetadataBadge>
       {scenario.shi.vykorystano && (
-        <div className={`${row} text-tactical-ice`} title={`${scenario.shi.instrument}: ${scenario.shi.shcho_zrobleno}`}>
+        <MetadataBadge color="text-tactical-ice" hint={t.aiHint}>
           <Sparkles className="w-3 h-3 shrink-0" />
           <span>{t.ai}</span>
-        </div>
+        </MetadataBadge>
       )}
-      <div className={`${row} text-steel-300`} title={scenario.dzherelo_vypadku.opys}>
+      <MetadataBadge color="text-steel-300" hint={cids ? t.cidsHint : scenario.dzherelo_vypadku.opys}>
         <FileCheck className="w-3 h-3 shrink-0" />
         <span>{source}</span>
-      </div>
+      </MetadataBadge>
     </div>
   );
 }
