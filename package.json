@@ -11,8 +11,9 @@
     "start": "node server/index.js",
     "validate": "python3 zibraty.py",
     "test": "node tests/run_tests.js && node tests/localization_tests.js && node tests/host_tests.js",
-    "test:browser": "npm run build && node tests/design.browser.cjs",
-    "test:themes": "npm run build && node tests/themes.browser.cjs"
+    "test:browser": "npm run build && node tests/case-display.browser.cjs && node tests/design.browser.cjs && node tests/themes.browser.cjs && node tests/description.browser.cjs && node tests/tooltips.browser.cjs && node tests/brand.browser.cjs",
+    "test:themes": "npm run build && node tests/themes.browser.cjs",
+    "test:cases": "node tests/case-display.browser.cjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",

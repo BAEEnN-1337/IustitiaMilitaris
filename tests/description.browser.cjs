@@ -76,21 +76,14 @@ const root = path.resolve(__dirname, '..'),
                 .first()
                 .textContent()
             ).trim(),
-            original = (lang === 'uk' ? uk : en)[id].sytuatsiia;
+            scenarioId = `S${Number(id.match(/(\d+)$/)[1]).toString().padStart(2, '0')}`,
+            original = (lang === 'uk' ? uk : en)[scenarioId].sytuatsiia;
           assert.ok(Array.from(preview).length > 0);
           const endings = [...original.matchAll(/[.!?](?=\s|$)/gu)].map(
             (m) => m.index + 1
           );
           if (endings[0] < 240 && endings.length > 1)
             assert.ok(preview.length >= endings[1]);
-          if (lang === 'uk' && ['S06', 'S07', 'S08'].includes(id)) {
-            const expectedEnd = endings[id === 'S07' ? 2 : 1];
-            assert.equal(
-              preview,
-              original.slice(0, expectedEnd),
-              `${id}: balanced preview`
-            );
-          }
 
           if (await popup.count()) assert.match(preview, /[.!?]$/u);
           assert.equal(

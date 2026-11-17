@@ -1,3 +1,4 @@
+import { caseLabel, choiceLabel } from '../i18n/display';
 import { allScenarios } from '../data/scenarios';
 import { localizeScenario } from '../i18n/content';
 import { DecisionProfile, resolvePath } from './DecisionProfile';
@@ -104,7 +105,9 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
             </span>
           )}
           <div>
-            <h1 className="im-title font-serif text-2xl font-bold text-white">{user || t.title}</h1>
+            <h1 className="im-title font-serif text-2xl font-bold text-white">
+              {user || t.title}
+            </h1>
             {user && <span className="badge mt-2">{t.localBadge}</span>}
           </div>
         </div>
@@ -144,10 +147,7 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
                 t.completedCount,
                 `${completed.length} / ${allScenarios.length}`
               ],
-              [
-                t.teamCount,
-                `${completed.filter((r) => ['S06', 'S07', 'S08'].includes(r.id)).length} / 3`
-              ],
+              [t.teamCount, `${completed.length} / ${allScenarios.length}`],
               [t.lastPlayed, date(recent)]
             ].map(([label, value]) => (
               <div className="surface space-y-3" key={label}>
@@ -156,14 +156,16 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
               </div>
             ))}
           </div>
-          <h2 className="im-title font-serif text-xl font-bold">{t.progress}</h2>
+          <h2 className="im-title font-serif text-xl font-bold">
+            {t.progress}
+          </h2>
           {!records.length && <p className="surface">{t.empty}</p>}
           {records.map(({ id, entry, scenario, steps, complete }) => (
             <article key={id} className="surface space-y-5">
               <header className="flex flex-wrap justify-between items-start gap-3">
                 <div>
                   <div className="flex flex-wrap gap-2 mb-3">
-                    <span className="badge">{id}</span>
+                    <span className="badge">{caseLabel(id, lang)}</span>
                     <span className="badge">
                       {themes[lang][scenario.tema as keyof typeof themes.en] ||
                         scenario.tema}
@@ -197,7 +199,7 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
                       </span>
                     )}
                     <span className="badge font-mono">
-                      {step.nodeId}: {step.variantId}
+                      {choiceLabel(scenario, step.nodeId, step.variantId, lang)}
                     </span>
                   </React.Fragment>
                 ))}
@@ -210,7 +212,12 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
                   {steps.map((step, i) => (
                     <li key={i}>
                       <strong>
-                        {step.nodeId}: {step.variantId}
+                        {choiceLabel(
+                          scenario,
+                          step.nodeId,
+                          step.variantId,
+                          lang
+                        )}
                       </strong>{' '}
                       — {step.variant.tekst}
                     </li>

@@ -1,10 +1,15 @@
+import { caseLabel, stageLabel, variantLabel } from '../i18n/display';
 import { Language } from '../i18n';
 import { localizeNorms, localizeScenario } from '../i18n/content';
 import scormLabels from '../i18n/scorm.json';
 import JSZip from 'jszip';
 import { Scenario, NormsData } from '../types';
 
-export async function generateScorm12Zip(scenario: Scenario, normsData: NormsData, lang: Language = 'uk'): Promise<Blob> {
+export async function generateScorm12Zip(
+  scenario: Scenario,
+  normsData: NormsData,
+  lang: Language = 'uk'
+): Promise<Blob> {
   const zip = new JSZip();
   scenario = localizeScenario(scenario, lang);
   normsData = localizeNorms(normsData, lang);
@@ -99,10 +104,16 @@ window.SCORM_COMPLETE = function() {
 
   // 3. Standalone self-contained index.html player
   // Embeds scenario JSON and relevant norm entries
-  const relevantNormIds = new Set(scenario.normy.map(n => n.id));
-  const embeddedNorms = normsData.normy.filter(n => relevantNormIds.has(n.id));
+  const relevantNormIds = new Set(scenario.normy.map((n) => n.id));
+  const embeddedNorms = normsData.normy.filter((n) =>
+    relevantNormIds.has(n.id)
+  );
 
-  const standaloneHtml = generateStandaloneHtmlPlayer(scenario, embeddedNorms, lang);
+  const standaloneHtml = generateStandaloneHtmlPlayer(
+    scenario,
+    embeddedNorms,
+    lang
+  );
   zip.file('index.html', standaloneHtml);
 
   return await zip.generateAsync({ type: 'blob' });
@@ -111,18 +122,48 @@ window.SCORM_COMPLETE = function() {
 function escapeXml(unsafe: string): string {
   return unsafe.replace(/[<>&'"]/g, (c) => {
     switch (c) {
-      case '<': return '&lt;';
-      case '>': return '&gt;';
-      case '&': return '&amp;';
-      case '\'': return '&apos;';
-      case '"': return '&quot;';
-      default: return c;
+      case '<':
+        return '&lt;';
+      case '>':
+        return '&gt;';
+      case '&':
+        return '&amp;';
+      case "'":
+        return '&apos;';
+      case '"':
+        return '&quot;';
+      default:
+        return c;
     }
   });
 }
 
-function generateStandaloneHtmlPlayer(scenario: Scenario, embeddedNorms: any[], lang: Language): string {
+function generateStandaloneHtmlPlayer(
+  scenario: Scenario,
+  embeddedNorms: any[],
+  lang: Language
+): string {
   const labels = scormLabels[lang];
+  const presentation = {
+    case: caseLabel(scenario.id, lang),
+    stages: Object.fromEntries(
+      scenario.vuzly.map((node) => [
+        node.id,
+        stageLabel(scenario, node.id, lang)
+      ])
+    ),
+    variants: Object.fromEntries(
+      scenario.vuzly.map((node) => [
+        node.id,
+        Object.fromEntries(
+          node.varianty.map((v) => [
+            v.id,
+            variantLabel(scenario, node.id, v.id, lang)
+          ])
+        )
+      ])
+    )
+  };
   const scenarioJson = JSON.stringify(scenario).replace(/</g, '\\u003c');
   const normsJson = JSON.stringify(embeddedNorms).replace(/</g, '\\u003c');
 
@@ -261,6 +302,7 @@ function generateStandaloneHtmlPlayer(scenario: Scenario, embeddedNorms: any[], 
   </div>
 
   <script>
+    var presentation = ${JSON.stringify(presentation).replace(/</g, '\\u003c')};
     var scenario = ${scenarioJson};
     var norms = ${normsJson};
     var normsMap = {};
@@ -282,7 +324,7 @@ function generateStandaloneHtmlPlayer(scenario: Scenario, embeddedNorms: any[], 
       var app = document.getElementById('app');
       if (state.step === 'briefing') {
         app.innerHTML = \`
-          <span class="badge">\${scenario.id} • \${scenario.tryvalist_khv} ${escapeXml(labels.s1)} • \${scenario.tema}</span>
+          <span class="badge">\${presentation.case} • \${scenario.tryvalist_khv} ${escapeXml(labels.s1)} • \${scenario.tema}</span>
           <h1>\${scenario.nazva}</h1>
           <div class="context-box">
             <strong>${escapeXml(labels.s2)}</strong> \${scenario.kontekst}
@@ -300,12 +342,12 @@ function generateStandaloneHtmlPlayer(scenario: Scenario, embeddedNorms: any[], 
         var node = scenario.vuzly.find(function(v) { return v.id === state.currentNodeId; });
         var optionsHtml = node.varianty.map(function(varItem) {
           return \`<button class="btn-option" onclick="chooseOption('\${varItem.id}')">
-            <strong>\${varItem.id}.</strong> \${varItem.tekst}
+            <strong>\${presentation.variants[node.id][varItem.id]}.</strong> \${varItem.tekst}
           </button>\`;
         }).join('');
 
         app.innerHTML = \`
-          <span class="badge">${escapeXml(labels.s6)} \${node.id}</span>
+          <span class="badge">\${presentation.stages[node.id]}</span>
           <h2>\${node.zapytannia}</h2>
           \${node.tekst ? '<p style="margin-bottom: 1rem; color: var(--text-muted);">' + node.tekst + '</p>' : ''}
           <div class="options-grid">
@@ -318,7 +360,7 @@ function generateStandaloneHtmlPlayer(scenario: Scenario, embeddedNorms: any[], 
         function scoreClass(num) { return num > 0 ? 'pos' : (num === 0 ? 'zero' : 'neg'); }
 
         app.innerHTML = \`
-          <span class="badge">${escapeXml(labels.s7)} \${v.id}</span>
+          <span class="badge">${escapeXml(labels.s7)} \${presentation.variants[state.currentNodeId][v.id]}</span>
           <h2>${escapeXml(labels.s8)}</h2>
           <div class="scores-row">
             <div class="score-card">
@@ -347,7 +389,7 @@ function generateStandaloneHtmlPlayer(scenario: Scenario, embeddedNorms: any[], 
       } else if (state.step === 'reflection') {
         if (window.SCORM_COMPLETE) window.SCORM_COMPLETE();
         var stepsList = state.pathway.map(function(p, idx) {
-          return '<li>${escapeXml(labels.s18)} ' + p.nodeId + ' → ${escapeXml(labels.s19)} ' + p.variant.id + '</li>';
+          return '<li>' + presentation.stages[p.nodeId] + ' · ${escapeXml(labels.s19)} ' + presentation.variants[p.nodeId][p.variant.id] + ' — ' + p.variant.tekst + '</li>';
         }).join('');
 
         app.innerHTML = \`

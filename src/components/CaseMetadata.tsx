@@ -27,7 +27,7 @@ export function CaseMetadata({ scenario, lang }: { scenario: Scenario; lang: Lan
         <span>{verified ? t.verified : t.draft}</span>
       </MetadataBadge>
       {scenario.shi.vykorystano && (
-        <MetadataBadge color="text-tactical-ice" hint={t.aiHint}>
+        <MetadataBadge color="text-tactical-ice" hint={scenario.shi.perevirka_liudynoiu}>
           <Sparkles className="w-3 h-3 shrink-0" />
           <span>{t.ai}</span>
         </MetadataBadge>

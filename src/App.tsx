@@ -1,3 +1,4 @@
+import { caseLabel } from './i18n/display';
 import designLabels from './i18n/design.json';
 import { Auth } from './components/Auth';
 import accountLabels from './i18n/accounts.json';
@@ -50,7 +51,7 @@ export const App: React.FC = () => {
       (
         {
           catalog: '/',
-          solo: '/scenarios/S06',
+          solo: `/scenarios/${allScenarios[0].id}`,
           classroom: '/classroom',
           student: '/classroom',
           builder: '/builder',
@@ -162,7 +163,7 @@ export const App: React.FC = () => {
               <span aria-hidden="true">/</span>
               <span aria-current="page">
                 {currentView === 'solo'
-                  ? `${designLabels[lang].scenario} ${scenarioId}`
+                  ? caseLabel(scenarioId || '', lang)
                   : currentView === 'auth'
                     ? designLabels[lang].account
                     : currentView === 'builder'

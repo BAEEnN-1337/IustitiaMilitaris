@@ -1,3 +1,6 @@
+import fixtures from './scenarios.cjs';
+const { scenarios, route: caseRoute } = fixtures;
+const firstCase = scenarios[0];
 import WebSocket from 'ws';
 import { spawn, spawnSync } from 'node:child_process';
 import { mkdtemp, rm, access } from 'node:fs/promises';
@@ -89,20 +92,20 @@ try {
     (
       await request(
         '/api/progress',
-        { scenarioId: 'S06', pathway: [{ nodeId: 'V1', variantId: 'A' }] },
+        { scenarioId: firstCase.id, pathway: caseRoute(firstCase).slice(0, 1) },
         cookie
       )
     ).status,
     200
   );
   assert.equal(
-    (await (await request('/api/progress', null, cookie)).json()).S06.pathway[0]
+    (await (await request('/api/progress', null, cookie)).json()).S01.pathway[0]
       .variantId,
-    'A'
+    'A1'
   );
-  await request('/api/progress',{scenarioId:'S06',pathway:[{nodeId:'V1',variantId:'A'},{nodeId:'V2',variantId:'E1'},{nodeId:'V6',variantId:'J1'}]},cookie);
-  const completed=(await(await request('/api/progress',null,cookie)).json()).S06;assert.ok(completed.completedAt);
-  await request('/api/progress',{scenarioId:'S06',pathway:completed.pathway,notes:'note'},cookie);assert.equal((await(await request('/api/progress',null,cookie)).json()).S06.completedAt,completed.completedAt);
+  await request('/api/progress',{scenarioId:'S01',pathway:caseRoute(firstCase)},cookie);
+  const completed=(await(await request('/api/progress',null,cookie)).json()).S01;assert.ok(completed.completedAt);
+  await request('/api/progress',{scenarioId:'S01',pathway:completed.pathway,notes:'note'},cookie);assert.equal((await(await request('/api/progress',null,cookie)).json()).S01.completedAt,completed.completedAt);
   const bob = await request('/api/auth/register', {
     login: 'other-alias',
     password: 'secure-pass'
@@ -120,7 +123,7 @@ try {
     401
   );
   await Promise.all(
-    ['S01', 'S02', 'S03', 'S04'].map((scenarioId) =>
+    scenarios.map(s => s.id).map((scenarioId) =>
       request(
         '/api/progress',
         { scenarioId, pathway: [], notes: 'private note' },
@@ -129,7 +132,7 @@ try {
     )
   );
   const saved = await (await request('/api/progress', null, cookie)).json();
-  for (const id of ['S01', 'S02', 'S03', 'S04'])
+  for (const id of scenarios.map(s => s.id))
     assert.equal(saved[id].notes, 'private note');
   const info = await (await request('/api/server-info')).json();
   assert.ok(Array.isArray(info.lanUrls));
@@ -169,7 +172,7 @@ try {
   try {
     const host = await connect();
     let pending = wait(host, (m) => m.type === 'ROOM_CREATED');
-    send(host, { type: 'CREATE_ROOM', scenarioId: 'S06' });
+    send(host, { type: 'CREATE_ROOM', scenarioId: 'S01' });
     let state = await pending;
     const code = state.room.code;
     assert.match(code, /^\d{6}$/);
@@ -192,18 +195,18 @@ try {
     send(host, { type: 'OPEN_VOTING' });
     await pending;
     pending = wait(one, (m) => m.hasVoted && m.room.totalVotes === 1);
-    send(one, { type: 'SUBMIT_VOTE', variantId: 'A' });
+    send(one, { type: 'SUBMIT_VOTE', variantId: 'A1' });
     await pending;
-    send(one, { type: 'SUBMIT_VOTE', variantId: 'B' });
+    send(one, { type: 'SUBMIT_VOTE', variantId: 'B1' });
     pending = wait(host, (m) => m.room?.totalVotes === 2);
-    send(two, { type: 'SUBMIT_VOTE', variantId: 'B' });
+    send(two, { type: 'SUBMIT_VOTE', variantId: 'B1' });
     state = await pending;
-    assert.deepEqual(state.room.votes, { A: 1, B: 1 });
+    assert.deepEqual(state.room.votes, { A1: 1, B1: 1 });
     assert.equal(state.room.discussionIndex, 1);
     assert.ok(!JSON.stringify(state.room).includes(token));
     assert.ok(!('hostSecret' in state.room));
     pending = wait(two,m => m.room?.showLive === false); send(host,{type:'SET_LIVE',showLive:false}); const hidden=await pending; assert.deepEqual(hidden.room.votes,{}); assert.equal(hidden.room.totalVotes,2);
-    pending=wait(two,m=>m.room?.showLive===true);send(host,{type:'SET_LIVE',showLive:true});assert.deepEqual((await pending).room.votes,{A:1,B:1});
+    pending=wait(two,m=>m.room?.showLive===true);send(host,{type:'SET_LIVE',showLive:true});assert.deepEqual((await pending).room.votes,{A1:1,B1:1});
     one.close();
     const rejoined = await connect();
     pending = wait(rejoined, (m) => m.room);
@@ -220,12 +223,12 @@ try {
     await pending;
     pending = wait(
       host,
-      (m) => m.room?.phase === 'feedback' && m.room.selectedVariantId === 'B'
+      (m) => m.room?.phase === 'feedback' && m.room.selectedVariantId === 'B1'
     );
-    send(host, { type: 'DISCUSS', variantId: 'B' });
+    send(host, { type: 'DISCUSS', variantId: 'B1' });
     await pending;
-    pending = wait(host, (m) => m.room?.selectedVariantId === 'A');
-    send(host, { type: 'DISCUSS', variantId: 'A' });
+    pending = wait(host, (m) => m.room?.selectedVariantId === 'A1');
+    send(host, { type: 'DISCUSS', variantId: 'A1' });
     await pending;
     pending = wait(two, (m) => m.room?.currentNodeId === 'V2');
     send(host, { type: 'NEXT_STAGE', nextNodeId: 'V8' });
@@ -233,7 +236,7 @@ try {
     assert.equal(state.room.phase, 'voting');
     assert.equal(state.room.totalVotes, 0);
     assert.equal(state.hasVoted, false);
-    for (const variantId of ['E1', 'J1']) {
+    for (const variantId of caseRoute(firstCase).slice(1).map(step => step.variantId)) {
       pending = wait(host, (m) => m.room?.phase === 'results');
       send(host, { type: 'SHOW_RESULTS' });
       await pending;
@@ -248,10 +251,36 @@ try {
       state = await pending;
     }
     assert.equal(state.room.phase, 'finished');
-    assert.equal(state.room.history.length, 3);
+    assert.equal(state.room.history.length, 6);
     pending = wait(two, (m) => m.type === 'SESSION_CLOSED');
     send(host, { type: 'CLOSE_SESSION' });
     await pending;
+    assert.equal((await (await request('/api/health')).json()).activeRooms, 0);
+
+    for (const scenario of scenarios) {
+      for (const branch of scenario.id === 'S01' ? [1, 2, 3] : [0]) {
+        const facilitator = await connect();
+        const action = async (body, condition) => {
+          const result = wait(facilitator, condition);
+          send(facilitator, body);
+          return result;
+        };
+        await action({ type: 'CREATE_ROOM', scenarioId: scenario.id }, m => m.type === 'ROOM_CREATED');
+        await action({ type: 'OPEN_VOTING' }, m => m.room?.phase === 'voting');
+        const steps = caseRoute(scenario, branch);
+        for (const [index, step] of steps.entries()) {
+          await action({ type: 'SHOW_RESULTS' }, m => m.room?.phase === 'results');
+          await action({ type: 'DISCUSS', variantId: step.variantId }, m => m.room?.phase === 'feedback');
+          const expected = index === steps.length - 1 ? 'finished' : 'voting';
+          const result = await action({ type: 'NEXT_STAGE', nextNodeId: 'V999' }, m => m.room?.phase === expected);
+          assert.equal(result.room.history.length, index + 1);
+          if (expected === 'voting') assert.equal(result.room.currentNodeId, steps[index + 1].nodeId);
+          for (const key of ['user', 'userId', 'login', 'name', 'email', 'ip', 'rank', 'device'])
+            assert.ok(!(key in result.room));
+        }
+        await action({ type: 'CLOSE_SESSION' }, m => m.type === 'SESSION_CLOSED');
+      }
+    }
     assert.equal((await (await request('/api/health')).json()).activeRooms, 0);
   } finally {
     for (const ws of sockets) ws.terminate();
@@ -260,8 +289,8 @@ try {
     '/',
     '/auth',
     '/norms',
-    '/builder/S06',
-    '/scenarios/S06/play',
+    '/builder/S01',
+    '/scenarios/S01/play',
     '/classroom',
     '/classroom/host/123456',
     '/classroom/join/123456'

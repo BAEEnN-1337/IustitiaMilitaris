@@ -1,12 +1,32 @@
+import { caseLabel, stageLabel, variantLabel } from '../i18n/display';
 import { localizeScenario } from '../i18n/content';
 import { ui } from '../i18n/ui';
 import React, { useState } from 'react';
-import { 
-  Wrench, CheckCircle2, AlertTriangle, Download, Upload, 
-  Play, Plus, Trash2, Layers, BookOpen, User, Scale, ShieldCheck,
-  FileCode, Sparkles
+import {
+  Wrench,
+  CheckCircle2,
+  AlertTriangle,
+  Download,
+  Upload,
+  Play,
+  Plus,
+  Trash2,
+  Layers,
+  BookOpen,
+  User,
+  Scale,
+  ShieldCheck,
+  FileCode,
+  Sparkles
 } from 'lucide-react';
-import { Scenario, Node, Variant, Role, ValueConflict, ScenarioNorm } from '../types';
+import {
+  Scenario,
+  Node,
+  Variant,
+  Role,
+  ValueConflict,
+  ScenarioNorm
+} from '../types';
 import { normyData, allScenarios } from '../data/scenarios';
 import { validateScenario } from '../utils/validator';
 import { DecisionTreeSvg } from './DecisionTreeSvg';
@@ -25,116 +45,157 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
   const t = translations[lang];
 
   // Active builder tab: 'general' | 'roles' | 'nodes' | 'verification' | 'graph'
-  const [activeTab, setActiveTab] = useState<'general' | 'roles' | 'nodes' | 'verification' | 'graph'>('general');
+  const [activeTab, setActiveTab] = useState<
+    'general' | 'roles' | 'nodes' | 'verification' | 'graph'
+  >('general');
 
   // Initial template scenario
-  const [scenario, setScenario] = useState<Scenario>(allScenarios.find(s => s.id === window.location.pathname.split('/')[2]) || {
-    id: "S09",
-    nazva: ui(lang, 'm53'),
-    versiia: "1.0",
-    data_stvorennia: "2026-11-16",
-    tema: "konflikt-interesiv",
-    audytoriia: [ui(lang, 'm54'), ui(lang, 'm55')],
-    tryvalist_khv: 20,
-    kontekst: ui(lang, 'm56'),
-    diiovi_osoby: [
-      { id: "R1", rol: ui(lang, 'm57'), opys: ui(lang, 'm58'), hravets: true },
-      { id: "R2", rol: ui(lang, 'm59'), opys: ui(lang, 'm60'), hravets: false }
-    ],
-    sytuatsiia: ui(lang, 'm61'),
-    tsinnosti_v_konflikti: [
-      { tsinnist_a: ui(lang, 'm62'), tsinnist_b: ui(lang, 'm63'), poiasnennia: ui(lang, 'm64') }
-    ],
-    pochatkovyi_vuzol: "V1",
-    vuzly: [
-      {
-        id: "V1",
-        tekst: "",
-        zapytannia: ui(lang, 'm65'),
-        varianty: [
-          {
-            id: "A",
-            tekst: ui(lang, 'm66'),
-            naslidky: { odrazu: ui(lang, 'm67'), vidkladeni: ui(lang, 'm68') },
-            baly: { dobrochesnist: 2, efektyvnist: 0, dovira: 1 },
-            chomu_taki_baly: ui(lang, 'm69'),
-            zvorotnyi_zviazok: ui(lang, 'm70'),
-            normy: ["ZPK-28"],
-            nastupnyi_vuzol: "V2"
-          },
-          {
-            id: "B",
-            tekst: ui(lang, 'm71'),
-            naslidky: { odrazu: ui(lang, 'm72'), vidkladeni: ui(lang, 'm73') },
-            baly: { dobrochesnist: -1, efektyvnist: 1, dovira: -1 },
-            chomu_taki_baly: ui(lang, 'm74'),
-            zvorotnyi_zviazok: ui(lang, 'm75'),
-            normy: ["ZPK-42"],
-            nastupnyi_vuzol: null
-          },
-          {
-            id: "C",
-            tekst: ui(lang, 'm76'),
-            naslidky: { odrazu: ui(lang, 'm77'), vidkladeni: ui(lang, 'm78') },
-            baly: { dobrochesnist: 2, efektyvnist: 1, dovira: 2 },
-            chomu_taki_baly: ui(lang, 'm79'),
-            zvorotnyi_zviazok: ui(lang, 'm80'),
-            normy: ["ZPK-28", "ZPK-44"],
-            nastupnyi_vuzol: null
-          }
-        ]
+  const [scenario, setScenario] = useState<Scenario>(
+    allScenarios.find(
+      (s) => s.id === window.location.pathname.split('/')[2]
+    ) || {
+      id: 'S09',
+      nazva: ui(lang, 'm53'),
+      versiia: '1.0',
+      data_stvorennia: '2026-11-16',
+      tema: 'konflikt-interesiv',
+      audytoriia: [ui(lang, 'm54'), ui(lang, 'm55')],
+      tryvalist_khv: 20,
+      kontekst: ui(lang, 'm56'),
+      diiovi_osoby: [
+        {
+          id: 'R1',
+          rol: ui(lang, 'm57'),
+          opys: ui(lang, 'm58'),
+          hravets: true
+        },
+        {
+          id: 'R2',
+          rol: ui(lang, 'm59'),
+          opys: ui(lang, 'm60'),
+          hravets: false
+        }
+      ],
+      sytuatsiia: ui(lang, 'm61'),
+      tsinnosti_v_konflikti: [
+        {
+          tsinnist_a: ui(lang, 'm62'),
+          tsinnist_b: ui(lang, 'm63'),
+          poiasnennia: ui(lang, 'm64')
+        }
+      ],
+      pochatkovyi_vuzol: 'V1',
+      vuzly: [
+        {
+          id: 'V1',
+          tekst: '',
+          zapytannia: ui(lang, 'm65'),
+          varianty: [
+            {
+              id: 'A',
+              tekst: ui(lang, 'm66'),
+              naslidky: {
+                odrazu: ui(lang, 'm67'),
+                vidkladeni: ui(lang, 'm68')
+              },
+              baly: { dobrochesnist: 2, efektyvnist: 0, dovira: 1 },
+              chomu_taki_baly: ui(lang, 'm69'),
+              zvorotnyi_zviazok: ui(lang, 'm70'),
+              normy: ['ZPK-28'],
+              nastupnyi_vuzol: 'V2'
+            },
+            {
+              id: 'B',
+              tekst: ui(lang, 'm71'),
+              naslidky: {
+                odrazu: ui(lang, 'm72'),
+                vidkladeni: ui(lang, 'm73')
+              },
+              baly: { dobrochesnist: -1, efektyvnist: 1, dovira: -1 },
+              chomu_taki_baly: ui(lang, 'm74'),
+              zvorotnyi_zviazok: ui(lang, 'm75'),
+              normy: ['ZPK-42'],
+              nastupnyi_vuzol: null
+            },
+            {
+              id: 'C',
+              tekst: ui(lang, 'm76'),
+              naslidky: {
+                odrazu: ui(lang, 'm77'),
+                vidkladeni: ui(lang, 'm78')
+              },
+              baly: { dobrochesnist: 2, efektyvnist: 1, dovira: 2 },
+              chomu_taki_baly: ui(lang, 'm79'),
+              zvorotnyi_zviazok: ui(lang, 'm80'),
+              normy: ['ZPK-28', 'ZPK-44'],
+              nastupnyi_vuzol: null
+            }
+          ]
+        },
+        {
+          id: 'V2',
+          tekst: ui(lang, 'm81'),
+          zapytannia: ui(lang, 'm82'),
+          varianty: [
+            {
+              id: 'E1',
+              tekst: ui(lang, 'm83'),
+              naslidky: {
+                odrazu: ui(lang, 'm84'),
+                vidkladeni: ui(lang, 'm85')
+              },
+              baly: { dobrochesnist: 2, efektyvnist: 1, dovira: 1 },
+              chomu_taki_baly: ui(lang, 'm86'),
+              zvorotnyi_zviazok: ui(lang, 'm87'),
+              normy: ['ZPK-28'],
+              nastupnyi_vuzol: null
+            },
+            {
+              id: 'E2',
+              tekst: ui(lang, 'm88'),
+              naslidky: {
+                odrazu: ui(lang, 'm89'),
+                vidkladeni: ui(lang, 'm90')
+              },
+              baly: { dobrochesnist: -2, efektyvnist: 0, dovira: -2 },
+              chomu_taki_baly: ui(lang, 'm91'),
+              zvorotnyi_zviazok: ui(lang, 'm92'),
+              normy: ['ZPK-41'],
+              nastupnyi_vuzol: null
+            }
+          ]
+        }
+      ],
+      normy: [
+        { id: 'ZPK-28', yak_zastosovuietsia: ui(lang, 'm93') },
+        { id: 'ZPK-41', yak_zastosovuietsia: ui(lang, 'm94') },
+        { id: 'ZPK-42', yak_zastosovuietsia: ui(lang, 'm95') },
+        { id: 'ZPK-44', yak_zastosovuietsia: ui(lang, 'm96') }
+      ],
+      zastosovnist: ui(lang, 'm97'),
+      porady: [ui(lang, 'm98'), ui(lang, 'm99')],
+      pytannia_dlia_obhovorennia: [ui(lang, 'm100'), ui(lang, 'm101')],
+      dzherelo_vypadku: { typ: 'вигаданий', opys: ui(lang, 'm102') },
+      perevirka_zmistu: {
+        fakhivets_dzpk: 'не проведено',
+        khto: null,
+        data: null,
+        prymitka: ui(lang, 'm103')
       },
-      {
-        id: "V2",
-        tekst: ui(lang, 'm81'),
-        zapytannia: ui(lang, 'm82'),
-        varianty: [
-          {
-            id: "E1",
-            tekst: ui(lang, 'm83'),
-            naslidky: { odrazu: ui(lang, 'm84'), vidkladeni: ui(lang, 'm85') },
-            baly: { dobrochesnist: 2, efektyvnist: 1, dovira: 1 },
-            chomu_taki_baly: ui(lang, 'm86'),
-            zvorotnyi_zviazok: ui(lang, 'm87'),
-            normy: ["ZPK-28"],
-            nastupnyi_vuzol: null
-          },
-          {
-            id: "E2",
-            tekst: ui(lang, 'm88'),
-            naslidky: { odrazu: ui(lang, 'm89'), vidkladeni: ui(lang, 'm90') },
-            baly: { dobrochesnist: -2, efektyvnist: 0, dovira: -2 },
-            chomu_taki_baly: ui(lang, 'm91'),
-            zvorotnyi_zviazok: ui(lang, 'm92'),
-            normy: ["ZPK-41"],
-            nastupnyi_vuzol: null
-          }
-        ]
+      shi: {
+        vykorystano: false,
+        instrument: null,
+        shcho_zrobleno: ui(lang, 'm104'),
+        perevirka_liudynoiu: ui(lang, 'm105')
       }
-    ],
-    normy: [
-      { id: "ZPK-28", yak_zastosovuietsia: ui(lang, 'm93') },
-      { id: "ZPK-41", yak_zastosovuietsia: ui(lang, 'm94') },
-      { id: "ZPK-42", yak_zastosovuietsia: ui(lang, 'm95') },
-      { id: "ZPK-44", yak_zastosovuietsia: ui(lang, 'm96') }
-    ],
-    zastosovnist: ui(lang, 'm97'),
-    porady: [
-      ui(lang, 'm98'),
-      ui(lang, 'm99')
-    ],
-    pytannia_dlia_obhovorennia: [
-      ui(lang, 'm100'),
-      ui(lang, 'm101')
-    ],
-    dzherelo_vypadku: { typ: "вигаданий", opys: ui(lang, 'm102') },
-    perevirka_zmistu: { fakhivets_dzpk: "не проведено", khto: null, data: null, prymitka: ui(lang, 'm103') },
-    shi: { vykorystano: false, instrument: null, shcho_zrobleno: ui(lang, 'm104'), perevirka_liudynoiu: ui(lang, 'm105') }
-  });
+    }
+  );
 
   const [selectedNodeIdx, setSelectedNodeIdx] = useState<number>(0);
   const [validationRequested, setValidationRequested] = useState(false);
-  const validationErrors = validationRequested ? validateScenario(scenario, normyData, lang) : [];
+  const validationErrors = validationRequested
+    ? validateScenario(scenario, normyData, lang)
+    : [];
 
   // Run validation
   const runValidation = () => {
@@ -240,7 +301,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
         }
       ]
     };
-    setScenario(prev => ({ ...prev, vuzly: [...prev.vuzly, newNode] }));
+    setScenario((prev) => ({ ...prev, vuzly: [...prev.vuzly, newNode] }));
     setSelectedNodeIdx(scenario.vuzly.length);
   };
 
@@ -249,7 +310,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
       alert(ui(lang, 'm124'));
       return;
     }
-    setScenario(prev => ({
+    setScenario((prev) => ({
       ...prev,
       vuzly: prev.vuzly.filter((_, i) => i !== idx)
     }));
@@ -268,9 +329,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
               {t.builder.title}
             </h1>
           </div>
-          <p className="text-xs text-steel-300 mt-1">
-            {t.builder.subtitle}
-          </p>
+          <p className="text-xs text-steel-300 mt-1">{t.builder.subtitle}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
           <button
@@ -300,7 +359,12 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
           <label className="px-3 py-2 rounded-sm bg-obsidian-850 hover:bg-obsidian-800 text-steel-300 border border-steel-700 text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer">
             <Upload className="w-4 h-4" />
             {t.builder.importJsonBtn}
-            <input type="file" accept=".json" onChange={handleImportJson} className="hidden" />
+            <input
+              type="file"
+              accept=".json"
+              onChange={handleImportJson}
+              className="hidden"
+            />
           </label>
 
           <button
@@ -316,17 +380,20 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
         <div className="p-4 rounded-sm bg-status-danger/10 border border-status-danger/30 text-status-danger text-xs space-y-1">
           <div className="font-bold flex flex-wrap items-center gap-2 text-status-danger">
             <AlertTriangle className="w-4 h-4" />
-            {ui(lang, 'm125')}{' '}{validationErrors.length} {ui(lang, 'm126')}{' '}</div>
+            {ui(lang, 'm125')} {validationErrors.length} {ui(lang, 'm126')}{' '}
+          </div>
           <ul className="list-disc pl-5 space-y-0.5">
             {validationErrors.map((err, idx) => (
-              <li key={idx}><strong>{err.field}:</strong> {err.message}</li>
+              <li key={idx}>
+                <strong>{err.field}:</strong> {err.message}
+              </li>
             ))}
           </ul>
         </div>
       ) : (
         <div className="p-3.5 rounded-sm bg-status-success/10 border border-status-success/30 text-status-success text-xs flex flex-wrap items-center gap-2">
           <CheckCircle2 className="w-4 h-4 text-status-success" />
-          <span>{ui(lang, 'm127')}{' '}</span>
+          <span>{ui(lang, 'm127')} </span>
         </div>
       )}
       <div className="flex border-b border-obsidian-800 gap-1 overflow-x-auto text-xs font-semibold">
@@ -334,9 +401,13 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
           { id: 'general', label: t.builder.mainInfoTab, icon: FileCode },
           { id: 'roles', label: t.builder.rolesTab, icon: User },
           { id: 'nodes', label: t.builder.nodesTab, icon: Layers },
-          { id: 'verification', label: t.builder.verificationTab, icon: Sparkles },
-          { id: 'graph', label: t.builder.visualGraphTab, icon: Layers },
-        ].map(tab => {
+          {
+            id: 'verification',
+            label: t.builder.verificationTab,
+            icon: Sparkles
+          },
+          { id: 'graph', label: t.builder.visualGraphTab, icon: Layers }
+        ].map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
           return (
@@ -360,104 +431,160 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
           <div className="space-y-4 text-xs">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-steel-300 font-bold mb-1">ID (S01..S99):</label>
-                <input
-                  type="text"
-                  value={scenario.id}
-                  onChange={e => setScenario({ ...scenario, id: e.target.value })}
-                  className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
-                />
+                <label className="block text-steel-300 font-bold mb-1">
+                  {lang === 'uk' ? 'Задача' : 'Case'}
+                </label>
+                <div className="space-y-2">
+                  <span className="badge">{caseLabel(scenario.id, lang)}</span>
+                  <details>
+                    <summary className="text-xs cursor-pointer text-steel-300">
+                      {lang === 'uk'
+                        ? 'Технічний ID (JSON)'
+                        : 'Technical ID (JSON)'}
+                    </summary>
+                    <input
+                      type="text"
+                      value={scenario.id}
+                      onChange={(e) =>
+                        setScenario({ ...scenario, id: e.target.value })
+                      }
+                      className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
+                    />
+                  </details>
+                </div>
               </div>
               <div>
-                <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm128')}{' '}</label>
+                <label className="block text-steel-300 font-bold mb-1">
+                  {ui(lang, 'm128')}{' '}
+                </label>
                 <input
                   type="text"
                   value={scenario.versiia}
-                  onChange={e => setScenario({ ...scenario, versiia: e.target.value })}
+                  onChange={(e) =>
+                    setScenario({ ...scenario, versiia: e.target.value })
+                  }
                   className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
                 />
               </div>
               <div>
-                <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm129')}{' '}</label>
+                <label className="block text-steel-300 font-bold mb-1">
+                  {ui(lang, 'm129')}{' '}
+                </label>
                 <input
                   type="text"
                   value={scenario.data_stvorennia}
-                  onChange={e => setScenario({ ...scenario, data_stvorennia: e.target.value })}
+                  onChange={(e) =>
+                    setScenario({
+                      ...scenario,
+                      data_stvorennia: e.target.value
+                    })
+                  }
                   className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm130')}{' '}</label>
+              <label className="block text-steel-300 font-bold mb-1">
+                {ui(lang, 'm130')}{' '}
+              </label>
               <input
                 type="text"
                 value={scenario.nazva}
-                onChange={e => setScenario({ ...scenario, nazva: e.target.value })}
+                onChange={(e) =>
+                  setScenario({ ...scenario, nazva: e.target.value })
+                }
                 className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white text-sm"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm131')}{' '}</label>
+                <label className="block text-steel-300 font-bold mb-1">
+                  {ui(lang, 'm131')}{' '}
+                </label>
                 <select
                   value={scenario.tema}
-                  onChange={e => setScenario({ ...scenario, tema: e.target.value })}
+                  onChange={(e) =>
+                    setScenario({ ...scenario, tema: e.target.value })
+                  }
                   className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
                 >
-                  <option value="podarunok">{ui(lang, 'm132')}{' '}</option>
-                  <option value="konflikt-interesiv">{ui(lang, 'm133')}{' '}</option>
-                  <option value="vykryvach">{ui(lang, 'm134')}{' '}</option>
-                  <option value="akademichna-dobrochesnist">{ui(lang, 'm135')}{' '}</option>
-                  <option value="sluzhbove-maino">{ui(lang, 'm136')}{' '}</option>
-                  <option value="kadrovi-rishennia">{ui(lang, 'm137')}{' '}</option>
-                  <option value="neformalnyi-tysk">{ui(lang, 'm138')}{' '}</option>
-                  <option value="rozpodil-resursiv">{ui(lang, 'm139')}{' '}</option>
-                  <option value="pravdyvist-zvitiv">{ui(lang, 'm140')}{' '}</option>
-                  <option value="inshe">{ui(lang, 'm141')}{' '}</option>
+                  <option value="podarunok">{ui(lang, 'm132')} </option>
+                  <option value="konflikt-interesiv">
+                    {ui(lang, 'm133')}{' '}
+                  </option>
+                  <option value="vykryvach">{ui(lang, 'm134')} </option>
+                  <option value="akademichna-dobrochesnist">
+                    {ui(lang, 'm135')}{' '}
+                  </option>
+                  <option value="sluzhbove-maino">{ui(lang, 'm136')} </option>
+                  <option value="kadrovi-rishennia">{ui(lang, 'm137')} </option>
+                  <option value="neformalnyi-tysk">{ui(lang, 'm138')} </option>
+                  <option value="rozpodil-resursiv">{ui(lang, 'm139')} </option>
+                  <option value="pravdyvist-zvitiv">{ui(lang, 'm140')} </option>
+                  <option value="inshe">{ui(lang, 'm141')} </option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm142')}{' '}</label>
+                <label className="block text-steel-300 font-bold mb-1">
+                  {ui(lang, 'm142')}{' '}
+                </label>
                 <input
                   type="number"
                   min={1}
                   max={90}
                   value={scenario.tryvalist_khv}
-                  onChange={e => setScenario({ ...scenario, tryvalist_khv: parseInt(e.target.value) || 20 })}
+                  onChange={(e) =>
+                    setScenario({
+                      ...scenario,
+                      tryvalist_khv: parseInt(e.target.value) || 20
+                    })
+                  }
                   className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm143')}{' '}</label>
+              <label className="block text-steel-300 font-bold mb-1">
+                {ui(lang, 'm143')}{' '}
+              </label>
               <textarea
                 rows={3}
                 value={scenario.kontekst}
-                onChange={e => setScenario({ ...scenario, kontekst: e.target.value })}
+                onChange={(e) =>
+                  setScenario({ ...scenario, kontekst: e.target.value })
+                }
                 className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
               />
             </div>
 
             <div>
-              <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm144')}{' '}</label>
+              <label className="block text-steel-300 font-bold mb-1">
+                {ui(lang, 'm144')}{' '}
+              </label>
               <textarea
                 rows={4}
                 value={scenario.sytuatsiia}
-                onChange={e => setScenario({ ...scenario, sytuatsiia: e.target.value })}
+                onChange={(e) =>
+                  setScenario({ ...scenario, sytuatsiia: e.target.value })
+                }
                 className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
               />
             </div>
 
             <div>
-              <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm145')}{' '}</label>
+              <label className="block text-steel-300 font-bold mb-1">
+                {ui(lang, 'm145')}{' '}
+              </label>
               <textarea
                 rows={3}
                 value={scenario.zastosovnist}
-                onChange={e => setScenario({ ...scenario, zastosovnist: e.target.value })}
+                onChange={(e) =>
+                  setScenario({ ...scenario, zastosovnist: e.target.value })
+                }
                 className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
               />
             </div>
@@ -466,8 +593,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
         {activeTab === 'roles' && (
           <div className="space-y-4 text-xs">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="text-steel-300">
-                {ui(lang, 'm146')}{' '}</span>
+              <span className="text-steel-300">{ui(lang, 'm146')} </span>
               <button
                 onClick={() => {
                   const newR: Role = {
@@ -476,23 +602,30 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                     opys: ui(lang, 'm148'),
                     hravets: false
                   };
-                  setScenario({ ...scenario, diiovi_osoby: [...scenario.diiovi_osoby, newR] });
+                  setScenario({
+                    ...scenario,
+                    diiovi_osoby: [...scenario.diiovi_osoby, newR]
+                  });
                 }}
                 className="im-primary px-3 py-1.5 rounded-sm bg-status-success hover:bg-status-success text-white font-semibold flex items-center gap-1.5"
               >
                 <Plus className="w-3.5 h-3.5" />
-                {ui(lang, 'm149')}{' '}</button>
+                {ui(lang, 'm149')}{' '}
+              </button>
             </div>
 
             <div className="space-y-3">
               {scenario.diiovi_osoby.map((role, rIdx) => (
-                <div key={role.id} className="p-4 rounded-sm bg-obsidian-950 border border-obsidian-800 space-y-3">
+                <div
+                  key={role.id}
+                  className="p-4 rounded-sm bg-obsidian-950 border border-obsidian-800 space-y-3"
+                >
                   <div className="flex flex-wrap items-center justify-between gap-2 gap-3">
                     <div className="flex items-center gap-3">
                       <input
                         type="text"
                         value={role.id}
-                        onChange={e => {
+                        onChange={(e) => {
                           const updated = [...scenario.diiovi_osoby];
                           updated[rIdx].id = e.target.value;
                           setScenario({ ...scenario, diiovi_osoby: updated });
@@ -503,7 +636,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                         type="text"
                         value={role.rol}
                         placeholder={ui(lang, 'm150')}
-                        onChange={e => {
+                        onChange={(e) => {
                           const updated = [...scenario.diiovi_osoby];
                           updated[rIdx].rol = e.target.value;
                           setScenario({ ...scenario, diiovi_osoby: updated });
@@ -517,24 +650,28 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                         <input
                           type="checkbox"
                           checked={!!role.hravets}
-                          onChange={e => {
+                          onChange={(e) => {
                             // Ensure only one player
-                            const updated = scenario.diiovi_osoby.map((r, i) => ({
-                              ...r,
-                              hravets: i === rIdx ? e.target.checked : false
-                            }));
+                            const updated = scenario.diiovi_osoby.map(
+                              (r, i) => ({
+                                ...r,
+                                hravets: i === rIdx ? e.target.checked : false
+                              })
+                            );
                             setScenario({ ...scenario, diiovi_osoby: updated });
                           }}
                           className="rounded-sm text-status-success focus:ring-0"
                         />
-                        <span>{ui(lang, 'm151')}{' '}</span>
+                        <span>{ui(lang, 'm151')} </span>
                       </label>
 
                       <button
                         onClick={() => {
                           setScenario({
                             ...scenario,
-                            diiovi_osoby: scenario.diiovi_osoby.filter((_, i) => i !== rIdx)
+                            diiovi_osoby: scenario.diiovi_osoby.filter(
+                              (_, i) => i !== rIdx
+                            )
                           });
                         }}
                         className="p-1 rounded-sm text-steel-400 hover:text-status-danger"
@@ -548,7 +685,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                     rows={2}
                     value={role.opys}
                     placeholder={ui(lang, 'm152')}
-                    onChange={e => {
+                    onChange={(e) => {
                       const updated = [...scenario.diiovi_osoby];
                       updated[rIdx].opys = e.target.value;
                       setScenario({ ...scenario, diiovi_osoby: updated });
@@ -574,7 +711,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                         : 'bg-obsidian-950 text-steel-300 hover:text-white border border-obsidian-800'
                     }`}
                   >
-                    {node.id}
+                    {stageLabel(scenario, node.id, lang)}
                   </button>
                 ))}
               </div>
@@ -584,24 +721,42 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                 className="im-secondary px-3 py-1.5 rounded-sm bg-obsidian-800 hover:bg-steel-700 text-status-success font-semibold flex items-center gap-1.5 shrink-0"
               >
                 <Plus className="w-3.5 h-3.5" />
-                {ui(lang, 'm153')}{' '}</button>
+                {ui(lang, 'm153')}{' '}
+              </button>
             </div>
             {scenario.vuzly[selectedNodeIdx] && (
               <div className="p-5 rounded-sm bg-obsidian-950 border border-obsidian-800 space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-3">
                     <span className="font-mono text-sm font-bold text-status-success">
-                      {ui(lang, 'm154')}{' '}</span>
-                    <input
-                      type="text"
-                      value={scenario.vuzly[selectedNodeIdx].id}
-                      onChange={e => {
-                        const updated = [...scenario.vuzly];
-                        updated[selectedNodeIdx].id = e.target.value;
-                        setScenario({ ...scenario, vuzly: updated });
-                      }}
-                      className="im-field w-20 font-mono font-bold bg-obsidian-850 border border-steel-700 rounded-sm p-1.5 text-center text-white"
-                    />
+                      {ui(lang, 'm154')}{' '}
+                    </span>
+                    <div className="space-y-2">
+                      <span className="badge">
+                        {stageLabel(
+                          scenario,
+                          scenario.vuzly[selectedNodeIdx].id,
+                          lang
+                        )}
+                      </span>
+                      <details>
+                        <summary className="text-xs cursor-pointer text-steel-300">
+                          {lang === 'uk'
+                            ? 'Технічний ID (JSON)'
+                            : 'Technical ID (JSON)'}
+                        </summary>
+                        <input
+                          type="text"
+                          value={scenario.vuzly[selectedNodeIdx].id}
+                          onChange={(e) => {
+                            const updated = [...scenario.vuzly];
+                            updated[selectedNodeIdx].id = e.target.value;
+                            setScenario({ ...scenario, vuzly: updated });
+                          }}
+                          className="im-field w-20 font-mono font-bold bg-obsidian-850 border border-steel-700 rounded-sm p-1.5 text-center text-white"
+                        />
+                      </details>
+                    </div>
                   </div>
 
                   <button
@@ -609,16 +764,18 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                     className="p-1 rounded-sm text-steel-400 hover:text-status-danger flex items-center gap-1"
                   >
                     <Trash2 className="w-4 h-4" />
-                    {ui(lang, 'm155')}{' '}</button>
+                    {ui(lang, 'm155')}{' '}
+                  </button>
                 </div>
 
                 <div>
                   <label className="block text-steel-300 font-bold mb-1">
-                    {ui(lang, 'm156')}{' '}</label>
+                    {ui(lang, 'm156')}{' '}
+                  </label>
                   <textarea
                     rows={2}
                     value={scenario.vuzly[selectedNodeIdx].tekst}
-                    onChange={e => {
+                    onChange={(e) => {
                       const updated = [...scenario.vuzly];
                       updated[selectedNodeIdx].tekst = e.target.value;
                       setScenario({ ...scenario, vuzly: updated });
@@ -629,11 +786,12 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
 
                 <div>
                   <label className="block text-steel-300 font-bold mb-1">
-                    {ui(lang, 'm157')}{' '}</label>
+                    {ui(lang, 'm157')}{' '}
+                  </label>
                   <input
                     type="text"
                     value={scenario.vuzly[selectedNodeIdx].zapytannia}
-                    onChange={e => {
+                    onChange={(e) => {
                       const updated = [...scenario.vuzly];
                       updated[selectedNodeIdx].zapytannia = e.target.value;
                       setScenario({ ...scenario, vuzly: updated });
@@ -643,72 +801,119 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                 </div>
                 <div className="space-y-4 pt-3 border-t border-obsidian-800">
                   <span className="font-bold text-steel-300 uppercase tracking-wider block">
-                    {ui(lang, 'm158')}{' '}</span>
+                    {ui(lang, 'm158')}{' '}
+                  </span>
 
                   {scenario.vuzly[selectedNodeIdx].varianty.map((v, vIdx) => (
-                    <div key={v.id} className="steel-panel p-4 rounded-sm bg-obsidian-850 border border-steel-700 space-y-3">
+                    <div
+                      key={v.id}
+                      className="steel-panel p-4 rounded-sm bg-obsidian-850 border border-steel-700 space-y-3"
+                    >
                       <div className="flex flex-wrap items-center justify-between gap-2 gap-3">
                         <div className="flex flex-wrap items-center gap-2">
-                          <input
-                            type="text"
-                            value={v.id}
-                            placeholder="ID (A, B...)"
-                            onChange={e => {
-                              const updated = [...scenario.vuzly];
-                              updated[selectedNodeIdx].varianty[vIdx].id = e.target.value;
-                              setScenario({ ...scenario, vuzly: updated });
-                            }}
-                            className="im-field w-16 font-mono font-bold bg-obsidian-950 border border-steel-700 rounded-sm p-1.5 text-center text-status-success"
-                          />
-                          <span className="text-steel-300">{ui(lang, 'm159')}{' '}</span>
-                          <input
-                            type="text"
+                          <div className="space-y-2">
+                            <span className="badge">
+                              {variantLabel(
+                                scenario,
+                                scenario.vuzly[selectedNodeIdx].id,
+                                v.id,
+                                lang
+                              )}
+                            </span>
+                            <details>
+                              <summary className="text-xs cursor-pointer text-steel-300">
+                                {lang === 'uk'
+                                  ? 'Технічний ID (JSON)'
+                                  : 'Technical ID (JSON)'}
+                              </summary>
+                              <input
+                                type="text"
+                                value={v.id}
+                                placeholder="ID (A, B...)"
+                                onChange={(e) => {
+                                  const updated = [...scenario.vuzly];
+                                  updated[selectedNodeIdx].varianty[vIdx].id =
+                                    e.target.value;
+                                  setScenario({ ...scenario, vuzly: updated });
+                                }}
+                                className="im-field w-16 font-mono font-bold bg-obsidian-950 border border-steel-700 rounded-sm p-1.5 text-center text-status-success"
+                              />
+                            </details>
+                          </div>
+                          <span className="text-steel-300">
+                            {ui(lang, 'm159')}{' '}
+                          </span>
+                          <select
                             value={v.nastupnyi_vuzol || ''}
-                            placeholder={ui(lang, 'm160')}
-                            onChange={e => {
+                            onChange={(e) => {
                               const updated = [...scenario.vuzly];
-                              updated[selectedNodeIdx].varianty[vIdx].nastupnyi_vuzol = e.target.value.trim() || null;
+                              updated[selectedNodeIdx].varianty[
+                                vIdx
+                              ].nastupnyi_vuzol = e.target.value.trim() || null;
                               setScenario({ ...scenario, vuzly: updated });
                             }}
                             className="im-field w-24 font-mono bg-obsidian-950 border border-steel-700 rounded-sm p-1.5 text-center text-status-warning"
-                          />
+                          >
+                            <option value="">
+                              {lang === 'uk' ? 'Завершення' : 'Finish'}
+                            </option>
+                            {scenario.vuzly.map((target) => (
+                              <option key={target.id} value={target.id}>
+                                {stageLabel(scenario, target.id, lang)}
+                              </option>
+                            ))}
+                          </select>
                         </div>
                         <div className="flex flex-wrap items-center gap-2 text-xs">
-                          <label className="text-steel-300">{ui(lang, 'm161')}{' '}</label>
+                          <label className="text-steel-300">
+                            {ui(lang, 'm161')}{' '}
+                          </label>
                           <input
                             type="number"
                             min={-2}
                             max={2}
                             value={v.baly.dobrochesnist}
-                            onChange={e => {
+                            onChange={(e) => {
                               const updated = [...scenario.vuzly];
-                              updated[selectedNodeIdx].varianty[vIdx].baly.dobrochesnist = parseInt(e.target.value) || 0;
+                              updated[selectedNodeIdx].varianty[
+                                vIdx
+                              ].baly.dobrochesnist =
+                                parseInt(e.target.value) || 0;
                               setScenario({ ...scenario, vuzly: updated });
                             }}
                             className="im-field w-12 bg-obsidian-950 border border-steel-700 rounded-sm p-1 text-center font-bold text-status-success"
                           />
-                          <label className="text-steel-300">{ui(lang, 'm162')}{' '}</label>
+                          <label className="text-steel-300">
+                            {ui(lang, 'm162')}{' '}
+                          </label>
                           <input
                             type="number"
                             min={-2}
                             max={2}
                             value={v.baly.efektyvnist}
-                            onChange={e => {
+                            onChange={(e) => {
                               const updated = [...scenario.vuzly];
-                              updated[selectedNodeIdx].varianty[vIdx].baly.efektyvnist = parseInt(e.target.value) || 0;
+                              updated[selectedNodeIdx].varianty[
+                                vIdx
+                              ].baly.efektyvnist =
+                                parseInt(e.target.value) || 0;
                               setScenario({ ...scenario, vuzly: updated });
                             }}
                             className="im-field w-12 bg-obsidian-950 border border-steel-700 rounded-sm p-1 text-center font-bold text-status-warning"
                           />
-                          <label className="text-steel-300">{ui(lang, 'm163')}{' '}</label>
+                          <label className="text-steel-300">
+                            {ui(lang, 'm163')}{' '}
+                          </label>
                           <input
                             type="number"
                             min={-2}
                             max={2}
                             value={v.baly.dovira}
-                            onChange={e => {
+                            onChange={(e) => {
                               const updated = [...scenario.vuzly];
-                              updated[selectedNodeIdx].varianty[vIdx].baly.dovira = parseInt(e.target.value) || 0;
+                              updated[selectedNodeIdx].varianty[
+                                vIdx
+                              ].baly.dovira = parseInt(e.target.value) || 0;
                               setScenario({ ...scenario, vuzly: updated });
                             }}
                             className="im-field w-12 bg-obsidian-950 border border-steel-700 rounded-sm p-1 text-center font-bold text-tactical-ice"
@@ -720,9 +925,10 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                         rows={2}
                         value={v.tekst}
                         placeholder={ui(lang, 'm164')}
-                        onChange={e => {
+                        onChange={(e) => {
                           const updated = [...scenario.vuzly];
-                          updated[selectedNodeIdx].varianty[vIdx].tekst = e.target.value;
+                          updated[selectedNodeIdx].varianty[vIdx].tekst =
+                            e.target.value;
                           setScenario({ ...scenario, vuzly: updated });
                         }}
                         className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2 text-white"
@@ -733,9 +939,11 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                           type="text"
                           value={v.naslidky.odrazu}
                           placeholder={ui(lang, 'm165')}
-                          onChange={e => {
+                          onChange={(e) => {
                             const updated = [...scenario.vuzly];
-                            updated[selectedNodeIdx].varianty[vIdx].naslidky.odrazu = e.target.value;
+                            updated[selectedNodeIdx].varianty[
+                              vIdx
+                            ].naslidky.odrazu = e.target.value;
                             setScenario({ ...scenario, vuzly: updated });
                           }}
                           className="im-field bg-obsidian-950 border border-steel-700 rounded-sm p-1.5 text-steel-100"
@@ -744,9 +952,11 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                           type="text"
                           value={v.naslidky.vidkladeni}
                           placeholder={ui(lang, 'm166')}
-                          onChange={e => {
+                          onChange={(e) => {
                             const updated = [...scenario.vuzly];
-                            updated[selectedNodeIdx].varianty[vIdx].naslidky.vidkladeni = e.target.value;
+                            updated[selectedNodeIdx].varianty[
+                              vIdx
+                            ].naslidky.vidkladeni = e.target.value;
                             setScenario({ ...scenario, vuzly: updated });
                           }}
                           className="im-field bg-obsidian-950 border border-steel-700 rounded-sm p-1.5 text-steel-100"
@@ -762,33 +972,50 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
         {activeTab === 'verification' && (
           <div className="space-y-4 text-xs">
             <h3 className="im-section-title font-bold text-white uppercase tracking-wider">
-              {ui(lang, 'm167')}{' '}</h3>
+              {ui(lang, 'm167')}{' '}
+            </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm168')}{' '}</label>
+                <label className="block text-steel-300 font-bold mb-1">
+                  {ui(lang, 'm168')}{' '}
+                </label>
                 <select
                   value={scenario.perevirka_zmistu.fakhivets_dzpk}
-                  onChange={e => setScenario({
-                    ...scenario,
-                    perevirka_zmistu: { ...scenario.perevirka_zmistu, fakhivets_dzpk: e.target.value as any }
-                  })}
+                  onChange={(e) =>
+                    setScenario({
+                      ...scenario,
+                      perevirka_zmistu: {
+                        ...scenario.perevirka_zmistu,
+                        fakhivets_dzpk: e.target.value as any
+                      }
+                    })
+                  }
                   className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2 text-white"
                 >
-                  <option value="не проведено">{ui(lang, 'm169')}{' '}</option>
-                  <option value="проведено">{ui(lang, 'm170')}{' '}</option>
-                  <option value="проведено із зауваженнями">{ui(lang, 'm171')}{' '}</option>
+                  <option value="не проведено">{ui(lang, 'm169')} </option>
+                  <option value="проведено">{ui(lang, 'm170')} </option>
+                  <option value="проведено із зауваженнями">
+                    {ui(lang, 'm171')}{' '}
+                  </option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm172')}{' '}</label>
+                <label className="block text-steel-300 font-bold mb-1">
+                  {ui(lang, 'm172')}{' '}
+                </label>
                 <input
                   type="text"
                   value={scenario.perevirka_zmistu.khto || ''}
-                  onChange={e => setScenario({
-                    ...scenario,
-                    perevirka_zmistu: { ...scenario.perevirka_zmistu, khto: e.target.value || null }
-                  })}
+                  onChange={(e) =>
+                    setScenario({
+                      ...scenario,
+                      perevirka_zmistu: {
+                        ...scenario.perevirka_zmistu,
+                        khto: e.target.value || null
+                      }
+                    })
+                  }
                   placeholder={ui(lang, 'm173')}
                   className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2 text-white"
                 />
@@ -796,56 +1023,79 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
             </div>
 
             <div>
-              <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm174')}{' '}</label>
+              <label className="block text-steel-300 font-bold mb-1">
+                {ui(lang, 'm174')}{' '}
+              </label>
               <textarea
                 rows={2}
                 value={scenario.perevirka_zmistu.prymitka}
-                onChange={e => setScenario({
-                  ...scenario,
-                  perevirka_zmistu: { ...scenario.perevirka_zmistu, prymitka: e.target.value }
-                })}
+                onChange={(e) =>
+                  setScenario({
+                    ...scenario,
+                    perevirka_zmistu: {
+                      ...scenario.perevirka_zmistu,
+                      prymitka: e.target.value
+                    }
+                  })
+                }
                 className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2 text-white"
               />
             </div>
 
             <h3 className="im-section-title font-bold text-white uppercase tracking-wider pt-4 border-t border-obsidian-800">
-              {ui(lang, 'm175')}{' '}</h3>
+              {ui(lang, 'm175')}{' '}
+            </h3>
             <div>
-              <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm176')}{' '}</label>
+              <label className="block text-steel-300 font-bold mb-1">
+                {ui(lang, 'm176')}{' '}
+              </label>
               <input
                 type="text"
                 value={scenario.shi.instrument || ''}
-                onChange={e => setScenario({
-                  ...scenario,
-                  shi: { ...scenario.shi, instrument: e.target.value || null }
-                })}
+                onChange={(e) =>
+                  setScenario({
+                    ...scenario,
+                    shi: { ...scenario.shi, instrument: e.target.value || null }
+                  })
+                }
                 placeholder="Claude (Anthropic) / Antigravity"
                 className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2 text-white"
               />
             </div>
 
             <div>
-              <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm177')}{' '}</label>
+              <label className="block text-steel-300 font-bold mb-1">
+                {ui(lang, 'm177')}{' '}
+              </label>
               <textarea
                 rows={2}
                 value={scenario.shi.shcho_zrobleno}
-                onChange={e => setScenario({
-                  ...scenario,
-                  shi: { ...scenario.shi, shcho_zrobleno: e.target.value }
-                })}
+                onChange={(e) =>
+                  setScenario({
+                    ...scenario,
+                    shi: { ...scenario.shi, shcho_zrobleno: e.target.value }
+                  })
+                }
                 className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2 text-white"
               />
             </div>
 
             <div>
-              <label className="block text-steel-300 font-bold mb-1">{ui(lang, 'm178')}{' '}</label>
+              <label className="block text-steel-300 font-bold mb-1">
+                {ui(lang, 'm178')}{' '}
+              </label>
               <textarea
                 rows={2}
                 value={scenario.shi.perevirka_liudynoiu}
-                onChange={e => setScenario({
-                  ...scenario,
-                  shi: { ...scenario.shi, perevirka_liudynoiu: e.target.value }
-                })}
+                onChange={(e) =>
+                  setScenario({
+                    ...scenario,
+                    shi: {
+                      ...scenario.shi,
+                      perevirka_liudynoiu: e.target.value
+                    }
+                  })
+                }
                 className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2 text-white"
               />
             </div>
@@ -854,8 +1104,10 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
         {activeTab === 'graph' && (
           <div className="space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-steel-300">
-              <span>{ui(lang, 'm179')}{' '}</span>
-              <span className="font-mono">{scenario.vuzly.length} {ui(lang, 'm180')}{' '}</span>
+              <span>{ui(lang, 'm179')} </span>
+              <span className="font-mono">
+                {scenario.vuzly.length} {ui(lang, 'm180')}{' '}
+              </span>
             </div>
             <DecisionTreeSvg scenario={scenario} />
           </div>

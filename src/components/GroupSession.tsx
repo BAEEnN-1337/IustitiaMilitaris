@@ -1,3 +1,4 @@
+import { caseLabel, stageLabel, optionLabel, variantLabel, choiceLabel, scenarioStageCount } from '../i18n/display';
 import { CaseMetadata } from './CaseMetadata';
 import {
   Dossier,
@@ -106,7 +107,7 @@ export function GroupSession({
             ws.send(
               JSON.stringify({
                 type: 'CREATE_ROOM',
-                scenarioId: initialScenario?.id || 'S06'
+                scenarioId: initialScenario?.id || allScenarios[0]?.id
               })
             );
           else {
@@ -241,7 +242,13 @@ export function GroupSession({
           >
             <div className="flex justify-between gap-3">
               <p className="text-sm">
-                <strong className="text-justice-gold">{v.id}</strong> · {v.tekst}
+                <strong className="text-justice-gold">
+                  {optionLabel(
+                    items.findIndex((item) => item.id === v.id),
+                    lang
+                  )}
+                </strong>{' '}
+                · {v.tekst}
               </p>
               <span className="badge shrink-0 font-mono">
                 {percent}% · {count}
@@ -259,7 +266,11 @@ export function GroupSession({
                 className={selected ? 'action-primary' : 'action'}
                 onClick={() => send('DISCUSS', v.id)}
               >
-                {t.discuss} {v.id}
+                {t.discuss}{' '}
+                {optionLabel(
+                  items.findIndex((item) => item.id === v.id),
+                  lang
+                )}
                 {v.id === leader?.id ? ` · ${t.leader}` : ''}
               </button>
             )}
@@ -268,44 +279,44 @@ export function GroupSession({
       })}
     </div>
   );
-  const scenarioCards = (team: boolean) => (
+  const scenarioCards = () => (
     <div
       className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
-      data-testid={team ? 'landing-team-grid' : 'landing-examples-grid'}
+      data-testid="landing-team-grid"
     >
-      {allScenarios
-        .filter((s) => ['S06', 'S07', 'S08'].includes(s.id) === team)
-        .map((source) => {
-          const s = localizeScenario(source, lang);
-          return (
-            <article
-              key={s.id}
-              className="surface-muted h-full flex flex-col gap-4"
-            >
-              <div className="space-y-3">
-                <div className="flex flex-wrap gap-2">
-                  <span className="badge">{s.id}</span>
-                  <span className="badge">
-                    {themes[lang][s.tema as keyof typeof themes.en] || s.tema}
-                  </span>
-                  <span className="badge">
-                    {s.tryvalist_khv} {t.minutes} · {s.vuzly.length} {t.stages}
-                  </span>
-                </div>
-                <h4 className="im-scenario-title font-serif font-bold text-white leading-relaxed">
-                  {s.nazva}
-                </h4>
+      {allScenarios.map((source) => {
+        const s = localizeScenario(source, lang);
+        return (
+          <article
+            key={s.id}
+            className="surface-muted h-full flex flex-col gap-4"
+          >
+            <div className="space-y-3">
+              <div className="flex flex-wrap gap-2">
+                <span className="badge">{caseLabel(s.id, lang)}</span>
+                <span className="badge">
+                  {themes[lang][s.tema as keyof typeof themes.en] || s.tema}
+                </span>
+                <span className="badge">
+                  {s.tryvalist_khv} {t.minutes} · {scenarioStageCount(s)} {t.stages}
+                </span>
               </div>
-              <div className="mt-auto"><CaseMetadata scenario={s} lang={lang} /></div>
-              <a
-                className="action w-full whitespace-nowrap border-steel-700 text-steel-300 hover:border-steel-600 hover:text-steel-100"
-                href={`/classroom/host/new?scenario=${s.id}`}
-              >
-                {t.host} →
-              </a>
-            </article>
-          );
-        })}
+              <h4 className="im-scenario-title font-serif font-bold text-white leading-relaxed">
+                {s.nazva}
+              </h4>
+            </div>
+            <div className="mt-auto">
+              <CaseMetadata scenario={s} lang={lang} />
+            </div>
+            <a
+              className="action w-full whitespace-nowrap border-steel-700 text-steel-300 hover:border-steel-600 hover:text-steel-100"
+              href={`/classroom/host/new?scenario=${s.id}`}
+            >
+              {t.host} →
+            </a>
+          </article>
+        );
+      })}
     </div>
   );
   return (
@@ -320,7 +331,9 @@ export function GroupSession({
       {!joining && (
         <>
           <header>
-            <h1 className="im-title font-serif text-2xl font-bold text-white">{t.title}</h1>
+            <h1 className="im-title font-serif text-2xl font-bold text-white">
+              {t.title}
+            </h1>
             <p className="mt-2 text-sm text-steel-300">{t.privacy}</p>
           </header>
           <form
@@ -334,7 +347,9 @@ export function GroupSession({
             }}
           >
             <div className="space-y-1">
-              <h2 className="im-title font-serif text-xl font-bold">{t.participant}</h2>
+              <h2 className="im-title font-serif text-xl font-bold">
+                {t.participant}
+              </h2>
               <p className="text-sm text-steel-300">{t.joinHint}</p>
             </div>
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full lg:w-auto">
@@ -360,17 +375,15 @@ export function GroupSession({
             </div>
           </form>
           <div className="surface space-y-6">
-            <h2 className="im-title font-serif text-xl font-bold">{t.hostTitle}</h2>
+            <h2 className="im-title font-serif text-xl font-bold">
+              {t.hostTitle}
+            </h2>
             <section className="space-y-3" aria-label={t.team}>
-              <h3 className="im-section-title font-semibold text-steel-300">{t.team}</h3>
-              {scenarioCards(true)}
+              <h3 className="im-section-title font-semibold text-steel-300">
+                {t.team}
+              </h3>
+              {scenarioCards()}
             </section>
-            <details className="border-t border-steel-700 pt-4">
-              <summary className="cursor-pointer rounded-sm py-2 font-semibold text-steel-300 hover:text-white">
-                {t.examples} (5)
-              </summary>
-              <div className="mt-3">{scenarioCards(false)}</div>
-            </details>
           </div>
         </>
       )}
@@ -461,19 +474,32 @@ export function GroupSession({
           )}
           {room.phase === 'finished' ? (
             <div className="surface space-y-5 animate-fadeIn">
-              <h2 className="im-title font-serif text-xl font-bold">{t.summary}</h2>
+              <h2 className="im-title font-serif text-xl font-bold">
+                {t.summary}
+              </h2>
               <div className="w-full space-y-5">
                 <div className="surface-muted space-y-3">
                   <h3 className="im-section-title font-semibold">{t.path}</h3>
                   <ol className="flex flex-wrap gap-2">
                     {room.history.map((h, i) => (
                       <li className="badge font-mono" key={i}>
-                        {h.nodeId} → {h.selectedVariantId}
+                        {choiceLabel(
+                          scenario,
+                          h.nodeId,
+                          h.selectedVariantId,
+                          lang
+                        )}{' '}
+                        —{' '}
+                        {
+                          scenario.vuzly
+                            .find((n) => n.id === h.nodeId)
+                            ?.varianty.find((v) => v.id === h.selectedVariantId)
+                            ?.tekst
+                        }
                       </li>
                     ))}
                   </ol>
                 </div>
-
               </div>
               <p className="notice">
                 {t.mostDivided}:{' '}
@@ -483,7 +509,7 @@ export function GroupSession({
                       h.discussionIndex ===
                       Math.max(...room.history.map((h) => h.discussionIndex))
                   )
-                  .map((h) => h.nodeId)
+                  .map((h) => stageLabel(scenario, h.nodeId, lang))
                   .join(', ')}
               </p>
               <DecisionProfile
@@ -499,8 +525,13 @@ export function GroupSession({
                 return (
                   <details className="surface-muted" key={i} open>
                     <summary className="cursor-pointer font-semibold">
-                      {h.nodeId} → {h.selectedVariantId} · {t.index}:{' '}
-                      {h.discussionIndex}
+                      {choiceLabel(
+                        scenario,
+                        h.nodeId,
+                        h.selectedVariantId,
+                        lang
+                      )}{' '}
+                      · {t.index}: {h.discussionIndex}
                     </summary>
                     <div className="mt-4">
                       {chart(h.votes, n?.varianty || [])}
@@ -534,7 +565,9 @@ export function GroupSession({
                   <div className="grid gap-3 sm:grid-cols-2">
                     {scenario.diiovi_osoby.map((r) => (
                       <div className="surface-muted" key={r.id}>
-                        <h3 className="im-section-title font-bold text-justice-gold">{r.rol}</h3>
+                        <h3 className="im-section-title font-bold text-justice-gold">
+                          {r.rol}
+                        </h3>
                         <p className="mt-2 text-sm text-steel-300">{r.opys}</p>
                       </div>
                     ))}
@@ -567,7 +600,9 @@ export function GroupSession({
                     className="surface space-y-4 animate-fadeIn"
                     key={node.id}
                   >
-                    <span className="badge font-mono">{node.id}</span>
+                    <span className="badge font-mono">
+                      {stageLabel(scenario, node.id, lang)}
+                    </span>
                     <h2 className="im-title font-serif text-xl font-bold text-white">
                       {node.zapytannia}
                     </h2>
@@ -648,7 +683,9 @@ export function GroupSession({
                                 send('SUBMIT_VOTE', v.id);
                               }}
                             >
-                              <span className="badge font-mono">{v.id}</span>
+                              <span className="badge font-mono">
+                                {variantLabel(scenario, node.id, v.id, lang)}
+                              </span>
                               {v.tekst}
                             </button>
                           ))}
@@ -666,7 +703,9 @@ export function GroupSession({
                   )}
                   {['results', 'feedback'].includes(room.phase) && (
                     <div className="surface space-y-5">
-                      <h2 className="im-title font-serif font-bold text-xl">{t.results}</h2>
+                      <h2 className="im-title font-serif font-bold text-xl">
+                        {t.results}
+                      </h2>
                       <p className="notice">
                         {t.index}: <strong>{room.discussionIndex}</strong>
                         {room.discussionIndex >= 0.8 && (
@@ -689,7 +728,8 @@ export function GroupSession({
                       key={variant.id}
                     >
                       <h2 className="im-title font-serif text-lg font-bold">
-                        {variant.id} · {variant.tekst}
+                        {variantLabel(scenario, node.id, variant.id, lang)} ·{' '}
+                        {variant.tekst}
                       </h2>
                       <div className="grid gap-4 sm:grid-cols-2">
                         <Consequence title={t.immediate}>

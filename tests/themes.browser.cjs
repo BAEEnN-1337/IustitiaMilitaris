@@ -1,3 +1,4 @@
+const { route: caseRoute } = require('./scenarios.cjs');
 const { chromium } = require('playwright');
 const { spawn } = require('node:child_process');
 const fs = require('node:fs/promises'),
@@ -7,8 +8,8 @@ const fs = require('node:fs/promises'),
 const root = path.resolve(__dirname, '..'),
   labels = require(root + '/src/i18n/design.json'),
   group = require(root + '/src/i18n/group.json');
-const en = require(root + '/src/i18n/scenarios.en.json').S06,
-  uk = require(root + '/stsenarii/S06-reviziia-na-skladi.json');
+const en = require(root + '/src/i18n/scenarios.en.json').S01,
+  uk = require(root + '/stsenarii/S01-spravedlyvist-rozpodilu.json');
 function contrast(a, b) {
   const rgb = (c) =>
     c
@@ -95,9 +96,9 @@ function contrast(a, b) {
           for (const route of [
             '/auth',
             '/classroom',
-            '/builder/S06',
+            '/builder/S01',
             '/norms',
-            '/scenarios/S06'
+            '/scenarios/S01'
           ]) {
             await p.goto(base + route);
             assert.equal(
@@ -169,7 +170,7 @@ function contrast(a, b) {
               exact: true
             })
             .click();
-          assert.equal(await p.getByTestId('value-conflict').count(), 2);
+          assert.equal(await p.getByTestId('value-conflict').count(), uk.tsinnosti_v_konflikti.length);
           assert.equal(await p.getByTestId('dossier').count(), 1);
           await check();
           await p
@@ -182,7 +183,7 @@ function contrast(a, b) {
             })
             .click();
           let node = (lang === 'en' ? en : uk).vuzly[0];
-          for (const id of ['A', 'E1', 'J1']) {
+          for (const { variantId: id } of caseRoute(uk)) {
             await p.getByTestId('stepper').waitFor();
             const v = node.varianty.find((v) => v.id === id);
             await p.getByText(v.tekst, { exact: true }).click();
@@ -231,7 +232,7 @@ function contrast(a, b) {
             path: `${root}/test-results/themes/summary-${theme}-${lang}-${width}.png`,
             fullPage: true
           });
-          await p.goto(base + '/classroom/host/new?scenario=S06');
+          await p.goto(base + '/classroom/host/new?scenario=S01');
           await p
             .getByRole('button', { name: group[lang].start, exact: true })
             .waitFor();
@@ -256,7 +257,7 @@ function contrast(a, b) {
         }
     const c = await browser.newContext({ reducedMotion: 'reduce' }),
       p = await c.newPage();
-    await p.goto(base + '/scenarios/S06');
+    await p.goto(base + '/scenarios/S01');
     await p.evaluate(() => navigator.serviceWorker.ready);
     await p.reload();
     await p.waitForFunction(() => !!navigator.serviceWorker.controller);

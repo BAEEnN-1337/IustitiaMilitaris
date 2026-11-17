@@ -1,14 +1,15 @@
-import React from "react";
-import { Scale, Crosshair, Clock3 } from "lucide-react";
-import { Language, translations } from "../i18n";
-import labels from "../i18n/design.json";
-import type { Scenario } from "../types";
+import { caseLabel, stageLabel } from '../i18n/display';
+import React from 'react';
+import { Scale, Crosshair, Clock3 } from 'lucide-react';
+import { Language, translations } from '../i18n';
+import labels from '../i18n/design.json';
+import type { Scenario } from '../types';
 export function Dossier({
   scenario,
   lang,
   nodeId,
   index = 1,
-  children,
+  children
 }: {
   scenario: Scenario;
   lang: Language;
@@ -22,8 +23,10 @@ export function Dossier({
     <section className="dossier hud-crosshair space-y-3" data-testid="dossier">
       <div className="flex flex-wrap gap-2">
         <span className="badge font-mono">
-          {t.case} #{scenario.id} · {t.stage} {index}
-          {nodeId ? ` · ${nodeId}` : ""}
+          {caseLabel(scenario.id, lang)} ·{' '}
+          {nodeId
+            ? stageLabel(scenario, nodeId, lang)
+            : stageLabel(scenario, scenario.pochatkovyi_vuzol, lang)}
         </span>
         {role && (
           <span className="badge !text-justice-gold">
@@ -38,7 +41,7 @@ export function Dossier({
 export function ValueConflict({
   a,
   b,
-  explanation,
+  explanation
 }: {
   a: string;
   b: string;
@@ -59,7 +62,7 @@ export function StageStepper({
   scenario,
   nodeId,
   completed,
-  lang,
+  lang
 }: {
   scenario: Scenario;
   nodeId: string;
@@ -76,8 +79,8 @@ export function StageStepper({
           Math.max(
             0,
             ...node.varianty.map((v) =>
-              v.nastupnyi_vuzol ? depth(v.nastupnyi_vuzol, next) : 0,
-            ),
+              v.nastupnyi_vuzol ? depth(v.nastupnyi_vuzol, next) : 0
+            )
           )
       : 0;
   }
@@ -91,11 +94,11 @@ export function StageStepper({
       {Array.from({ length: total }, (_, i) => (
         <li
           key={i}
-          aria-current={i === completed ? "step" : undefined}
-          className={`badge ${i === completed ? "!border-justice-gold !text-justice-gold" : ""}`}
+          aria-current={i === completed ? 'step' : undefined}
+          className={`badge ${i === completed ? '!border-justice-gold !text-justice-gold' : ''}`}
         >
           <span>
-            {i + 1}.{" "}
+            {i + 1}.{' '}
             {i < completed
               ? t.completed
               : i === completed
@@ -110,7 +113,7 @@ export function StageStepper({
 export function Consequence({
   delayed = false,
   title,
-  children,
+  children
 }: {
   delayed?: boolean;
   title: string;
@@ -119,10 +122,10 @@ export function Consequence({
   const Icon = delayed ? Clock3 : Crosshair;
   return (
     <section
-      className={`surface-muted space-y-2 consequence ${delayed ? "consequence-delayed" : ""}`}
+      className={`surface-muted space-y-2 consequence ${delayed ? 'consequence-delayed' : ''}`}
     >
       <h3
-        className={`im-section-title flex items-center gap-2 text-sm font-bold ${delayed ? "text-status-warning" : "text-tactical-ice"}`}
+        className={`im-section-title flex items-center gap-2 text-sm font-bold ${delayed ? 'text-status-warning' : 'text-tactical-ice'}`}
       >
         <Icon size={18} aria-hidden="true" />
         {title}

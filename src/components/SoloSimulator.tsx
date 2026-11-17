@@ -1,3 +1,4 @@
+import { caseLabel, stageLabel, variantLabel } from '../i18n/display';
 import {
   Dossier,
   ValueConflict,
@@ -258,7 +259,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
       <div className="flex flex-wrap items-center justify-between gap-2 pb-4 mb-6 border-b border-obsidian-800">
         <div className="flex flex-wrap items-center gap-2">
           <span className="im-tag font-mono text-xs font-bold px-2 py-0.5 rounded-sm bg-obsidian-800 text-justice-gold border border-steel-700">
-            {scenario.id}
+            {caseLabel(scenario.id, lang)}
           </span>
           <span className="text-xs text-steel-300 font-medium">
             {scenario.nazva}
@@ -375,7 +376,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-steel-300">
               <span className="im-tag px-2.5 py-1 rounded-sm bg-obsidian-800 text-justice-gold border border-justice-gold/30 font-mono">
-                {currentNode.id}
+                {stageLabel(scenario, currentNode.id, lang)}
               </span>
               <span>
                 {t.step.stepLabel} {pathway.length + 1}
@@ -439,7 +440,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                             : 'bg-obsidian-800 text-steel-300 border border-steel-700'
                         }`}
                       >
-                        {v.id}
+                        {variantLabel(scenario, currentNodeId, v.id, lang)}
                       </span>
                       <div className="text-sm sm:text-base leading-relaxed">
                         {v.tekst}
@@ -485,7 +486,13 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 {t.feedback.title}
               </span>
               <span className="im-tag font-mono text-xs font-bold px-2 py-0.5 rounded-sm bg-justice-gold/20 text-justice-gold border border-justice-gold/30">
-                {ui(lang, 'm215')} {selectedVariant.id}
+                {lang === 'uk' ? 'Варіант' : 'Option'}{' '}
+                {variantLabel(
+                  scenario,
+                  currentNodeId,
+                  selectedVariant.id,
+                  lang
+                )}
               </span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -587,10 +594,11 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 >
                   <div>
                     <span className="font-mono font-bold text-justice-gold mr-2">
-                      {ui(lang, 'm217')} {p.nodeId}
+                      {stageLabel(scenario, p.nodeId, lang)}
                     </span>
                     <span className="font-semibold text-white">
-                      {ui(lang, 'm218')} {p.variant.id}:
+                      {lang === 'uk' ? 'Варіант' : 'Option'}{' '}
+                      {variantLabel(scenario, p.nodeId, p.variant.id, lang)}:
                     </span>
                     <p className="text-steel-300 mt-1">{p.variant.tekst}</p>
                   </div>
