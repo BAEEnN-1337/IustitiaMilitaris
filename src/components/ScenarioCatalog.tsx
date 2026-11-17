@@ -103,8 +103,8 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
       >
         <div className="scenario-card-content flex flex-1 flex-col p-5 sm:p-6 gap-0">
           <div className="scenario-card-description space-y-3.5">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex flex-wrap items-center gap-2">
+            <div className="card-top-meta">
+              <div className="card-top-meta-tags">
                 <span
                   className={`im-tag font-mono text-xs font-bold px-2.5 py-1 rounded-sm border ${
                     isTeam
@@ -119,21 +119,9 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
                 </span>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 text-xs text-steel-300">
-                <span
-                  className="flex items-center gap-1"
-                  title={ui(lang, 'm192')}
-                >
-                  <Clock className="w-3.5 h-3.5 text-steel-400" />
-                  {s.tryvalist_khv} {t.catalog.minutes}
-                </span>
-                <span
-                  className="flex items-center gap-1"
-                  title={ui(lang, 'm193')}
-                >
-                  <Layers className="w-3.5 h-3.5 text-steel-400" />
-                  {stageCount} {t.catalog.stagesCount}
-                </span>
+              <div className="card-top-meta-time text-steel-300">
+                <Clock aria-hidden="true" />
+                <span>{s.tryvalist_khv} {t.catalog.minutes} · {stageCount} {t.catalog.stagesCount}</span>
               </div>
             </div>
             <div className="scenario-card-copy">

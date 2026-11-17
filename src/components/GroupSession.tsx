@@ -292,12 +292,12 @@ export function GroupSession({
             className="surface-muted h-full flex flex-col gap-4"
           >
             <div className="space-y-3">
-              <div className="flex flex-wrap gap-2">
-                <span className="badge">{caseLabel(s.id, lang)}</span>
+              <div className="card-top-meta">
+                <div className="card-top-meta-tags"><span className="badge">{caseLabel(s.id, lang)}</span>
                 <span className="badge">
                   {themes[lang][s.tema as keyof typeof themes.en] || s.tema}
                 </span>
-                <span className="badge">
+                </div><span className="card-top-meta-time text-steel-300">
                   {s.tryvalist_khv} {t.minutes} · {scenarioStageCount(s)} {t.stages}
                 </span>
               </div>
