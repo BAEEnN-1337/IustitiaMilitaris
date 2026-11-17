@@ -236,12 +236,12 @@ export function GroupSession({
           variant?.id === v.id || (!variant && leader?.id === v.id);
         return (
           <article
-            className={`surface-muted space-y-3 ${selected ? '!border-emerald-500/40' : ''}`}
+            className={`surface-muted space-y-3 ${selected ? '!border-status-success/40' : ''}`}
             key={v.id}
           >
             <div className="flex justify-between gap-3">
               <p className="text-sm">
-                <strong className="text-emerald-300">{v.id}</strong> · {v.tekst}
+                <strong className="text-status-success">{v.id}</strong> · {v.tekst}
               </p>
               <span className="badge shrink-0 font-mono">
                 {percent}% · {count}
@@ -292,12 +292,12 @@ export function GroupSession({
                     {s.tryvalist_khv} {t.minutes} · {s.vuzly.length} {t.stages}
                   </span>
                 </div>
-                <h4 className="font-bold text-white leading-relaxed">
+                <h4 className="im-scenario-title font-serif font-bold text-white leading-relaxed">
                   {s.nazva}
                 </h4>
               </div>
               <a
-                className="action w-full"
+                className="action-primary w-full"
                 href={`/classroom/host/new?scenario=${s.id}`}
               >
                 {t.host} →
@@ -319,8 +319,8 @@ export function GroupSession({
       {!joining && (
         <>
           <header>
-            <h1 className="text-2xl font-bold text-white">{t.title}</h1>
-            <p className="mt-2 text-sm text-slate-400">{t.privacy}</p>
+            <h1 className="im-title font-serif text-2xl font-bold text-white">{t.title}</h1>
+            <p className="mt-2 text-sm text-steel-300">{t.privacy}</p>
           </header>
           <form
             className="surface flex flex-col lg:flex-row lg:items-center justify-between gap-5"
@@ -333,14 +333,14 @@ export function GroupSession({
             }}
           >
             <div className="space-y-1">
-              <h2 className="text-xl font-bold">{t.participant}</h2>
-              <p className="text-sm text-slate-400">{t.joinHint}</p>
+              <h2 className="im-title font-serif text-xl font-bold">{t.participant}</h2>
+              <p className="text-sm text-steel-300">{t.joinHint}</p>
             </div>
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full lg:w-auto">
               <label className="block flex-1 sm:flex-none">
                 <span className="sr-only">{t.code}</span>
                 <input
-                  className="field h-12 py-2 text-lg text-center tracking-widest font-mono sm:w-48"
+                  className="im-field field h-12 py-2 text-lg text-center tracking-widest font-mono sm:w-48"
                   inputMode="numeric"
                   maxLength={6}
                   pattern="[0-9]{6}"
@@ -359,13 +359,13 @@ export function GroupSession({
             </div>
           </form>
           <div className="surface space-y-6">
-            <h2 className="text-xl font-bold">{t.hostTitle}</h2>
+            <h2 className="im-title font-serif text-xl font-bold">{t.hostTitle}</h2>
             <section className="space-y-3" aria-label={t.team}>
-              <h3 className="font-semibold text-slate-300">{t.team}</h3>
+              <h3 className="im-section-title font-semibold text-steel-300">{t.team}</h3>
               {scenarioCards(true)}
             </section>
-            <details className="border-t border-navy-700 pt-4">
-              <summary className="cursor-pointer rounded-lg py-2 font-semibold text-slate-300 hover:text-white">
+            <details className="border-t border-steel-700 pt-4">
+              <summary className="cursor-pointer rounded-sm py-2 font-semibold text-steel-300 hover:text-white">
                 {t.examples} (5)
               </summary>
               <div className="mt-3">{scenarioCards(false)}</div>
@@ -395,7 +395,7 @@ export function GroupSession({
                     : room.history.length + depth(node.id)}
                 </span>
               </div>
-              <h1 className="text-xl sm:text-2xl font-bold text-white">
+              <h1 className="im-title font-serif text-xl sm:text-2xl font-bold text-white">
                 {scenario.nazva}
               </h1>
             </div>
@@ -420,7 +420,7 @@ export function GroupSession({
             <div className="surface flex flex-wrap items-center gap-5">
               {qr && (
                 <img
-                  className="rounded-lg border border-navy-700"
+                  className="rounded-sm border border-steel-700"
                   src={qr}
                   alt={link}
                   width={144}
@@ -429,7 +429,7 @@ export function GroupSession({
               )}
               <div className="space-y-3 flex-1">
                 <a
-                  className="block text-sm text-cyan-300 break-all"
+                  className="block text-sm text-tactical-ice break-all"
                   href={link}
                 >
                   {link}
@@ -460,10 +460,10 @@ export function GroupSession({
           )}
           {room.phase === 'finished' ? (
             <div className="surface space-y-5 animate-fadeIn">
-              <h2 className="text-xl font-bold">{t.summary}</h2>
+              <h2 className="im-title font-serif text-xl font-bold">{t.summary}</h2>
               <div className="grid gap-5 md:grid-cols-2 items-start">
                 <div className="surface-muted space-y-3">
-                  <h3 className="font-semibold">{t.path}</h3>
+                  <h3 className="im-section-title font-semibold">{t.path}</h3>
                   <ol className="flex flex-wrap gap-2">
                     {room.history.map((h, i) => (
                       <li className="badge font-mono" key={i}>
@@ -526,7 +526,7 @@ export function GroupSession({
                   </details>
                 );
               })}
-              <h3 className="font-bold">
+              <h3 className="im-section-title font-bold">
                 {translations[lang].reflection.applicabilityTitle}
               </h3>
               <p>{scenario.zastosovnist}</p>
@@ -540,10 +540,10 @@ export function GroupSession({
             <>
               {room.phase === 'briefing' ? (
                 <article className="surface space-y-5 animate-fadeIn">
-                  <h2 className="text-xl font-bold">
+                  <h2 className="im-title font-serif text-xl font-bold">
                     {translations[lang].briefing.title}
                   </h2>
-                  <p className="text-slate-300 leading-relaxed">
+                  <p className="text-steel-300 leading-relaxed">
                     {scenario.kontekst}
                   </p>
                   <Dossier scenario={scenario} lang={lang}>
@@ -552,8 +552,8 @@ export function GroupSession({
                   <div className="grid gap-3 sm:grid-cols-2">
                     {scenario.diiovi_osoby.map((r) => (
                       <div className="surface-muted" key={r.id}>
-                        <h3 className="font-bold text-emerald-300">{r.rol}</h3>
-                        <p className="mt-2 text-sm text-slate-300">{r.opys}</p>
+                        <h3 className="im-section-title font-bold text-status-success">{r.rol}</h3>
+                        <p className="mt-2 text-sm text-steel-300">{r.opys}</p>
                       </div>
                     ))}
                   </div>
@@ -586,7 +586,7 @@ export function GroupSession({
                     key={node.id}
                   >
                     <span className="badge font-mono">{node.id}</span>
-                    <h2 className="text-xl font-bold text-white">
+                    <h2 className="im-title font-serif text-xl font-bold text-white">
                       {node.zapytannia}
                     </h2>
                     <StageStepper
@@ -684,17 +684,17 @@ export function GroupSession({
                   )}
                   {['results', 'feedback'].includes(room.phase) && (
                     <div className="surface space-y-5">
-                      <h2 className="font-bold text-xl">{t.results}</h2>
+                      <h2 className="im-title font-serif font-bold text-xl">{t.results}</h2>
                       <p className="notice">
                         {t.index}: <strong>{room.discussionIndex}</strong>
                         {room.discussionIndex >= 0.8 && (
-                          <span className="badge ml-2 !text-amber-300">
+                          <span className="badge ml-2 !text-status-warning">
                             {designLabels[lang].discussion}
                           </span>
                         )}
                       </p>
                       {chart(room.votes, node.varianty, true)}
-                      <ul className="list-disc pl-5 space-y-2 text-sm text-slate-300">
+                      <ul className="list-disc pl-5 space-y-2 text-sm text-steel-300">
                         {scenario.pytannia_dlia_obhovorennia.map((q) => (
                           <li key={q}>{q}</li>
                         ))}
@@ -706,7 +706,7 @@ export function GroupSession({
                       className="surface space-y-5 animate-fadeIn"
                       key={variant.id}
                     >
-                      <h2 className="text-lg font-bold">
+                      <h2 className="im-title font-serif text-lg font-bold">
                         {variant.id} · {variant.tekst}
                       </h2>
                       <div className="grid gap-4 sm:grid-cols-2">
@@ -722,13 +722,13 @@ export function GroupSession({
                         explanation={variant.chomu_taki_baly}
                         lang={lang}
                       />
-                      <p className="leading-relaxed text-slate-300">
+                      <p className="leading-relaxed text-steel-300">
                         {variant.zvorotnyi_zviazok}
                       </p>
                       <div className="flex flex-wrap gap-2">
                         {variant.normy.map((id) => (
                           <button
-                            className="action !text-cyan-300"
+                            className="action !text-tactical-ice"
                             key={id}
                             onClick={() => setNorm(id)}
                           >

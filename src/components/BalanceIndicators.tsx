@@ -45,37 +45,37 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
   };
 
   return (
-    <div className="space-y-3 p-4 rounded-xl bg-navy-900 border border-navy-700">
-      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400 pb-2 border-b border-navy-800">
-        <span className="font-semibold uppercase tracking-wider text-slate-300">
+    <div className="steel-panel space-y-3 p-4 rounded-sm bg-obsidian-850 border border-steel-700">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-steel-300 pb-2 border-b border-obsidian-800">
+        <span className="font-semibold uppercase tracking-wider text-steel-300">
           {t.feedback.balanceTitle}
         </span>
-        <span className="text-[11px] text-amber-400/90 flex items-center gap-1">
+        <span className="text-[11px] text-status-warning/90 flex items-center gap-1">
           <Info className="w-3.5 h-3.5" />
           {ui(lang, 'm0')}{' '}
         </span>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div className="p-3 rounded-lg bg-navy-850 border border-navy-750 space-y-2">
+        <div className="steel-panel p-3 rounded-sm bg-obsidian-850 border border-steel-700 space-y-2">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <span className="text-xs font-medium text-steel-300 flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-status-success" />
               {t.dimensions.dobrochesnist}
             </span>
             <span
-              className={`text-xs font-bold px-2 py-0.5 rounded border ${getScoreColor(scores.dobrochesnist)}`}
+              className={`im-tag text-xs font-bold px-2 py-0.5 rounded-sm border ${getScoreColor(scores.dobrochesnist)}`}
             >
               {formatDelta(scores.dobrochesnist)}
             </span>
           </div>
-          <div className="w-full bg-navy-950 h-2 rounded-full overflow-hidden border border-navy-700/50">
+          <div className="w-full bg-obsidian-950 h-2 rounded-sm overflow-hidden border border-steel-700/50">
             <div
-              className={`h-full rounded-full transition-all duration-200 ${getBarColor(scores.dobrochesnist)}`}
+              className={`h-full rounded-sm transition-all duration-200 ${getBarColor(scores.dobrochesnist)}`}
               style={{ width: getBarWidth(scores.dobrochesnist) }}
             />
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-steel-300">
             {
               designLabels[lang][
                 scores.dobrochesnist > 0
@@ -87,25 +87,25 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
             }
           </p>
         </div>
-        <div className="p-3 rounded-lg bg-navy-850 border border-navy-750 space-y-2">
+        <div className="steel-panel p-3 rounded-sm bg-obsidian-850 border border-steel-700 space-y-2">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
-              <Zap className="w-4 h-4 text-amber-400" />
+            <span className="text-xs font-medium text-steel-300 flex items-center gap-1.5">
+              <Zap className="w-4 h-4 text-status-warning" />
               {t.dimensions.efektyvnist}
             </span>
             <span
-              className={`text-xs font-bold px-2 py-0.5 rounded border ${getScoreColor(scores.efektyvnist)}`}
+              className={`im-tag text-xs font-bold px-2 py-0.5 rounded-sm border ${getScoreColor(scores.efektyvnist)}`}
             >
               {formatDelta(scores.efektyvnist)}
             </span>
           </div>
-          <div className="w-full bg-navy-950 h-2 rounded-full overflow-hidden border border-navy-700/50">
+          <div className="w-full bg-obsidian-950 h-2 rounded-sm overflow-hidden border border-steel-700/50">
             <div
-              className={`h-full rounded-full transition-all duration-200 ${getBarColor(scores.efektyvnist)}`}
+              className={`h-full rounded-sm transition-all duration-200 ${getBarColor(scores.efektyvnist)}`}
               style={{ width: getBarWidth(scores.efektyvnist) }}
             />
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-steel-300">
             {
               designLabels[lang][
                 scores.efektyvnist > 0
@@ -117,25 +117,25 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
             }
           </p>
         </div>
-        <div className="p-3 rounded-lg bg-navy-850 border border-navy-750 space-y-2">
+        <div className="steel-panel p-3 rounded-sm bg-obsidian-850 border border-steel-700 space-y-2">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
-              <HeartHandshake className="w-4 h-4 text-cyan-400" />
+            <span className="text-xs font-medium text-steel-300 flex items-center gap-1.5">
+              <HeartHandshake className="w-4 h-4 text-tactical-ice" />
               {t.dimensions.dovira}
             </span>
             <span
-              className={`text-xs font-bold px-2 py-0.5 rounded border ${getScoreColor(scores.dovira)}`}
+              className={`im-tag text-xs font-bold px-2 py-0.5 rounded-sm border ${getScoreColor(scores.dovira)}`}
             >
               {formatDelta(scores.dovira)}
             </span>
           </div>
-          <div className="w-full bg-navy-950 h-2 rounded-full overflow-hidden border border-navy-700/50">
+          <div className="w-full bg-obsidian-950 h-2 rounded-sm overflow-hidden border border-steel-700/50">
             <div
-              className={`h-full rounded-full transition-all duration-200 ${getBarColor(scores.dovira)}`}
+              className={`h-full rounded-sm transition-all duration-200 ${getBarColor(scores.dovira)}`}
               style={{ width: getBarWidth(scores.dovira) }}
             />
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-steel-300">
             {
               designLabels[lang][
                 scores.dovira > 0
@@ -150,8 +150,8 @@ export const BalanceIndicators: React.FC<BalanceIndicatorsProps> = ({
       </div>
 
       {showExplanation && explanation && (
-        <div className="mt-2 text-xs text-slate-300 bg-navy-950/70 p-2.5 rounded-lg border border-navy-800 leading-relaxed">
-          <strong className="text-slate-400">{ui(lang, 'm1')} </strong>
+        <div className="mt-2 text-xs text-steel-300 bg-obsidian-950/70 p-2.5 rounded-sm border border-obsidian-800 leading-relaxed">
+          <strong className="text-steel-300">{ui(lang, 'm1')} </strong>
           {explanation}
         </div>
       )}

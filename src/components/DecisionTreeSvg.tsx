@@ -21,7 +21,7 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
   const lang = useLanguage();
   if (!scenario.vuzly || scenario.vuzly.length === 0) {
     return (
-      <div className="p-8 text-center text-slate-500 text-sm">
+      <div className="p-8 text-center text-steel-400 text-sm">
         {ui(lang, 'm27')}{' '}
       </div>
     );
@@ -117,7 +117,7 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
   }
 
   return (
-    <div className="w-full overflow-x-auto bg-navy-950/80 rounded-xl border border-navy-800 p-4">
+    <div className="w-full overflow-x-auto bg-obsidian-950/80 rounded-sm border border-obsidian-800 p-4">
       <svg
         width={svgWidth}
         height={svgHeight}
@@ -182,7 +182,7 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
                 fontSize="10"
                 fontWeight="bold"
                 textAnchor="middle"
-                className="bg-navy-950 px-1"
+                className="bg-obsidian-950 px-1"
               >
                 {e.label}
               </text>
@@ -257,10 +257,10 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
                     overflowY: 'auto',
                     overflowWrap: 'anywhere'
                   }}
-                  className="text-xs text-center p-1 rounded focus-visible:outline focus-visible:outline-2"
+                  className="text-xs text-center p-1 rounded-sm focus-visible:outline focus-visible:outline-2"
                 >
                   <strong className="block">{node.id}</strong>
-                  <span className="block mt-1 text-slate-400">
+                  <span className="block mt-1 text-steel-300">
                     {isStart
                       ? ui(lang, 'm28')
                       : isUnreachable

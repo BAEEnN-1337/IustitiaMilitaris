@@ -97,14 +97,14 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
         <div className="flex items-center gap-4">
           {user && (
             <span
-              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-xl font-bold text-emerald-300"
+              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-sm border border-status-success/30 bg-status-success/10 text-xl font-bold text-status-success"
               aria-hidden="true"
             >
               {user.slice(0, 2).toUpperCase()}
             </span>
           )}
           <div>
-            <h1 className="text-2xl font-bold text-white">{user || t.title}</h1>
+            <h1 className="im-title font-serif text-2xl font-bold text-white">{user || t.title}</h1>
             {user && <span className="badge mt-2">{t.localBadge}</span>}
           </div>
         </div>
@@ -151,12 +151,12 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
               [t.lastPlayed, date(recent)]
             ].map(([label, value]) => (
               <div className="surface space-y-3" key={label}>
-                <p className="text-sm text-slate-400">{label}</p>
+                <p className="text-sm text-steel-300">{label}</p>
                 <p className="text-xl font-bold text-white">{value}</p>
               </div>
             ))}
           </div>
-          <h2 className="text-xl font-bold">{t.progress}</h2>
+          <h2 className="im-title font-serif text-xl font-bold">{t.progress}</h2>
           {!records.length && <p className="surface">{t.empty}</p>}
           {records.map(({ id, entry, scenario, steps, complete }) => (
             <article key={id} className="surface space-y-5">
@@ -169,17 +169,17 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
                         scenario.tema}
                     </span>
                     <span
-                      className={`badge ${complete ? '!border-emerald-500/30 !text-emerald-300' : '!text-amber-300'}`}
+                      className={`badge ${complete ? '!border-status-success/30 !text-status-success' : '!text-status-warning'}`}
                     >
                       {complete ? t.completed : t.inProgress}
                     </span>
                   </div>
-                  <h3 className="text-lg font-bold text-white">
+                  <h3 className="im-scenario-title font-serif text-lg font-bold text-white">
                     {scenario.nazva}
                   </h3>
                 </div>
                 <time
-                  className="text-xs text-slate-400"
+                  className="text-xs text-steel-300"
                   dateTime={entry.completedAt || entry.updatedAt}
                 >
                   {date(entry.completedAt || entry.updatedAt)}
@@ -192,7 +192,7 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
                 {steps.map((step, i) => (
                   <React.Fragment key={i}>
                     {i > 0 && (
-                      <span aria-hidden="true" className="text-slate-500">
+                      <span aria-hidden="true" className="text-steel-400">
                         →
                       </span>
                     )}
@@ -203,10 +203,10 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
                 ))}
               </div>
               <details className="surface-muted">
-                <summary className="cursor-pointer text-sm text-cyan-300">
+                <summary className="cursor-pointer text-sm text-tactical-ice">
                   {t.path}
                 </summary>
-                <ol className="mt-3 space-y-3 text-sm text-slate-300">
+                <ol className="mt-3 space-y-3 text-sm text-steel-300">
                   {steps.map((step, i) => (
                     <li key={i}>
                       <strong>
@@ -222,13 +222,13 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
                 path={entry.pathway}
                 lang={lang}
               />
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-steel-300">
                 {translations[lang].reflection.profileNotice}
               </p>
               <label className="block space-y-2 text-sm font-medium">
                 {t.notes}
                 <textarea
-                  className="field mt-2 min-h-28"
+                  className="im-field field mt-2 min-h-28"
                   maxLength={4000}
                   value={entry.notes}
                   onChange={(e) => {
@@ -271,7 +271,7 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
                 </button>
                 {savedId === id && (
                   <span
-                    className="self-center text-sm text-emerald-300"
+                    className="self-center text-sm text-status-success"
                     role="status"
                   >
                     {t.saved}
@@ -302,7 +302,7 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
       ) : (
         <div className="surface space-y-5">
           <div
-            className="grid grid-cols-2 gap-2 rounded-xl bg-navy-950 p-1"
+            className="grid grid-cols-2 gap-2 rounded-sm bg-obsidian-950 p-1"
             role="tablist"
             aria-label={t.title}
           >
@@ -328,7 +328,7 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
             <label className="block text-sm font-medium">
               {t.alias}
               <input
-                className="field mt-2"
+                className="im-field field mt-2"
                 autoComplete="username"
                 value={login}
                 onChange={(e) => setLogin(e.target.value)}
@@ -339,7 +339,7 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
             <label className="block text-sm font-medium">
               {t.password}
               <input
-                className="field mt-2"
+                className="im-field field mt-2"
                 type="password"
                 autoComplete={register ? 'new-password' : 'current-password'}
                 minLength={6}
@@ -353,7 +353,7 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
               <label className="block text-sm font-medium">
                 {t.confirm}
                 <input
-                  className="field mt-2"
+                  className="im-field field mt-2"
                   type="password"
                   autoComplete="new-password"
                   value={confirm}

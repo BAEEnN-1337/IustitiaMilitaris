@@ -19,14 +19,14 @@ export function Dossier({
   const t = labels[lang],
     role = scenario.diiovi_osoby.find((r) => r.hravets);
   return (
-    <section className="dossier space-y-3" data-testid="dossier">
+    <section className="dossier hud-crosshair space-y-3" data-testid="dossier">
       <div className="flex flex-wrap gap-2">
         <span className="badge font-mono">
           {t.case} #{scenario.id} · {t.stage} {index}
           {nodeId ? ` · ${nodeId}` : ""}
         </span>
         {role && (
-          <span className="badge !text-emerald-300">
+          <span className="badge !text-status-success">
             {translations[lang].briefing.playerBadge}: {role.rol}
           </span>
         )}
@@ -48,10 +48,10 @@ export function ValueConflict({
     <div className="space-y-3" data-testid="value-conflict">
       <div className="value-poles">
         <div className="value-pole">{a}</div>
-        <Scale className="h-6 w-6 text-amber-400" aria-hidden="true" />
+        <Scale className="h-6 w-6 text-status-warning" aria-hidden="true" />
         <div className="value-pole">{b}</div>
       </div>
-      <p className="text-sm text-slate-300">{explanation}</p>
+      <p className="text-sm text-steel-300">{explanation}</p>
     </div>
   );
 }
@@ -92,7 +92,7 @@ export function StageStepper({
         <li
           key={i}
           aria-current={i === completed ? "step" : undefined}
-          className={`badge ${i === completed ? "!border-emerald-500 !text-emerald-300" : ""}`}
+          className={`badge ${i === completed ? "!border-status-success !text-status-success" : ""}`}
         >
           <span>
             {i + 1}.{" "}
@@ -122,12 +122,12 @@ export function Consequence({
       className={`surface-muted space-y-2 consequence ${delayed ? "consequence-delayed" : ""}`}
     >
       <h3
-        className={`flex items-center gap-2 text-sm font-bold ${delayed ? "text-amber-300" : "text-cyan-300"}`}
+        className={`im-section-title flex items-center gap-2 text-sm font-bold ${delayed ? "text-status-warning" : "text-tactical-ice"}`}
       >
         <Icon size={18} aria-hidden="true" />
         {title}
       </h3>
-      <div className="text-sm leading-relaxed text-slate-200">{children}</div>
+      <div className="text-sm leading-relaxed text-steel-100">{children}</div>
     </section>
   );
 }
@@ -157,7 +157,7 @@ export function Radar({
       <figcaption className="font-semibold">{t.balance}</figcaption>
       <svg
         viewBox="0 0 320 285"
-        className="w-full max-w-sm mx-auto text-slate-400"
+        className="w-full max-w-sm mx-auto text-steel-300"
         role="img"
         aria-label={t.balance}
       >
@@ -198,7 +198,7 @@ export function Radar({
             width={i === 0 ? 130 : 98}
             height={62}
           >
-            <div className="text-center text-xs text-slate-200 leading-relaxed">
+            <div className="text-center text-xs text-steel-100 leading-relaxed">
               {translations[lang].dimensions[axis]}
               <strong className="block">
                 {scores[axis] > 0 ? "+" : ""}
@@ -208,7 +208,7 @@ export function Radar({
           </foreignObject>
         ))}
       </svg>
-      <p className="text-xs text-slate-400">{t.radarNotice}</p>
+      <p className="text-xs text-steel-300">{t.radarNotice}</p>
     </figure>
   );
 }
