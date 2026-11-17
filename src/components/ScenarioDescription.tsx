@@ -5,16 +5,19 @@ import { descriptionPreview } from '../utils/descriptionPreview';
 
 export function ScenarioDescription({
   text,
-  lang
+  lang,
+  truncate = true
 }: {
   text: string;
   lang: Language;
+  truncate?: boolean;
 }) {
   const id = useId();
   const paragraph = useRef<HTMLParagraphElement>(null);
   const [content, setContent] = useState(() => descriptionPreview(text));
-  const { preview, continuation } = content;
+  const { preview, continuation } = truncate ? content : { preview: text, continuation: '' };
   useLayoutEffect(() => {
+    if (!truncate) return;
     let cancelled = false;
     const update = () => {
       const element = paragraph.current;
@@ -88,7 +91,7 @@ export function ScenarioDescription({
       observer.disconnect();
       document.fonts.removeEventListener('loadingdone', update);
     };
-  }, [text, lang]);
+  }, [text, lang, truncate]);
   return (
     <div
       lang={lang}

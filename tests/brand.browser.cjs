@@ -48,8 +48,8 @@ const root = path.resolve(__dirname, '..'),
             errors = [];
           p.on('pageerror', (e) => errors.push(e.message));
           await p.goto('http://127.0.0.1:18480/classroom');
-          const trigger = p.getByRole('button', {
-            name: labels[lang].open,
+          const trigger = p.getByRole('link', {
+            name: labels[lang].home,
             exact: true
           });
           assert.deepEqual(
@@ -73,33 +73,18 @@ const root = path.resolve(__dirname, '..'),
             );
             assert.ok(centers.every((y) => Math.abs(y - centers[0]) < 2));
           }
-          for (const method of ['button', 'escape', 'outside']) {
-            await trigger.click();
-            const dialog = p.getByRole('dialog');
-            await dialog.waitFor();
-            await p.waitForFunction(
-              () =>
-                document.querySelector('.brand-crest-frame img')
-                  .naturalWidth === 512
-            );
-            const close = dialog.getByRole('button', {
-              name: labels[lang].close
-            });
-            await close.focus();
-            await p.keyboard.press('Tab');
-            assert.equal(
-              await close.evaluate((el) => el === document.activeElement),
-              true
-            );
-            if (method === 'button') await close.click();
-            else if (method === 'escape') await p.keyboard.press('Escape');
-            else await p.mouse.click(2, 2);
-            assert.equal(await dialog.count(), 0);
-            assert.equal(
-              await trigger.evaluate((el) => el === document.activeElement),
-              true
-            );
-            assert.equal(new URL(p.url()).pathname, '/classroom');
+          await p.evaluate(() => window.navigationSentinel = 'preserved');
+          await trigger.click();
+          await p.waitForURL('**/');
+          assert.equal(await p.evaluate(() => window.navigationSentinel), 'preserved');
+          assert.equal(await p.getByRole('dialog').count(), 0);
+          assert.equal(await p.locator('.scenario-card').count(), 3);
+          assert.equal(await trigger.getAttribute('aria-haspopup'), null);
+          const badges = p.locator('.case-metadata-strip');
+          assert.equal(await badges.count(), 3);
+          for (const badge of await badges.all()) {
+            assert.equal(await badge.locator('.case-badge').count(), 1);
+            assert.equal(await badge.locator('.case-badge > span:not([role])').innerText(), lang === 'uk' ? 'НАВЧАЛЬНІ' : 'TRAINING');
           }
           for (const url of [
             '/brand-mark.svg',
@@ -114,7 +99,7 @@ const root = path.resolve(__dirname, '..'),
           assert.deepEqual(errors, []);
           await c.close();
           console.log(
-            'PASS brand, image, focus trap/restore, close button/Esc/backdrop, route preserved',
+            'PASS brand, catalogue router navigation, no dossier, single training badges',
             theme,
             lang,
             width
