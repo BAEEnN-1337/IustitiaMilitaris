@@ -140,7 +140,7 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
               <h3 className="scenario-card-title font-serif text-lg sm:text-xl font-bold text-steel-100 min-h-[3.25rem] sm:min-h-[3.5rem] flex items-start leading-snug">
                 {s.nazva}
               </h3>
-              <ScenarioDescription text={s.sytuatsiia} lang={lang} />
+              <ScenarioDescription text={s.sytuatsiia} lang={lang} truncate={s.id !== 'S02'} />
             </div>
           </div>
           <div className="scenario-card-metadata mt-3 pt-3 border-t border-steel-700/30 space-y-2">

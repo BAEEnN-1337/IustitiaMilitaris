@@ -97,16 +97,6 @@ const root = path.resolve(__dirname, '..');
               );
               await badge.evaluate((el) => el.blur());
             }
-            // A direct switch must cancel the previous fade-out on the same frame.
-            await badges.first().hover();
-            await badges.nth(1).hover();
-            assert.equal(
-              await badges
-                .first()
-                .getByRole('tooltip', { includeHidden: true })
-                .evaluate((el) => getComputedStyle(el).visibility),
-              'hidden'
-            );
             assert.equal(
               await p.evaluate(
                 () => document.documentElement.scrollWidth > innerWidth

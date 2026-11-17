@@ -1,7 +1,6 @@
 import { BrandLogo } from './BrandLogo';
-import { BrandDossier } from './BrandDossier';
 import brandLabels from '../i18n/brand.json';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Sun, Moon, UserRound } from 'lucide-react';
 import { Language, translations } from '../i18n';
 import labels from '../i18n/design.json';
@@ -22,8 +21,6 @@ export const Navbar = ({
   onAuth
 }: NavbarProps) => {
   const t = labels[lang];
-  const [brandOpen, setBrandOpen] = useState(false);
-  const closeBrand = useCallback(() => setBrandOpen(false), []);
   const [theme, setTheme] = useState(() => {
     try {
       return localStorage.getItem('eds-theme') === 'light' ? 'light' : 'dark';
@@ -51,19 +48,22 @@ export const Navbar = ({
   return (
     <header className="site-header sticky top-0 z-40 border-b border-steel-700 bg-obsidian-900/95 backdrop-blur-md">
       <div className="header-row">
-        <button
+        <a
+          href="/"
           className="header-brand brand-trigger"
-          aria-label={brandLabels[lang].open}
-          aria-haspopup="dialog"
-          aria-expanded={brandOpen}
-          onClick={() => setBrandOpen(true)}
+          aria-label={brandLabels[lang].home}
+          onClick={event => {
+            if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            event.preventDefault();
+            setCurrentView('catalog');
+          }}
         >
           <BrandLogo />
           <span className="brand-wordmark">
             <span className="brand-name">IUSTITIA MILITARIS</span>
             <span className="brand-subtitle">{brandLabels[lang].short}</span>
           </span>
-        </button>
+        </a>
         <nav className="header-nav" aria-label={translations[lang].appTitle}>
           {views.map((view) => (
             <button
@@ -123,7 +123,6 @@ export const Navbar = ({
           </button>
         </div>
       </div>
-      {brandOpen && <BrandDossier lang={lang} onClose={closeBrand} />}
     </header>
   );
 };

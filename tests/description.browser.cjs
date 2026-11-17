@@ -38,14 +38,15 @@ const root = path.resolve(__dirname, '..'),
       headless: true,
       args: ['--no-sandbox']
     });
+    for (const theme of ['dark', 'light'])
     for (const lang of ['uk', 'en'])
       for (const width of [360, 1280]) {
         const c = await browser.newContext({
           viewport: { width, height: 900 }
         });
         await c.addInitScript(
-          (l) => localStorage.setItem('eds-language', l),
-          lang
+          ({lang,theme}) => { localStorage.setItem('eds-language', lang); localStorage.setItem('eds-theme', theme); },
+          {lang,theme}
         );
         const p = await c.newPage();
         await p.goto('http://127.0.0.1:18496/');
@@ -79,6 +80,11 @@ const root = path.resolve(__dirname, '..'),
             scenarioId = `S${Number(id.match(/(\d+)$/)[1]).toString().padStart(2, '0')}`,
             original = (lang === 'uk' ? uk : en)[scenarioId].sytuatsiia;
           assert.ok(Array.from(preview).length > 0);
+          if (scenarioId === 'S02') {
+            assert.equal(preview, original);
+            assert.equal(await popup.count(), 0);
+            assert.equal(await desc.getByRole('button').count(), 0);
+          }
           const endings = [...original.matchAll(/[.!?](?=\s|$)/gu)].map(
             (m) => m.index + 1
           );
