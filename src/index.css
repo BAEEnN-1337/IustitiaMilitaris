@@ -793,3 +793,11 @@ body,
 .diagram-stage-button:hover { background:rgba(107,174,196,.1); }
 .diagram-stage-button:focus-visible { outline:2px solid #6BAEC4; outline-offset:-2px; }
 @media(prefers-reduced-motion:reduce) { .diagram-stage-button { transition:none; } }
+
+.profile-step-chip { display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; width:5rem; padding:4px 8px; border:1px solid rgb(var(--slate-600)); border-radius:2px; background:var(--graph-surface); color:var(--graph-ink); font-family:'IBM Plex Mono',monospace; font-size:11px; line-height:1.5; white-space:nowrap; }
+.profile-decision-timeline { border-left:1px solid rgb(var(--slate-600)); margin-left:5px; padding-left:20px; }
+.profile-decision-step { position:relative; padding:0 0 24px; overflow-wrap:anywhere; }
+.profile-decision-step:last-child { padding-bottom:0; }
+.profile-decision-step::before { content:''; position:absolute; left:-24px; top:9px; width:7px; height:7px; border-radius:50%; background:#C8A456; }
+.profile-decision-badges { display:flex; flex-wrap:nowrap; gap:6px; margin-bottom:8px; }
+@media(min-width:768px) { .profile-decision-step { display:grid; grid-template-columns:205px minmax(0,1fr); gap:16px; } .profile-decision-badges { margin-bottom:0; align-items:flex-start; } }
