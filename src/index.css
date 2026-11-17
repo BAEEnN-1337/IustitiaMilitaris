@@ -4,6 +4,9 @@
 
 :root {
   color-scheme: dark;
+  --primary-gold-start: #dec074;
+  --primary-gold-end: #cba552;
+  --primary-gold-shadow: 0 2px 4px rgb(4 8 14 / .18);
   --obsidian-950: 11 17 26;
   --obsidian-900: 14 21 32;
   --obsidian-850: 18 27 40;
@@ -148,6 +151,9 @@
 }
 :root[data-theme='light'] {
   color-scheme: light;
+  --primary-gold-start: #e6cc87;
+  --primary-gold-end: #d5b362;
+  --primary-gold-shadow: 0 1px 2px rgb(20 34 53 / .09);
   --obsidian-950: 240 242 245;
   --obsidian-900: 248 249 251;
   --obsidian-850: 255 255 255;
@@ -305,7 +311,6 @@
   .action-primary,
   .im-primary {
     @apply rounded-sm border border-justice-gold px-5 py-2.5 font-sans text-xs font-bold uppercase tracking-widest shadow-sm transition-all active:scale-[0.99] disabled:opacity-40;
-    background: #c8a456;
     color: #0b111a;
   }
   .action-primary {
@@ -336,11 +341,6 @@
   .meter-fill {
     @apply h-full rounded-sm bg-tactical-ice transition-[width] duration-200;
   }
-}
-.im-primary {
-  background: #c8a456;
-  color: #0b111a;
-  border-color: #c8a456;
 }
 .im-field {
   border-radius: 2px;
@@ -395,6 +395,13 @@
 }
 .im-primary.im-primary,
 .action-primary.action-primary {
+  background: var(--primary-gold-end) linear-gradient(135deg, var(--primary-gold-start) 0%, var(--primary-gold-end) 100%);
+  border: 1px solid rgb(200 164 86 / .6);
+  box-shadow: var(--primary-gold-shadow);
+  filter: brightness(1);
+  transition-property: filter, border-color, box-shadow, transform;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
   color: #0b111a;
   padding: 10px 20px;
   font-size: 12px;
@@ -595,10 +602,8 @@ body,
 
 .im-primary:hover:not(:disabled),
 .action-primary:hover:not(:disabled) {
-  background: #b38f44;
-  border-color: rgb(223 194 125 / 0.4);
-  box-shadow: none;
-  filter: none;
+  border-color: #e5cc89;
+  filter: brightness(1.05);
 }
 .network-dot {
   display: inline-block;
