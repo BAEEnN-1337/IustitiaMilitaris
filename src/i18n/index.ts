@@ -14,8 +14,8 @@ export const translations = {
       offlineDesc: "PWA працює без підключення до Інтернету"
     },
     catalog: {
-      teamScenariosTitle: "Сценарії команди (3+ етапи)",
-      teamScenariosDesc: "Повноцінні розгалужені кейси на основі Посібника CIDS № 1/2025, адаптовані під сектор безпеки і оборони України.",
+      teamScenariosTitle: "Задачі команди",
+      teamScenariosDesc: "Навчальні кейси для обговорення рішень і наслідків.",
       starterExamplesTitle: "Стартові приклади формату від організаторів (2 етапи)",
       starterExamplesDesc: "Базові зразки формату S01–S05 для демонстрації структури даних.",
       stagesCount: "етапів",
@@ -155,8 +155,8 @@ export const translations = {
       offlineDesc: "PWA runs 100% offline without Internet"
     },
     catalog: {
-      teamScenariosTitle: "Team Scenarios (3+ stages)",
-      teamScenariosDesc: "Full branched scenarios based on CIDS Handbook No. 1/2025 adapted for Ukraine's defense sector.",
+      teamScenariosTitle: "Team cases",
+      teamScenariosDesc: "Training cases for discussing decisions and their consequences.",
       starterExamplesTitle: "Organizer Starter Examples (2 stages)",
       starterExamplesDesc: "Basic S01–S05 format samples demonstrating schema structure.",
       stagesCount: "stages",

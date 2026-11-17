@@ -1,3 +1,5 @@
+const { scenarios, route: caseRoute } = require('./scenarios.cjs');
+const steps = caseRoute(scenarios[0]);
 const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
 const { spawn } = require('node:child_process');
@@ -91,18 +93,14 @@ const root = path.resolve(__dirname, '..'),
             .waitFor();
           await host.request.post(base + '/api/progress', {
             data: {
-              scenarioId: 'S06',
-              pathway: [
-                { nodeId: 'V1', variantId: 'A' },
-                { nodeId: 'V2', variantId: 'E1' },
-                { nodeId: 'V6', variantId: 'J1' }
-              ],
+              scenarioId: 'S01',
+              pathway: steps,
               notes: ''
             }
           });
           await host.reload();
-          await host.getByText('1 / 8', { exact: true }).waitFor();
-          await host.getByText('1 / 3', { exact: true }).waitFor();
+          await host.getByText('1 / 3', { exact: true }).first().waitFor();
+          await host.getByText('1 / 3', { exact: true }).first().waitFor();
           await host
             .getByLabel(a[lang].notes, { exact: true })
             .fill('A private reflection');
@@ -118,7 +116,7 @@ const root = path.resolve(__dirname, '..'),
           });
           await host.goto(base + '/classroom');
           await styled(host);
-          await host.goto(base + '/classroom/host/new?scenario=S06');
+          await host.goto(base + '/classroom/host/new?scenario=S01');
           await host
             .getByRole('button', { name: g[lang].start, exact: true })
             .waitFor();
@@ -138,7 +136,7 @@ const root = path.resolve(__dirname, '..'),
           await host
             .getByRole('button', { name: g[lang].start, exact: true })
             .click();
-          for (const [index, choice] of ['A', 'E1', 'J1'].entries()) {
+          for (const [index, choice] of steps.entries()) {
             const buttons = one.locator('main button.action.w-full');
             await buttons.first().waitFor();
             await buttons.first().click();
@@ -180,14 +178,20 @@ const root = path.resolve(__dirname, '..'),
             if (index === 0) {
               await host
                 .getByRole('button', {
-                  name: new RegExp('^' + g[lang].discuss + ' B')
+                  name: new RegExp(
+                    '^' + g[lang].discuss + ' ' + (lang === 'uk' ? 'Б' : 'B')
+                  )
                 })
                 .click();
             }
             await host
               .getByRole('button', {
                 name: new RegExp(
-                  '^' + g[lang].discuss + ' ' + choice + '(?: |$)'
+                  '^' +
+                    g[lang].discuss +
+                    ' ' +
+                    (lang === 'uk' ? 'А' : 'A') +
+                    '(?: |$)'
                 )
               })
               .click();
@@ -195,17 +199,17 @@ const root = path.resolve(__dirname, '..'),
               .locator('main article')
               .filter({
                 has: one.getByRole('heading', {
-                  name: new RegExp('^' + choice + ' ·')
+                  name: new RegExp('^' + (lang === 'uk' ? 'А' : 'A') + ' ·')
                 })
               })
               .waitFor();
             await host
               .getByRole('button', {
                 name:
-                  index < 2
+                  index < steps.length - 1
                     ? new RegExp('^' + g[lang].nextNode)
                     : g[lang].finish,
-                exact: index === 2
+                exact: index === steps.length - 1
               })
               .click();
           }
@@ -230,7 +234,7 @@ const root = path.resolve(__dirname, '..'),
             theme,
             lang,
             width,
-            'profile styling/KPI/notes; instructor+2 guests: V1→V2→V6, 50% live chart, hide, projector, reselect terminal option, feedback, summary'
+            'profile styling/KPI/notes; instructor+2 guests: six-stage branched case, 50% live chart, hide, projector, reselect terminal option, feedback, summary'
           );
         }
     assert.deepEqual(errors, []);

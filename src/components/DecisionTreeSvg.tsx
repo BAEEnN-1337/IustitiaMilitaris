@@ -1,3 +1,4 @@
+import { stageLabel, variantLabel } from '../i18n/display';
 import { useLanguage } from '../i18n/ui';
 import { ui } from '../i18n/ui';
 import React from 'react';
@@ -109,7 +110,7 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
         edges.push({
           from: node.id,
           to: v.nastupnyi_vuzol,
-          label: v.id,
+          label: variantLabel(scenario, node.id, v.id, lang),
           isVisited: isFromVisited && isToVisited
         });
       }
@@ -259,7 +260,9 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
                   }}
                   className="text-xs text-center p-1 rounded-sm focus-visible:outline focus-visible:outline-2"
                 >
-                  <strong className="block">{node.id}</strong>
+                  <strong className="block">
+                    {stageLabel(scenario, node.id, lang, false)}
+                  </strong>
                   <span className="block mt-1 text-steel-300">
                     {isStart
                       ? ui(lang, 'm28')

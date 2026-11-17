@@ -6,7 +6,7 @@ const en = read('../src/i18n/ui.en.json');
 assert.deepEqual(Object.keys(en).sort(), Object.keys(uk).sort());
 for (const [key, text] of Object.entries(en)) {
   assert.ok(text.trim(), `${key}: empty translation`);
-  assert.ok(!/[\u0400-\u04ff]/u.test(text), `${key}: Cyrillic in English UI`);
+  assert.ok(!/\p{Script=Cyrillic}/u.test(text), `${key}: Cyrillic in English UI`);
   assert.deepEqual([...text.matchAll(/\{\d+\}/g)].map(m => m[0]).sort(),
     [...uk[key].matchAll(/\{\d+\}/g)].map(m => m[0]).sort(), `${key}: interpolation mismatch`);
 }
@@ -20,22 +20,22 @@ for (const norm of original.normy) {
   }
   for (const key of ['akt', 'punkt', 'korotko', 'redaktsiia', 'dzherelo_zvirky']) {
     assert.ok(english[key].length > 0);
-    assert.ok(!/[\u0400-\u04ff]/u.test(english[key]), `${norm.id}: untranslated ${key}`);
+    assert.ok(!/\p{Script=Cyrillic}/u.test(english[key]), `${norm.id}: untranslated ${key}`);
   }
   assert.equal(english.tsytaty.length, norm.tsytaty.length, `${norm.id}: lost quotation`);
-  assert.ok(english.tsytaty.every(q => !/[\u0400-\u04ff]/u.test(q)));
+  assert.ok(english.tsytaty.every(q => !/\p{Script=Cyrillic}/u.test(q)));
 }
 const scorm = read('../src/i18n/scorm.json');
 assert.deepEqual(Object.keys(scorm.uk), Object.keys(scorm.en));
-assert.ok(!/[\u0400-\u04ff]/u.test(JSON.stringify(scorm.en)));
+assert.ok(!/\p{Script=Cyrillic}/u.test(JSON.stringify(scorm.en)));
 console.log(`PASS: ${Object.keys(en).length} UI translations, ${original.normy.length} legal norms, SCORM labels and interpolation parity`);
 const overlays = read('../src/i18n/scenarios.en.json');
-assert.equal(Object.keys(overlays).length, 8);
+assert.deepEqual(Object.keys(overlays).sort(), ['S01', 'S02', 'S03']);
 for (const overlay of Object.values(overlays)) {
-  assert.ok(!/[\u0400-\u04ff]/u.test(JSON.stringify(overlay)));
+  assert.ok(!/\p{Script=Cyrillic}/u.test(JSON.stringify(overlay)));
   assert.ok(overlay.nazva && overlay.kontekst && overlay.sytuatsiia && overlay.audytoriia.length);
 }
-console.log('PASS: English briefing overlays for S01–S08');
+console.log('PASS: English briefing overlays for S01–S03');
 
 // Every leaf must be present: checking rendered headings alone misses branches,
 // actor descriptions, feedback and verification/AI metadata.
@@ -49,26 +49,26 @@ function assertSameStructure(source, translated, path) {
     for (const key of Object.keys(source)) assertSameStructure(source[key], translated[key], `${path}.${key}`);
   } else if (typeof source === 'string') {
     assert.equal(typeof translated, 'string', `${path}: missing translation`);
-    assert.ok(!/[\u0400-\u04ff]/u.test(translated), `${path}: untranslated content`);
+    assert.ok(!/\p{Script=Cyrillic}/u.test(translated), `${path}: untranslated content`);
     if (source.length) assert.ok(translated.trim(), `${path}: empty translation`);
     // Identifiers, links, theme enum keys, graph edges and dates are machine data.
-    if (!/[\u0400-\u04ff]/u.test(source)) assert.equal(translated, source, `${path}: changed machine data`);
+    if (!/\p{Script=Cyrillic}/u.test(source)) assert.equal(translated, source, `${path}: changed machine data`);
   } else {
     assert.equal(translated, source, `${path}: changed score, flag or null`);
   }
 }
 const scenarioFiles = fs.readdirSync(new URL('../stsenarii/', import.meta.url));
-for (const id of ['S01', 'S02', 'S03', 'S04', 'S05', 'S06', 'S07', 'S08']) {
+for (const id of ['S01', 'S02', 'S03']) {
   const source = read(`../stsenarii/${scenarioFiles.find(name => name.startsWith(`${id}-`))}`);
   assertSameStructure(source, overlays[id], id);
   assert.equal(overlays[id].dzherelo_vypadku.typ, 'fictional');
   assert.equal(overlays[id].perevirka_zmistu.fakhivets_dzpk, 'pending');
 }
-console.log('PASS: S01–S08 complete English content, all branches, IDs, edges, scores and metadata');
+console.log('PASS: S01–S03 complete English content, all branches, IDs, edges, scores and metadata');
 
 for (const name of ['accounts', 'group', 'themes', 'design', 'brand', 'caseBadges']) {
   const dictionary = read(`../src/i18n/${name}.json`);
   assert.deepEqual(Object.keys(dictionary.uk).sort(), Object.keys(dictionary.en).sort());
-  assert.ok(!/[\u0400-\u04ff]/u.test(JSON.stringify(dictionary.en)));
+  assert.ok(!/\p{Script=Cyrillic}/u.test(JSON.stringify(dictionary.en)));
 }
 console.log('PASS: local account and classroom UI language parity');

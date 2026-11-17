@@ -1,181 +1,111 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import assert from 'assert';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const rootDir = path.join(__dirname, '..');
-
-console.log('====================================================');
-console.log('   RUNNING AUTOMATED TEST SUITE: ETHICAL SIMULATOR  ');
-console.log('====================================================\n');
-
-let passedTests = 0;
-let totalTests = 0;
-
-function runTest(name, fn) {
-  totalTests++;
-  try {
-    fn();
-    console.log(`  ✓ [PASS] ${name}`);
-    passedTests++;
-  } catch (err) {
-    console.error(`  ✗ [FAIL] ${name}`);
-    console.error(`    ${err.message}\n`);
-    process.exitCode = 1;
-  }
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+import { createRequire } from 'node:module';
+import fixtures from './scenarios.cjs';
+const require = createRequire(import.meta.url), load = require('./ts-loader.cjs');
+const { scenarios, root } = fixtures;
+const { allScenarios } = load(root + '/src/data/scenarios.ts');
+const { localizeScenario } = load(root + '/src/i18n/content.ts');
+const { stageLabel, variantLabel, choiceLabel, caseLabel, scenarioStageCount } = load(root + '/src/i18n/display.ts');
+const { generateScorm12Zip } = load(root + '/src/utils/scormExport.ts');
+const JSZip = require('jszip');
+const norms = JSON.parse(fs.readFileSync(root + '/normy.json', 'utf8'));
+let passed = 0, total = 0;
+async function test(name, run) {
+  total++;
+  try { await run(); passed++; console.log('PASS:', name); }
+  catch (error) { process.exitCode = 1; console.error('FAIL:', name, error); }
 }
-
-// 1. SCENARIO VALIDATION TESTS
-runTest('All 8 scenarios exist and have valid JSON syntax', () => {
-  const stsenariiDir = path.join(rootDir, 'stsenarii');
-  const files = fs.readdirSync(stsenariiDir).filter(f => f.endsWith('.json'));
-  assert.strictEqual(files.length, 8, `Expected 8 scenario files, found ${files.length}`);
+await test('Exactly three new cases, 26 nodes and 102 options', () => {
+  assert.deepEqual(scenarios.map(s => s.id), ['S01','S02','S03']);
+  assert.equal(scenarios.reduce((sum,s) => sum+s.vuzly.length,0),26);
+  assert.equal(scenarios.flatMap(s=>s.vuzly.flatMap(n=>n.varianty)).length,102);
+  assert.deepEqual(allScenarios.map(s=>s.nazva),scenarios.map(s=>s.nazva));
 });
-
-runTest('Team scenarios S06, S07, S08 have >= 3 sequential stages along main branches', () => {
-  const stsenariiDir = path.join(rootDir, 'stsenarii');
-  const teamFiles = ['S06-reviziia-na-skladi.json', 'S07-terminova-lohistyka.json', 'S08-kadrovyi-vidbir-pid-tyskom.json'];
-
-  for (const filename of teamFiles) {
-    const raw = fs.readFileSync(path.join(stsenariiDir, filename), 'utf-8');
-    const s = JSON.parse(raw);
-    const vuzlyMap = new Map(s.vuzly.map(v => [v.id, v]));
-
-    // Check depth from start node
-    function getDepth(nodeId, visited = new Set()) {
-      if (!nodeId || visited.has(nodeId)) return 0;
-      visited.add(nodeId);
-      const node = vuzlyMap.get(nodeId);
-      if (!node || !node.varianty) return 1;
-
-      let maxChildDepth = 0;
-      for (const v of node.varianty) {
-        if (v.nastupnyi_vuzol) {
-          maxChildDepth = Math.max(maxChildDepth, getDepth(v.nastupnyi_vuzol, new Set(visited)));
-        }
-      }
-      return 1 + maxChildDepth;
+await test('All branches reachable, acyclic and terminal at six, eight or nine stages', () => {
+  for (const [i,s] of scenarios.entries()) {
+    const nodes = new Map(s.vuzly.map(n=>[n.id,n])), reached = new Set();
+    function depths(id, trail = new Set()) {
+      if (id === null) return new Set([0]);
+      assert.ok(nodes.has(id),id);assert.ok(!trail.has(id),'cycle');reached.add(id);
+      const next = new Set(trail).add(id), result = new Set();
+      for (const v of nodes.get(id).varianty) for(const d of depths(v.nastupnyi_vuzol,next)) result.add(d+1);
+      return result;
     }
-
-    const depth = getDepth(s.pochatkovyi_vuzol);
-    assert.ok(depth >= 3, `${s.id} maximum depth is ${depth}, must be >= 3`);
+    assert.deepEqual([...depths('V1')],[[6,8,9][i]]);
+    assert.equal(reached.size,nodes.size);
+    assert.equal(s.diiovi_osoby.filter(r=>r.hravets).length,1);
+    if (s.id==='S01') {
+      assert.deepEqual(nodes.get('V1').varianty.map(v=>v.nastupnyi_vuzol),['V2','V3','V4','V5']);
+      for(const id of ['V2','V3','V4','V5']) assert.ok(nodes.get(id).varianty.every(v=>v.nastupnyi_vuzol==='V6'));
+    } else assert.ok(s.vuzly.every(n=>n.varianty.length===4));
   }
 });
-
-runTest('Option IDs match regex ^[A-Z][0-9]?$ and are globally unique per scenario', () => {
-  const stsenariiDir = path.join(rootDir, 'stsenarii');
-  const files = fs.readdirSync(stsenariiDir).filter(f => f.endsWith('.json'));
-
-  for (const f of files) {
-    const s = JSON.parse(fs.readFileSync(path.join(stsenariiDir, f), 'utf-8'));
-    const ids = [];
-    for (const vz of s.vuzly) {
-      for (const v of vz.varianty) {
-        assert.match(v.id, /^[A-Z][0-9]?$/, `Variant ID ${v.id} in ${s.id} invalid regex`);
-        ids.push(v.id);
-      }
-    }
-    const idSet = new Set(ids);
-    assert.strictEqual(idSet.size, ids.length, `Duplicate variant IDs found in ${s.id}`);
-  }
-});
-
-runTest('All scenario norms exist in normy.json with verified status', () => {
-  const normy = JSON.parse(fs.readFileSync(path.join(rootDir, 'normy.json'), 'utf-8'));
-  const normMap = new Map(normy.normy.map(n => [n.id, n]));
-
-  const teamFiles = ['S06-reviziia-na-skladi.json', 'S07-terminova-lohistyka.json', 'S08-kadrovyi-vidbir-pid-tyskom.json'];
-  const stsenariiDir = path.join(rootDir, 'stsenarii');
-
-  for (const f of teamFiles) {
-    const s = JSON.parse(fs.readFileSync(path.join(stsenariiDir, f), 'utf-8'));
-    for (const n of s.normy) {
-      const normEntry = normMap.get(n.id);
-      assert.ok(normEntry, `Norm ${n.id} in ${s.id} not found in normy.json`);
-      assert.notStrictEqual(normEntry.status_zvirky, 'ne-zvireno', `Norm ${n.id} in ${s.id} is unverified`);
-    }
-  }
-});
-
-// 2. ZERO-PII & CLASSROOM ANONYMITY AUDIT
-runTest('Classroom room state contains strictly zero personal identifiers', () => {
-  const mockRoom = {
-    code: '839201',
-    scenarioId: 'S06',
-    currentNodeId: 'V1',
-    votingActive: true,
-    votes: { 'A': 12, 'B': 8 },
-    totalVotes: 20,
-    history: []
-  };
-
-  const forbiddenKeys = ['user', 'userId', 'name', 'email', 'ip', 'userAgent', 'rank', 'login', 'device'];
-  for (const key of Object.keys(mockRoom)) {
-    assert.ok(!forbiddenKeys.includes(key), `Forbidden personal key "${key}" detected in room state`);
-  }
-  assert.strictEqual(typeof mockRoom.votes['A'], 'number', 'Votes must be purely aggregate numbers');
-});
-
-runTest('Discussion index correctly calculates polarization vs consensus', () => {
-  function calcIndex(votes, total) {
-    if (total <= 1) return 0;
-    const counts = Object.values(votes).filter(c => c > 0);
-    const k = counts.length;
-    if (k <= 1) return 0;
-    const sumSq = counts.reduce((acc, c) => acc + Math.pow(c / total, 2), 0);
-    const maxPoss = 1 - (1 / k);
-    if (maxPoss <= 0) return 0;
-    return Math.round(((1 - sumSq) / maxPoss) * 100) / 100;
-  }
-
-  // Consensus (100% on one option)
-  const consensus = calcIndex({ 'A': 30, 'B': 0 }, 30);
-  assert.strictEqual(consensus, 0, `Expected consensus index 0, got ${consensus}`);
-
-  // 50/50 split (maximum controversy)
-  const split = calcIndex({ 'A': 15, 'B': 15 }, 30);
-  assert.strictEqual(split, 1.0, `Expected split index 1.0, got ${split}`);
-});
-
-// 3. SCORM 1.2 COMPLIANCE & PRIVACY AUDIT
-runTest('SCORM 1.2 manifest and API script conform to privacy standard', () => {
-  const rawS06 = JSON.parse(fs.readFileSync(path.join(rootDir, 'stsenarii', 'S06-reviziia-na-skladi.json'), 'utf-8'));
-  
-  // Verify manifest template
-  const manifestSnippet = `<manifest identifier="MANIFEST_${rawS06.id}" version="1.2"`;
-  const schemaSnippet = `<schema>ADL SCORM</schema><schemaversion>1.2</schemaversion>`;
-  const scoSnippet = `<resource identifier="RES_${rawS06.id}" type="web-content" adlcp:scormtype="sco" href="index.html">`;
-  
-  assert.ok(manifestSnippet.length > 0);
-  assert.ok(schemaSnippet.length > 0);
-  assert.ok(scoSnippet.length > 0);
-
-  // Verify that lesson_status is only completed, no scores
-  const expectedScormCommit = 'cmi.core.lesson_status = "completed"';
-  assert.ok(expectedScormCommit.includes('completed'));
-});
-
-// 4. VALUE TRADE-OFF INDEPENDENCE (NO SUMMING)
-runTest('Balance scores exist on 3 independent axes and are within [-2, +2]', () => {
-  const stsenariiDir = path.join(rootDir, 'stsenarii');
-  const files = fs.readdirSync(stsenariiDir).filter(f => f.endsWith('.json'));
-
-  for (const f of files) {
-    const s = JSON.parse(fs.readFileSync(path.join(stsenariiDir, f), 'utf-8'));
-    for (const vz of s.vuzly) {
-      for (const v of vz.varianty) {
-        assert.ok(v.baly.dobrochesnist >= -2 && v.baly.dobrochesnist <= 2);
-        assert.ok(v.baly.efektyvnist >= -2 && v.baly.efektyvnist <= 2);
-        assert.ok(v.baly.dovira >= -2 && v.baly.dovira <= 2);
-        // Verify there is no 'total' or 'sum' field in baly
-        assert.strictEqual(v.baly.total, undefined, 'baly must never contain a total or sum field');
+await test('Unique option IDs, complete consequences, analytical feedback and independent bounded scales', () => {
+  for(const s of scenarios) {
+    const ids = new Set();
+    for(const n of s.vuzly) {
+      assert.ok(n.varianty.length>=2&&n.varianty.length<=4);
+      if(n.id==='V1') assert.ok(n.varianty.length>=3);
+      for(const v of n.varianty) {
+        assert.match(v.id,/^[A-Z][0-9]?$/);assert.ok(!ids.has(v.id));ids.add(v.id);
+        assert.deepEqual(Object.keys(v.baly).sort(),['dobrochesnist','dovira','efektyvnist']);
+        for(const value of Object.values(v.baly)) assert.ok(Number.isInteger(value)&&value>=-2&&value<=2);
+        for(const text of [v.tekst,v.naslidky.odrazu,v.naslidky.vidkladeni,v.chomu_taki_baly,v.zvorotnyi_zviazok]) assert.ok(text.trim());
+        assert.doesNotMatch(v.zvorotnyi_zviazok+' '+v.chomu_taki_baly,/правильна відповідь|неправильна відповідь|чому неправильно/iu);
       }
     }
   }
 });
-
-console.log(`\n====================================================`);
-console.log(`  TEST RESULTS: ${passedTests}/${totalTests} TESTS PASSED (100%)`);
-console.log(`====================================================`);
+await test('Every legal reference exists; unverified sources retain honest status', () => {
+  const map = new Map(norms.normy.map(n=>[n.id,n]));
+  for(const s of scenarios) {
+    const roots = new Set(s.normy.map(n=>n.id));
+    for(const n of s.normy) { assert.ok(map.has(n.id));assert.ok(n.yak_zastosovuietsia.trim()); }
+    for(const n of s.vuzly) for(const v of n.varianty) for(const id of v.normy) {assert.ok(map.has(id));assert.ok(roots.has(id));}
+    assert.equal(s.perevirka_zmistu.fakhivets_dzpk,'не проведено');
+  }
+  for(const norm of norms.normy) if(norm.status_zvirky!=='ne-zvireno') assert.ok(norm.tsytaty.length>0);
+  const courts=norms.normy.filter(n=>n.id.startsWith('VS-'));
+  assert.equal(courts.length,5);assert.ok(courts.every(n=>n.status_zvirky==='ne-zvireno'));
+});
+await test('Actual localization preserves custom imports and switches complete built-in content', () => {
+  for(const source of allScenarios) {
+    const english=localizeScenario(source,'en');
+    assert.equal(english.nazva,fixtures.englishScenarios[source.id].nazva);
+    assert.equal(localizeScenario(english,'uk'),source);
+    const edited=structuredClone(source);edited.sytuatsiia='Custom imported content';
+    assert.equal(localizeScenario(edited,'en'),edited);
+    assert.equal(localizeScenario(structuredClone(source),'en'),english);
+  }
+});
+await test('Logical stages and ordinal option letters replace technical IDs in both languages', () => {
+  for(const lang of ['uk','en']) for(const source of allScenarios) {
+    const s=localizeScenario(source,lang),prefix=lang==='uk'?'Етап':'Stage';
+    assert.equal(scenarioStageCount(s), {S01:6,S02:8,S03:9}[s.id]);
+    assert.equal(caseLabel(s.id,lang),(lang==='uk'?'ЗАДАЧА ':'CASE ')+Number(s.id.slice(1)));
+    for(const [i,n] of s.vuzly.entries()) {
+      const number=s.id==='S01'?(i===0?1:i<5?2:i-2):i+1;
+      assert.equal(stageLabel(s,n.id,lang,false),`${prefix} ${number}`);
+      for(const [j,v] of n.varianty.entries()) {
+        assert.equal(variantLabel(s,n.id,v.id,lang),(lang==='uk'?'АБВГ':'ABCD')[j]);
+        assert.doesNotMatch(choiceLabel(s,n.id,v.id,lang),/\bV\d+\b/);
+      }
+    }
+  }
+});
+await test('Real SCORM archives contain complete localized graphs and status-only LMS writes', async () => {
+  for(const lang of ['uk','en']) for(const source of allScenarios) {
+    const blob=await generateScorm12Zip(source,norms,lang),zip=await JSZip.loadAsync(await blob.arrayBuffer());
+    const manifest=await zip.file('imsmanifest.xml').async('string'),html=await zip.file('index.html').async('string'),api=await zip.file('scorm-api.js').async('string');
+    assert.match(manifest,/<schemaversion>1.2<\/schemaversion>/);assert.ok(manifest.includes('MANIFEST_'+source.id));
+    const embedded=JSON.parse(html.match(/var scenario = (.+);/)[1]);
+    assert.deepEqual(embedded,localizeScenario(source,lang));
+    if(lang==='en')assert.doesNotMatch(JSON.stringify(embedded),/\p{Script=Cyrillic}/u);
+    const writes=[],window={API:{LMSInitialize:()=>true,LMSSetValue:(k,v)=>writes.push([k,v]),LMSCommit:()=>true,LMSFinish:()=>true}};window.parent=window;
+    vm.runInNewContext(api,{window});window.SCORM_INIT();window.SCORM_COMPLETE();
+    assert.deepEqual(writes,[['cmi.core.lesson_status','incomplete'],['cmi.core.lesson_status','completed']]);
+  }
+});
+console.log(`${passed}/${total} tests passed (${Math.round(100*passed/total)}%)`);
