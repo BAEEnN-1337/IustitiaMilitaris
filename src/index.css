@@ -774,5 +774,5 @@ body,
 .scenario-description:is(:hover, :focus-within)::after { content: ''; position: absolute; top: 100%; left: 0; right: 0; height: 6px; }
 .description-continuation { height: auto; max-height: none; overflow: visible; overflow-wrap: anywhere; }
 
-.scenario-description .description-preview-box { height: calc(7 * 1.625em); line-height: 1.625; text-align: left; }
+.scenario-description .description-preview-box { min-height: calc(7 * 1.625em); height: auto; line-height: 1.625; text-align: justify; text-align-last: left; hyphens: auto; }
 .scenario-card-metadata > .case-metadata-strip { padding-top: 0; }

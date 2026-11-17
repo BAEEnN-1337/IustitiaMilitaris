@@ -21,6 +21,7 @@ export function ScenarioDescription({
       if (!element || cancelled) return;
       const style = getComputedStyle(element);
       const mirror = document.createElement('p');
+      mirror.lang = lang;
       Object.assign(mirror.style, {
         position: 'fixed',
         left: '-100000px',
@@ -33,6 +34,9 @@ export function ScenarioDescription({
         wordSpacing: style.wordSpacing,
         overflowWrap: style.overflowWrap,
         whiteSpace: 'normal',
+        textAlign: 'justify',
+        textAlignLast: 'left',
+        hyphens: 'auto',
         margin: '0',
         padding: '0'
       });
@@ -86,10 +90,14 @@ export function ScenarioDescription({
     };
   }, [text, lang]);
   return (
-    <div className="scenario-description relative group mt-2 font-sans text-xs sm:text-sm text-steel-300 leading-relaxed text-left overflow-visible">
+    <div
+      lang={lang}
+      className="scenario-description relative group mt-2 font-sans text-xs sm:text-sm text-steel-300 leading-relaxed text-justify [text-align-last:left] hyphens-auto overflow-visible"
+    >
       <p
         ref={paragraph}
-        className="description-preview-box relative font-sans text-xs sm:text-sm text-steel-300 leading-relaxed text-left"
+        lang={lang}
+        className="description-preview-box relative font-sans text-xs sm:text-sm text-steel-300 leading-relaxed text-justify [text-align-last:left] hyphens-auto"
       >
         <span className="description-preview">{preview}</span>
         {continuation && (
@@ -101,7 +109,7 @@ export function ScenarioDescription({
               event.preventDefault();
               event.stopPropagation();
             }}
-            className="description-more absolute bottom-0 right-0 font-mono text-tactical-ice font-bold ml-1 cursor-help hover:text-justice-gold transition-colors"
+            className="description-more font-mono text-tactical-ice font-bold ml-1 cursor-help hover:text-justice-gold transition-colors"
           >
             [···]
           </button>
