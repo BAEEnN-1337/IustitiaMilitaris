@@ -296,7 +296,7 @@ export function GroupSession({
                 </h4>
               </div>
               <a
-                className="action mt-auto w-full border-steel-700 text-steel-300 hover:border-steel-600 hover:text-steel-100"
+                className="action mt-auto w-full whitespace-nowrap border-steel-700 text-steel-300 hover:border-steel-600 hover:text-steel-100"
                 href={`/classroom/host/new?scenario=${s.id}`}
               >
                 {t.host} →

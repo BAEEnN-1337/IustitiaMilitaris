@@ -160,33 +160,32 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
           </div>
           </div>
         </div>
-        <div className="p-4 bg-obsidian-950/70 border-t border-obsidian-800/80 rounded-sm flex flex-wrap items-center justify-between gap-2">
-          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+        <div className="p-4 bg-obsidian-950/70 border-t border-obsidian-800/80 rounded-sm flex flex-col">
             <button
               onClick={() => onStartSolo(s)}
-              className="im-primary flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-sm bg-justice-gold hover:bg-justice-gold text-white font-semibold text-xs transition-colors shadow-sm"
+              className="im-primary w-full flex items-center justify-center gap-2 px-3.5 py-2 rounded-sm bg-justice-gold hover:bg-justice-gold text-white font-semibold text-xs transition-colors shadow-sm"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               {t.catalog.startSolo}
             </button>
+          <div className="scenario-secondary-actions grid grid-cols-[minmax(0,1fr)_max-content] gap-2 mt-2 w-full">
             <button
               onClick={() => onStartClassroom(s)}
-              className="im-secondary flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-sm bg-obsidian-800 hover:bg-obsidian-850 text-steel-300 hover:text-steel-100 border border-steel-700 hover:border-steel-600 font-medium text-xs transition-colors"
+              className="im-secondary w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-sm bg-obsidian-800 hover:bg-obsidian-850 text-steel-300 hover:text-steel-100 border border-steel-700 hover:border-steel-600 font-medium text-xs transition-colors"
             >
               <Users className="w-3.5 h-3.5" />
               {t.catalog.startClassroom}
             </button>
-          </div>
-
           <button
             onClick={() => handleExportScorm(s)}
             disabled={downloadingId === s.id}
-            className="im-secondary w-full sm:w-auto inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-sm bg-obsidian-800 hover:bg-obsidian-850 text-steel-300 hover:text-steel-100 border border-steel-700 hover:border-steel-600 text-[11px] font-medium transition-colors"
+            className="im-secondary w-full inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-sm bg-obsidian-800 hover:bg-obsidian-850 text-steel-300 hover:text-steel-100 border border-steel-700 hover:border-steel-600 text-[11px] font-medium transition-colors"
             title={ui(lang, 'm195')}
           >
             <Download className="w-3.5 h-3.5" />
             {downloadingId === s.id ? ui(lang, 'm196') : 'SCORM 1.2'}
           </button>
+          </div>
         </div>
       </div>
     );
