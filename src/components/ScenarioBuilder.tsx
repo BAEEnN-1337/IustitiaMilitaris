@@ -378,7 +378,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
       </section>
       <Collapsible isOpen={preview}><section className="studio-preview steel-panel p-5 space-y-3" aria-label={studio.preview}>
         <button className="im-secondary action" onClick={()=>setPreview(false)}>{studio.close}</button>
-        <div className="scenario-card max-w-md mx-auto steel-panel p-5 space-y-3"><span className="badge">{caseLabel(scenario.id,lang)}</span><h3 className="scenario-card-title font-serif text-xl">{scenario.nazva}</h3><ScenarioDescription text={scenario.sytuatsiia} lang={lang} truncate={scenario.id!=='S02'}/><CaseMetadata scenario={scenario} lang={lang}/><button className="im-secondary action w-full" onClick={handleTestInSimulator}>{t.catalog.startSolo}</button></div>
+        <div className="scenario-card max-w-md mx-auto steel-panel p-5 space-y-3"><span className="badge">{caseLabel(scenario.id,lang)}</span><h3 className="scenario-card-title font-serif text-xl">{scenario.nazva}</h3><ScenarioDescription text={scenario.sytuatsiia} lang={lang} truncate={scenario.id !== 'S02' && !(scenario.id === 'S01' && lang === 'en')}/><CaseMetadata scenario={scenario} lang={lang}/><button className="im-secondary action w-full" onClick={handleTestInSimulator}>{t.catalog.startSolo}</button></div>
       </section></Collapsible>
 
       {validationErrors.length > 0 ? (

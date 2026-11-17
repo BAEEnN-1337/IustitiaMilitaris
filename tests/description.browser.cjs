@@ -52,6 +52,18 @@ const root = path.resolve(__dirname, '..'),
         await p.goto('http://127.0.0.1:18496/');
         await p.evaluate(() => document.fonts.ready);
         const cards = p.locator('.scenario-card');
+        if (lang === 'en' && width === 1280) {
+          await cards.first().waitFor();
+          assert.equal(await cards.first().locator('.description-preview').textContent(), en.S01.sytuatsiia);
+          assert.equal(await cards.first().locator('.description-more,.description-continuation').count(), 0);
+          const aligned = await cards.evaluateAll(es => es.map(e => ({
+            height:e.getBoundingClientRect().height,
+            metadata:e.querySelector('.scenario-card-metadata').getBoundingClientRect().top,
+            actions:e.lastElementChild.getBoundingClientRect().top
+          })));
+          for (const card of aligned) for (const key of ['height','metadata','actions']) assert.ok(Math.abs(card[key]-aligned[0][key])<1, key);
+        }
+
         const starts = await cards.evaluateAll((els) =>
           els.map((el) => ({
             top: el.getBoundingClientRect().top,
