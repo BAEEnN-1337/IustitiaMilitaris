@@ -1,0 +1,42 @@
+{
+  "uk": {
+    "loading": "Завантаження розділу…",
+    "tracker": "Тактичний трекер",
+    "stage": "Етап",
+    "of": "з",
+    "keys": "1–4 — обрати варіант · Enter — підтвердити / далі",
+    "print": "Зберегти розбір у PDF / Друк",
+    "all": "Усі",
+    "laws": "Кодекси та Закони",
+    "constitution": "Конституція",
+    "courts": "Судова практика ВС",
+    "international": "НАЗК / Міжнародні",
+    "found": "Знайдено норм",
+    "search": "Пошук за статтею, актом, описом або цитатою",
+    "status": "Статус звірки",
+    "verified": "Звірено",
+    "pending": "Потребує звірки",
+    "immediate": "Одразу (Тактичний ефект)",
+    "delayed": "Згодом (Стратегічний ефект)"
+  },
+  "en": {
+    "loading": "Loading section…",
+    "tracker": "Tactical tracker",
+    "stage": "Stage",
+    "of": "of",
+    "keys": "1–4 — select option · Enter — confirm / continue",
+    "print": "Save review as PDF / Print",
+    "all": "All",
+    "laws": "Codes and laws",
+    "constitution": "Constitution",
+    "courts": "Supreme Court decisions",
+    "international": "NACP / International",
+    "found": "Provisions found",
+    "search": "Search article, act, description or quotation",
+    "status": "Verification status",
+    "verified": "Verified",
+    "pending": "Needs verification",
+    "immediate": "Immediately (Tactical effect)",
+    "delayed": "Later (Strategic effect)"
+  }
+}

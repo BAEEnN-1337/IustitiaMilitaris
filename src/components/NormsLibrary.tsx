@@ -1,3 +1,4 @@
+import polish from '../i18n/polish.json';
 import { caseLabel } from '../i18n/display';
 import { localizeNorms } from '../i18n/content';
 import { ui } from '../i18n/ui';
@@ -23,6 +24,8 @@ interface NormsLibraryProps {
 export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
   const normyData = localizeNorms(originalNorms, lang);
   const t = translations[lang];
+  const copy = polish[lang];
+  const [category, setCategory] = useState('all');
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -45,11 +48,12 @@ export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
         n.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
         n.akt.toLowerCase().includes(searchQuery.toLowerCase()) ||
         n.punkt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        n.korotko.toLowerCase().includes(searchQuery.toLowerCase());
+        n.korotko.toLowerCase().includes(searchQuery.toLowerCase()) || n.tsytaty.join(' ').toLowerCase().includes(searchQuery.toLowerCase());
 
       const matchesStatus =
-        statusFilter === 'all' || n.status_zvirky === statusFilter;
-      return matchesSearch && matchesStatus;
+        statusFilter === 'all' || (statusFilter === 'verified' ? n.status_zvirky !== 'ne-zvireno' : n.status_zvirky === 'ne-zvireno');
+      const type = n.typ === 'sudova-praktyka' || n.id.startsWith('VS-') ? 'courts' : n.id.startsWith('KONST-') ? 'constitution' : ['zakon','kodeks','postanova'].includes(n.typ) ? 'laws' : 'international';
+      return matchesSearch && matchesStatus && (category === 'all' || category === type);
     })
     .sort((a, b) => a.akt.localeCompare(b.akt));
 
@@ -79,7 +83,7 @@ export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
           <Search className="w-4 h-4 text-steel-300 absolute left-3 top-3" />
           <input
             type="text"
-            placeholder={ui(lang, 'm44')}
+            aria-label={copy.search} placeholder={copy.search}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm pl-9 pr-4 py-2 text-xs text-white placeholder-steel-300 focus:outline-none focus:border-tactical-ice"
@@ -89,17 +93,16 @@ export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
         <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto text-xs">
           <span className="text-steel-300">{ui(lang, 'm45')} </span>
           <select
-            value={statusFilter}
+            aria-label={copy.status} value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
             className="im-field bg-obsidian-950 border border-steel-700 text-steel-100 rounded-sm px-3 py-1.5 focus:outline-none focus:border-tactical-ice text-xs"
           >
-            <option value="all">{ui(lang, 'm46')} </option>
-            <option value="zvireno">{ui(lang, 'm47')} </option>
-            <option value="zvireno-rekomendatsiinyi">{ui(lang, 'm48')} </option>
-            <option value="ne-zvireno">{ui(lang, 'm49')} </option>
+            <option value="all">{copy.all}</option><option value="verified">{copy.verified}</option><option value="pending">{copy.pending}</option>
           </select>
         </div>
       </div>
+      <div className="flex flex-wrap gap-2" role="group" aria-label={t.nav.norms}>{(['all','laws','constitution','courts','international'] as const).map(key => <button className={`action ${category === key ? 'border-justice-gold text-justice-gold' : ''}`} aria-pressed={category === key} key={key} onClick={() => setCategory(key)}>{copy[key]}</button>)}</div>
+      <p role="status" className="text-sm text-steel-300" data-testid="norm-results">{copy.found}: {filteredNorms.length}</p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filteredNorms.map((norm, index) => {
           const isVerified = norm.status_zvirky === 'zvireno';
@@ -116,6 +119,7 @@ export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
               )}
               <div
                 key={norm.id}
+                data-testid="norm-card" data-norm-id={norm.id}
                 onClick={() => setActiveNorm(norm)}
                 className="steel-panel p-5 rounded-sm bg-obsidian-850 border border-obsidian-800 hover:border-tactical-ice/40 hover:bg-obsidian-850 transition-all cursor-pointer flex flex-col justify-between space-y-3"
               >

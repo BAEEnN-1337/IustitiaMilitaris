@@ -31,6 +31,12 @@ export default defineConfig({
     }
   },
   build: {
+    rollupOptions: { output: { manualChunks(id) {
+      if (id.includes('node_modules/jszip')) return 'scorm-zip';
+      if (id.includes('node_modules')) return 'vendor';
+      if (id.includes('/src/i18n/scenarios.en.json')) return 'scenario-english';
+      if (id.includes('/stsenarii/')) return 'scenario-source';
+    } } },
     outDir: 'dist',
     emptyOutDir: true
   }
