@@ -766,3 +766,10 @@ body,
 
 .decision-path-scroll { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { .decision-path-scroll { scroll-behavior: auto; } }
+
+.card-top-meta { display:flex; align-items:center; justify-content:space-between; gap:6px; flex-wrap:nowrap; min-height:1.75rem; font-size:11px; }
+.card-top-meta-tags { display:flex; align-items:center; gap:4px; min-width:0; }
+.card-top-meta-tags > :is(.im-tag,.badge) { flex-shrink:0; white-space:nowrap; font-size:inherit !important; letter-spacing:normal !important; padding:2px 4px !important; line-height:1.4; }
+.card-top-meta-time { display:flex; align-items:center; gap:3px; flex-shrink:0; white-space:nowrap; font-size:inherit; }
+.card-top-meta-time svg { width:11px; height:11px; flex-shrink:0; }
+@media(max-width:379px) { .card-top-meta { flex-wrap:wrap; font-size:10px; } }
