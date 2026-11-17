@@ -1,3 +1,4 @@
+import { CaseMetadata } from './CaseMetadata';
 import {
   Dossier,
   ValueConflict,
@@ -295,8 +296,9 @@ export function GroupSession({
                   {s.nazva}
                 </h4>
               </div>
+              <div className="mt-auto"><CaseMetadata scenario={s} lang={lang} /></div>
               <a
-                className="action mt-auto w-full whitespace-nowrap border-steel-700 text-steel-300 hover:border-steel-600 hover:text-steel-100"
+                className="action w-full whitespace-nowrap border-steel-700 text-steel-300 hover:border-steel-600 hover:text-steel-100"
                 href={`/classroom/host/new?scenario=${s.id}`}
               >
                 {t.host} →

@@ -712,7 +712,7 @@ body,
     .scenario-card { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 0; }
     .scenario-card-content { display: contents; }
     .scenario-card-description { padding: 24px 24px 14px; }
-    .scenario-card-metadata { display: grid; grid-row: span 2; grid-template-rows: subgrid; row-gap: 14px; margin: 0 24px; padding-bottom: 24px; }
+    .scenario-card-metadata { display: grid; grid-row: span 2; grid-template-rows: subgrid; row-gap: 14px; margin: 0 16px; padding-bottom: 24px; }
     .scenario-card-metadata > * { margin-top: 0; }
   }
 }
@@ -728,3 +728,13 @@ body,
   overflow-wrap: normal;
 }
 .scenario-secondary-actions > button > svg { width: 12px; height: 12px; }
+
+@media (max-width: 767px) {
+  .scenario-card-metadata { margin-inline: -4px; }
+}
+.case-metadata-strip { overflow-wrap: anywhere; }
+.case-metadata-strip > div > span { min-width: 0; }
+
+@media (min-width: 640px) and (max-width: 767px) {
+  .scenario-card-metadata { margin-inline: -8px; }
+}

@@ -1,9 +1,10 @@
+import { CaseMetadata } from './CaseMetadata';
 import { localizeScenario } from '../i18n/content';
 import { ui } from '../i18n/ui';
 import React, { useState } from 'react';
 import { 
-  Play, Users, Download, Clock, Layers, Award, Sparkles, 
-  HelpCircle, Search, ShieldCheck, AlertCircle, FileCheck
+  Play, Users, Download, Clock, Layers, Award,
+  HelpCircle, Search
 } from 'lucide-react';
 import { Scenario } from '../types';
 import { teamScenarios, starterExamples, normyData } from '../data/scenarios';
@@ -77,8 +78,6 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
 
   const renderScenarioCard = (s: Scenario, isTeam: boolean) => {
     const stageCount = s.vuzly.length;
-    const isVerified = ['проведено', 'verified'].includes(s.perevirka_zmistu.fakhivets_dzpk);
-    const isPending = ['не проведено', 'pending'].includes(s.perevirka_zmistu.fakhivets_dzpk);
 
     return (
       <div 
@@ -126,34 +125,7 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
           </div>
           </div>
           <div className="scenario-card-metadata mt-auto pt-4 border-t border-steel-700/40 space-y-3.5">
-          <div className="flex flex-wrap items-center gap-2 text-[11px]">
-            <span 
-              className={`im-tag inline-flex items-center gap-1 px-2 py-0.5 rounded-sm border ${
-                isVerified
-                  ? 'bg-justice-gold/10 text-justice-gold border-justice-gold/30'
-                  : 'bg-status-warning/10 text-status-warning border-status-warning/30'
-              }`}
-              title={s.perevirka_zmistu.prymitka}
-            >
-              {isVerified ? <ShieldCheck className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
-              {isVerified ? t.catalog.verified : t.catalog.unverified}
-            </span>
-            {s.shi.vykorystano && (
-              <span 
-                className="im-tag inline-flex items-center gap-1 px-2 py-0.5 rounded-sm bg-tactical-ice/10 text-tactical-ice border border-tactical-ice/30"
-                title={`${s.shi.instrument}: ${s.shi.shcho_zrobleno}`}
-              >
-                <Sparkles className="w-3 h-3" />
-                {ui(lang, 'm194')}{' '}</span>
-            )}
-            <span 
-              className="im-tag inline-flex items-center gap-1 px-2 py-0.5 rounded-sm bg-obsidian-800 text-steel-300 border border-steel-700"
-              title={s.dzherelo_vypadku.opys}
-            >
-              <FileCheck className="w-3 h-3 text-steel-400" />
-              {['вигаданий', 'fictional'].includes(s.dzherelo_vypadku.typ) ? t.catalog.fictional : t.catalog.anonymized}
-            </span>
-          </div>
+          <CaseMetadata scenario={s} lang={lang} />
           <div className="text-[11px] text-steel-300">
             <span className="text-steel-300 font-semibold">{t.catalog.audience}: </span>
             <span className="">{s.audytoriia.join(', ')}</span>
