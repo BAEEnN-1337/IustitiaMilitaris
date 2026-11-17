@@ -108,4 +108,13 @@ await test('Real SCORM archives contain complete localized graphs and status-onl
     assert.deepEqual(writes,[['cmi.core.lesson_status','incomplete'],['cmi.core.lesson_status','completed']]);
   }
 });
+await test('Builder allocates valid unique IDs after stage nine without changing source cases', () => {
+  const { freshNode, freshVariant, reachableNodes }=load(root+'/src/utils/builderStudio.ts');
+  const source=structuredClone(scenarios[2]),before=JSON.stringify(source);
+  const created=freshNode(source,'en');assert.equal(created.id,'V10');assert.equal(JSON.stringify(source),before);
+  const draft=structuredClone(source);draft.vuzly.push(created);created.varianty.push(freshVariant(draft,'en'));
+  const ids=draft.vuzly.flatMap(n=>n.varianty.map(v=>v.id));assert.equal(new Set(ids).size,ids.length);ids.forEach(id=>assert.match(id,/^[A-Z][0-9]?$/));
+  assert.equal(reachableNodes(draft).has(created.id),false);draft.vuzly[0].varianty[0].nastupnyi_vuzol=created.id;assert.equal(reachableNodes(draft).has(created.id),true);
+});
+
 console.log(`${passed}/${total} tests passed (${Math.round(100*passed/total)}%)`);
