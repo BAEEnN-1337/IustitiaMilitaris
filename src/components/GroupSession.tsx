@@ -1,3 +1,4 @@
+import { AnimatedDetails } from './Collapsible';
 import { caseLabel, stageLabel, optionLabel, variantLabel, choiceLabel, scenarioStageCount } from '../i18n/display';
 import { CaseMetadata } from './CaseMetadata';
 import {
@@ -523,7 +524,7 @@ export function GroupSession({
               {room.history.map((h, i) => {
                 const n = scenario.vuzly.find((n) => n.id === h.nodeId);
                 return (
-                  <details className="surface-muted" key={i} open>
+                  <AnimatedDetails className="surface-muted" key={i} open>
                     <summary className="cursor-pointer font-semibold">
                       {choiceLabel(
                         scenario,
@@ -536,7 +537,7 @@ export function GroupSession({
                     <div className="mt-4">
                       {chart(h.votes, n?.varianty || [])}
                     </div>
-                  </details>
+                  </AnimatedDetails>
                 );
               })}
               <h3 className="im-section-title font-bold">

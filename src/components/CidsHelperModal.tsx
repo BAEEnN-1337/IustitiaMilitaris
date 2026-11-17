@@ -1,3 +1,4 @@
+import { AnimatedOverlay } from './Collapsible';
 import { ui } from '../i18n/ui';
 import React, { useState } from 'react';
 import { X, BookOpen, CheckSquare, Square, Scale, HelpCircle } from 'lucide-react';
@@ -15,7 +16,7 @@ export const CidsHelperModal: React.FC<CidsHelperModalProps> = ({ isOpen, onClos
   // Interactive local checklist state (used solely for reflection, not persisted or graded)
   const [checkedTests, setCheckedTests] = useState<Record<string, boolean>>({});
 
-  if (!isOpen) return null;
+
 
   const toggleTest = (id: string) => {
     setCheckedTests(prev => ({ ...prev, [id]: !prev[id] }));
@@ -26,7 +27,7 @@ export const CidsHelperModal: React.FC<CidsHelperModalProps> = ({ isOpen, onClos
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm overflow-y-auto">
+    <AnimatedOverlay isOpen={isOpen} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm overflow-y-auto">
       <div role="dialog" aria-modal="true" aria-label={ui(lang, 'closeDialog')}
         className="steel-panel animate-fadeIn relative w-full max-w-3xl bg-obsidian-850 border border-steel-700 rounded-sm shadow-2xl p-6 sm:p-8 my-8 text-steel-100 max-h-[85dvh] overflow-y-auto"
         onClick={e => e.stopPropagation()}
@@ -135,6 +136,6 @@ export const CidsHelperModal: React.FC<CidsHelperModalProps> = ({ isOpen, onClos
           </button>
         </div>
       </div>
-    </div>
+    </AnimatedOverlay>
   );
 };

@@ -1,3 +1,4 @@
+import { AnimatedDetails } from './Collapsible';
 import React from 'react';
 import type { Scenario } from '../types';
 import type { Language } from '../i18n';
@@ -16,7 +17,7 @@ export function ProfileDecisionPath({ scenario, path, lang, open }: {
         {lang === 'uk' ? 'Е' : 'S'}{index + 1} · {variantLabel(scenario, step.nodeId, step.variantId, lang)}
       </span>)}
     </div>
-    <details className="surface-muted min-w-0" open={open} data-testid="profile-route">
+    <AnimatedDetails className="surface-muted min-w-0" open={open} data-testid="profile-route">
       <summary className="cursor-pointer text-sm text-tactical-ice">{labels[lang].path}</summary>
       <div className="mt-4 min-w-0 space-y-5">
         <DecisionPathSvg scenario={scenario} steps={steps} />
@@ -37,6 +38,6 @@ export function ProfileDecisionPath({ scenario, path, lang, open }: {
           })}
         </ol>
       </div>
-    </details>
+    </AnimatedDetails>
   </div>;
 }
