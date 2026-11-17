@@ -1,3 +1,4 @@
+import { AnimatedDetails } from './Collapsible';
 import React, { useState } from 'react';
 import type { Scenario, Variant } from '../types';
 import type { Language } from '../i18n';
@@ -23,7 +24,7 @@ export function BuilderNodeEditor({scenario,lang,index,onChange,onSelect,onAdd,o
    <label className="block">{lang==='uk'?'Ситуація етапу':'Stage situation'}<textarea className="im-field w-full mt-1" rows={3} value={node.tekst} onChange={e=>update(s=>{s.vuzly[index].tekst=e.target.value;})}/></label>
    <label className="block">{lang==='uk'?'Запитання':'Question'}<input className="im-field w-full mt-1" value={node.zapytannia} onChange={e=>update(s=>{s.vuzly[index].zapytannia=e.target.value;})}/></label>
    <label className="block">{t.search}<input type="search" data-field="normy" className="im-field w-full mt-1" value={search} onChange={e=>setSearch(e.target.value)}/></label>
-   {node.varianty.map((v,i)=><details key={v.id} data-variant-id={v.id} className="studio-option steel-panel p-4" open={i===0}>
+   {node.varianty.map((v,i)=><AnimatedDetails key={v.id} data-variant-id={v.id} className="studio-option steel-panel p-4" open={i===0}>
     <summary className="cursor-pointer font-mono text-justice-gold">{optionLabel(i,lang)} · {v.tekst}</summary>
     <div className="space-y-3 mt-4">
      <button disabled={node.varianty.length<=(node.id===scenario.pochatkovyi_vuzol?3:2)} className="im-secondary action" onClick={()=>update(s=>{s.vuzly[index].varianty.splice(i,1);})}>{t.remove}</button>
@@ -36,7 +37,7 @@ export function BuilderNodeEditor({scenario,lang,index,onChange,onSelect,onAdd,o
      <label className="block">{t.feedback}<textarea className="im-field w-full" value={v.zvorotnyi_zviazok} onChange={e=>change(i,v=>{v.zvorotnyi_zviazok=e.target.value;})}/></label>
      <fieldset><legend>{t.norms}</legend><div className="max-h-64 overflow-y-auto space-y-1 mt-2">{norms.length===0&&<p>{t.empty}</p>}{norms.map(n=><button type="button" key={n.id} title={n.korotko} aria-pressed={v.normy.includes(n.id)} className={`studio-norm w-full text-left ${v.normy.includes(n.id)?'studio-selected':''}`} onClick={()=>update(s=>{const ids=s.vuzly[index].varianty[i].normy;const j=ids.indexOf(n.id);if(j<0)ids.push(n.id);else ids.splice(j,1);const used=new Set(s.vuzly.flatMap(n=>n.varianty.flatMap(v=>v.normy)));s.normy=[...used].map(id=>s.normy.find(n=>n.id===id)||{id,yak_zastosovuietsia:localizeNorm(normyData.normy.find(n=>n.id===id)!,lang).korotko});})}>{n.id} · {n.punkt} · {n.akt}</button>)}</div></fieldset>
     </div>
-   </details>)}
+   </AnimatedDetails>)}
    <button className="im-secondary action" disabled={node.varianty.length>=4} onClick={()=>{try{update(s=>{s.vuzly[index].varianty.push(freshVariant(s,lang));});}catch{alert(t.limit);}}}>+ {t.addOption}</button>
   </section>}
  </div>;

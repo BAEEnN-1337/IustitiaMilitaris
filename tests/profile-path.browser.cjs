@@ -49,6 +49,7 @@ const pathways = Object.fromEntries(scenarios.map(s => {
         const details = card.getByTestId('profile-route');
         if (source.id === 'S03') assert.equal(await details.getAttribute('open'), '');
         if (await details.getAttribute('open') === null) await details.locator('summary').click();
+        await details.locator('.collapsible').first().waitFor({state:'visible'});
         assert.equal(await details.getByTestId('path-stage').count(), steps.length);
         assert.equal(await details.getByTestId('selected-curve').count(), steps.length - 1);
         assert.equal(await card.getByTestId('profile-timeline').locator('li').count(), steps.length);

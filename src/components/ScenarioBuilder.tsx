@@ -1,3 +1,4 @@
+import { AnimatedDetails, Collapsible } from './Collapsible';
 import studioLabels from '../i18n/builderStudio.json';
 import { freshNode, freshVariant, reachableNodes, nextScenarioId, knownScenarioIds } from '../utils/builderStudio';
 import { BuilderNodeEditor } from './BuilderNodeEditor';
@@ -375,10 +376,10 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
           <button className="im-secondary action" aria-expanded={preview} onClick={()=>setPreview(!preview)}>{studio.preview}</button>
         </div>
       </section>
-      {preview&&<section className="studio-preview steel-panel p-5 space-y-3" aria-label={studio.preview}>
+      <Collapsible isOpen={preview}><section className="studio-preview steel-panel p-5 space-y-3" aria-label={studio.preview}>
         <button className="im-secondary action" onClick={()=>setPreview(false)}>{studio.close}</button>
         <div className="scenario-card max-w-md mx-auto steel-panel p-5 space-y-3"><span className="badge">{caseLabel(scenario.id,lang)}</span><h3 className="scenario-card-title font-serif text-xl">{scenario.nazva}</h3><ScenarioDescription text={scenario.sytuatsiia} lang={lang} truncate={scenario.id!=='S02'}/><CaseMetadata scenario={scenario} lang={lang}/><button className="im-secondary action w-full" onClick={handleTestInSimulator}>{t.catalog.startSolo}</button></div>
-      </section>}
+      </section></Collapsible>
 
       {validationErrors.length > 0 ? (
         <div className="steel-panel border-l-[3px] border-l-status-warning p-4 text-xs space-y-1">
@@ -442,7 +443,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                 </label>
                 <div className="space-y-2">
                   <span className="badge">{caseLabel(scenario.id, lang)}</span>
-                  <details>
+                  <AnimatedDetails>
                     <summary className="text-xs cursor-pointer text-steel-300">
                       {lang === 'uk'
                         ? 'Технічний ID (JSON)'
@@ -456,7 +457,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
                       }
                       className="im-field w-full bg-obsidian-950 border border-steel-700 rounded-sm p-2.5 text-white"
                     />
-                  </details>
+                  </AnimatedDetails>
                 </div>
               </div>
               <div>
@@ -763,7 +764,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
               {ui(lang, 'm175')}{' '}
             </h3>
             <fieldset><legend>{studio.ai}</legend><div className="flex gap-2 mt-2">{[true,false].map(value=><button key={String(value)} className={`studio-stage ${scenario.shi.vykorystano===value?'studio-selected':''}`} aria-pressed={scenario.shi.vykorystano===value} onClick={()=>setScenario({...scenario,shi:{...scenario.shi,vykorystano:value,instrument:value?scenario.shi.instrument:null}})}>{value?studio.yes:studio.no}</button>)}</div></fieldset>
-            {scenario.shi.vykorystano&&<div className="space-y-3">            <div>
+            <Collapsible isOpen={scenario.shi.vykorystano}><div className="space-y-3">            <div>
               <label className="block text-steel-300 font-bold mb-1">
                 {ui(lang, 'm176')}{' '}
               </label>
@@ -798,7 +799,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
               />
             </div>
 
-</div>}
+</div></Collapsible>
             <div>
               <label className="block text-steel-300 font-bold mb-1">
                 {ui(lang, 'm178')}{' '}

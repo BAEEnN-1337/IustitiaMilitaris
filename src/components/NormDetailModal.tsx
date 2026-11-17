@@ -1,8 +1,9 @@
+import { AnimatedOverlay } from './Collapsible';
 import { safeExternalUrl } from '../utils/security';
 import { localizeNorm } from '../i18n/content';
 import { useLanguage } from '../i18n/ui';
 import { ui } from '../i18n/ui';
-import React from 'react';
+import React, { useRef } from 'react';
 import { X, BookOpen, ExternalLink, CheckCircle2, AlertTriangle, FileText } from 'lucide-react';
 import { NormEntry } from '../types';
 
@@ -14,14 +15,17 @@ interface NormDetailModalProps {
 
 export const NormDetailModal: React.FC<NormDetailModalProps> = ({ norm: originalNorm, yakZastosovuietsia, onClose }) => {
   const lang = useLanguage();
-  const norm = originalNorm ? localizeNorm(originalNorm, lang) : null;
+  const previous = useRef(originalNorm);
+  if (originalNorm) previous.current = originalNorm;
+  const cached = originalNorm || previous.current;
+  const norm = cached ? localizeNorm(cached, lang) : null;
   if (!norm) return null;
 
   const isVerified = norm.status_zvirky === 'zvireno';
   const isRecommended = norm.status_zvirky === 'zvireno-rekomendatsiinyi';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm overflow-y-auto">
+    <AnimatedOverlay isOpen={!!originalNorm} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm overflow-y-auto">
       <div role="dialog" aria-modal="true" aria-label={ui(lang, 'closeDialog')}
         className="steel-panel animate-fadeIn relative w-full max-w-2xl bg-obsidian-850 border border-steel-700 rounded-sm shadow-2xl p-6 sm:p-7 text-steel-100 max-h-[85dvh] overflow-y-auto"
         onClick={e => e.stopPropagation()}
@@ -121,6 +125,6 @@ export const NormDetailModal: React.FC<NormDetailModalProps> = ({ norm: original
           )}
         </div>
       </div>
-    </div>
+    </AnimatedOverlay>
   );
 };

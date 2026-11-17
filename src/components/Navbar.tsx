@@ -1,3 +1,4 @@
+import { Collapsible } from './Collapsible';
 import { BrandLogo } from './BrandLogo';
 import brandLabels from '../i18n/brand.json';
 import React, { useEffect, useState } from 'react';
@@ -20,6 +21,7 @@ export const Navbar = ({
   setLang,
   onAuth
 }: NavbarProps) => {
+  const [menuOpen, setMenuOpen] = useState(false);
   const t = labels[lang];
   const [theme, setTheme] = useState(() => {
     try {
@@ -64,7 +66,7 @@ export const Navbar = ({
             <span className="brand-subtitle">{brandLabels[lang].short}</span>
           </span>
         </a>
-        <nav className="header-nav" aria-label={translations[lang].appTitle}>
+        <nav className="header-nav desktop-navigation" aria-label={translations[lang].appTitle}>
           {views.map((view) => (
             <button
               key={view}
@@ -82,6 +84,7 @@ export const Navbar = ({
           ))}
         </nav>
         <div className="header-tools">
+          <button className="header-icon mobile-menu-trigger" aria-label={lang === 'uk' ? 'Меню навігації' : 'Navigation menu'} aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen(!menuOpen)}><span className={`collapse-chevron ${menuOpen ? 'is-open' : ''}`}>⌄</span></button>
           <span
             className={`flex items-center gap-1 text-xs ${online ? 'text-steel-300' : 'text-steel-400'}`}
             role="status"
@@ -123,6 +126,7 @@ export const Navbar = ({
           </button>
         </div>
       </div>
+      <div className="mobile-navigation"><Collapsible isOpen={menuOpen} id="mobile-navigation"><nav className="flex flex-wrap gap-2 px-4 pb-3" aria-label={lang === 'uk' ? 'Мобільна навігація' : 'Mobile navigation'}>{views.map(view => <button key={view} className="header-tab" onClick={() => {setCurrentView(view);setMenuOpen(false);}}>{t[view]}</button>)}</nav></Collapsible></div>
     </header>
   );
 };

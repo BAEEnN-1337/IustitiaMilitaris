@@ -1,3 +1,4 @@
+import { Collapsible } from './Collapsible';
 import polish from '../i18n/polish.json';
 import { caseLabel, stageLabel, variantLabel, scenarioStageCount } from '../i18n/display';
 import {
@@ -346,20 +347,16 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
             </div>
             <div className="rounded-sm border border-steel-700 overflow-hidden bg-obsidian-950">
               <button
-                onClick={() => setShowValuesConflict(!showValuesConflict)}
+                aria-expanded={showValuesConflict} onClick={() => setShowValuesConflict(!showValuesConflict)}
                 className="im-secondary w-full p-4 flex flex-wrap items-center justify-between gap-2 text-left text-sm font-semibold text-status-warning hover:bg-obsidian-850 transition-colors"
               >
                 <span className="flex flex-wrap items-center gap-2">
                   <Scale className="w-4 h-4 text-status-warning" />
                   {t.briefing.valuesConflictTitle}
                 </span>
-                {showValuesConflict ? (
-                  <ChevronUp className="w-4 h-4" />
-                ) : (
-                  <ChevronDown className="w-4 h-4" />
-                )}
+                <ChevronDown className={`w-4 h-4 collapse-chevron ${showValuesConflict ? 'is-open' : ''}`} />
               </button>
-              {showValuesConflict && (
+              <Collapsible isOpen={showValuesConflict}>
                 <div className="animate-fadeIn p-4 border-t border-obsidian-800 space-y-3 text-xs sm:text-sm">
                   {scenario.tsinnosti_v_konflikti.map((c, idx) => (
                     <div
@@ -374,7 +371,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                     </div>
                   ))}
                 </div>
-              )}
+              </Collapsible>
             </div>
             <button
               onClick={handleStartFromBriefing}
