@@ -140,7 +140,7 @@ const root = path.resolve(__dirname, '..'),
             await desc.evaluate((e) => e.scrollIntoView({ block: 'center' }));
             await p.mouse.move(0, 0);
             await p.evaluate(() =>
-              Promise.all(document.getAnimations().map((a) => a.finished))
+              Promise.all(document.getAnimations().map((a) => a.finished.catch(() => {})))
             );
             const positions = () =>
               p
@@ -157,7 +157,7 @@ const root = path.resolve(__dirname, '..'),
             await desc.hover();
             await popup.waitFor({ state: 'visible' });
             await popup.evaluate((e) =>
-              Promise.all(e.getAnimations().map((a) => a.finished))
+              Promise.all(e.getAnimations().map((a) => a.finished.catch(() => {})))
             );
             assert.deepEqual(await positions(), before);
             const a = await desc.boundingBox(),
@@ -207,6 +207,18 @@ const root = path.resolve(__dirname, '..'),
             }
           )
         );
+        await p.goto('http://127.0.0.1:18496/');
+        await p.setViewportSize({width,height:500});
+        await p.locator('.scenario-description').first().waitFor();await p.locator('.scenario-description').first().evaluate(e=>{
+          // Keep the stacking regression exercised when current catalogue copy fits in full.
+          if(!e.querySelector('.description-continuation')){const button=document.createElement('button');button.className='description-more';button.textContent='[···]';e.append(button);const popup=document.createElement('div');popup.className='description-continuation absolute left-0 right-0 top-full mt-1.5 w-full z-40 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible';popup.textContent='Continuation '.repeat(100);e.append(popup);}
+        });
+        const more=p.locator('.description-more').first();await more.hover();await more.focus();
+        await p.waitForFunction(()=>getComputedStyle(document.querySelector('.description-continuation')).opacity==='1');
+        const down=await p.locator('.scenario-description').first().evaluate(e=>e.querySelector('.description-continuation').getBoundingClientRect().top>=e.getBoundingClientRect().bottom);assert.equal(down,true);
+        await p.locator('.description-continuation').first().evaluate(e=>window.scrollBy(0,e.getBoundingClientRect().top-20));
+        assert.equal(await p.evaluate(()=>{const pop=document.querySelector('.description-continuation').getBoundingClientRect(),header=document.querySelector('.site-header').getBoundingClientRect();const x=Math.min(innerWidth-10,Math.max(10,pop.left+20)),y=Math.min(header.bottom-2,Math.max(2,pop.top+10));return pop.top<header.bottom&&document.elementFromPoint(x,y)?.closest('.site-header')!==null;}),true);
+        assert.equal(await p.locator('main').evaluate(e=>getComputedStyle(e).zIndex),'10');assert.equal(await p.locator('.site-header').evaluate(e=>getComputedStyle(e).zIndex),'50');
         await c.close();
         console.log(
           'PASS complete-sentence preview, exact continuation, overlay width, hover/focus and zero card/metadata/action displacement',

@@ -49,7 +49,7 @@ export const Navbar = ({
   }, []);
   const views = ['catalog', 'classroom', 'builder', 'norms'] as const;
   return (
-    <header className="site-header sticky top-0 z-40 border-b border-steel-700 bg-obsidian-900/95 backdrop-blur-md">
+    <header className="site-header sticky top-0 z-50 border-b border-steel-700 bg-obsidian-900/95 backdrop-blur-md">
       <div className="header-row">
         <a
           href="/"

@@ -154,7 +154,7 @@ export const App: React.FC = () => {
           lang={lang}
           setLang={setLang}
         />
-        <main className="flex-1"><Suspense fallback={<div className="page-shell" role="status"><div className="steel-panel p-4 font-mono text-sm text-tactical-ice">{polish[lang].loading}</div></div>}>
+        <main className="flex-1 relative z-10"><Suspense fallback={<div className="page-shell" role="status"><div className="steel-panel p-4 font-mono text-sm text-tactical-ice">{polish[lang].loading}</div></div>}>
           <PageMotion pathname={pathname} lang={lang}>
           {pathname !== '/' && (
             <nav
