@@ -781,3 +781,6 @@ body,
 
 .scenario-description .description-preview-box { min-height: calc(7 * 1.625em); height: auto; line-height: 1.625; text-align: justify; text-align-last: left; hyphens: auto; }
 .scenario-card-metadata > .case-metadata-strip { padding-top: 0; }
+
+.decision-path-scroll { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { .decision-path-scroll { scroll-behavior: auto; } }

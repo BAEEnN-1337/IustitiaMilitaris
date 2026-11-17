@@ -1,11 +1,13 @@
+import { DecisionPathSvg } from './DecisionPathSvg';
 import { stageLabel, variantLabel } from '../i18n/display';
 import { useLanguage } from '../i18n/ui';
 import { ui } from '../i18n/ui';
-import React from 'react';
+import React, { useId } from 'react';
 import { Scenario } from '../types';
 
 interface DecisionTreeSvgProps {
   scenario: Scenario;
+  selectedPath?: { nodeId: string; variantId: string }[];
   currentNodeId?: string;
   visitedNodeIds?: string[];
   onSelectNode?: (nodeId: string) => void;
@@ -14,12 +16,15 @@ interface DecisionTreeSvgProps {
 
 export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
   scenario,
+  selectedPath,
   currentNodeId,
   visitedNodeIds = [],
   onSelectNode,
   unreachableNodeIds = []
 }) => {
   const lang = useLanguage();
+  const markerId = useId().replace(/:/g, "");
+  if (selectedPath) return <DecisionPathSvg scenario={scenario} steps={selectedPath} />;
   if (!scenario.vuzly || scenario.vuzly.length === 0) {
     return (
       <div className="p-8 text-center text-steel-400 text-sm">
@@ -72,7 +77,7 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
     .sort((a, b) => a - b);
 
   // Layout parameters
-  const colWidth = 240;
+  const colWidth = 320;
   const rowHeight = 130;
   const nodeWidth = 170;
   const nodeHeight = 84;
@@ -117,6 +122,14 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
     }
   }
 
+  const groupedEdges = [...edges.reduce((groups, edge) => {
+    const key = `${edge.from}:${edge.to}`;
+    const existing = groups.get(key);
+    if (existing) existing.label += ` · ${edge.label}`;
+    else groups.set(key, { ...edge });
+    return groups;
+  }, new Map<string, typeof edges[number]>()).values()];
+
   return (
     <div className="w-full overflow-x-auto bg-obsidian-950/80 rounded-sm border border-obsidian-800 p-4">
       <svg
@@ -126,7 +139,7 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
       >
         <defs>
           <marker
-            id="arrow"
+            id={`${markerId}-arrow`}
             viewBox="0 0 10 10"
             refX="6"
             refY="5"
@@ -137,7 +150,7 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
             <path d="M 0 1 L 10 5 L 0 9 z" fill="rgb(var(--slate-400))" />
           </marker>
           <marker
-            id="arrow-active"
+            id={`${markerId}-arrow-active`}
             viewBox="0 0 10 10"
             refX="6"
             refY="5"
@@ -145,10 +158,10 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
             markerHeight="6"
             orient="auto-start-reverse"
           >
-            <path d="M 0 1 L 10 5 L 0 9 z" fill="var(--graph-positive)" />
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#C8A456" />
           </marker>
         </defs>
-        {edges.map((e, idx) => {
+        {groupedEdges.map((e, idx) => {
           const fromPos = nodePositions[e.from];
           const toPos = nodePositions[e.to];
           if (!fromPos || !toPos) return null;
@@ -162,23 +175,23 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
           const pathD = `M ${startX} ${startY} C ${midX} ${startY}, ${midX} ${endY}, ${endX} ${endY}`;
 
           return (
-            <g key={idx}>
+            <g key={idx} data-testid="builder-edge">
               <path
                 d={pathD}
                 fill="none"
                 stroke={
                   e.isVisited
-                    ? 'var(--graph-positive)'
+                    ? '#C8A456'
                     : 'rgb(var(--slate-500))'
                 }
                 strokeWidth={e.isVisited ? 2.5 : 1.5}
-                markerEnd={e.isVisited ? 'url(#arrow-active)' : 'url(#arrow)'}
+                markerEnd={e.isVisited ? `url(#${markerId}-arrow-active)` : `url(#${markerId}-arrow)`}
               />
               <text
                 x={midX}
                 y={(startY + endY) / 2 - 4}
                 fill={
-                  e.isVisited ? 'var(--graph-positive)' : 'var(--graph-ink)'
+                  e.isVisited ? '#C8A456' : 'var(--graph-ink)'
                 }
                 fontSize="10"
                 fontWeight="bold"
@@ -205,13 +218,13 @@ export const DecisionTreeSvg: React.FC<DecisionTreeSvgProps> = ({
           let textColor = 'var(--graph-ink)';
 
           if (isCurrent) {
-            strokeColor = 'var(--graph-positive)';
-            fillColor = 'rgba(16, 185, 129, 0.2)';
-            textColor = 'var(--graph-positive)';
+            strokeColor = '#C8A456';
+            fillColor = 'rgba(200, 164, 86, 0.2)';
+            textColor = '#C8A456';
           } else if (isVisited) {
-            strokeColor = 'var(--graph-positive)';
-            fillColor = 'rgba(16, 185, 129, 0.1)';
-            textColor = 'var(--graph-positive)';
+            strokeColor = '#C8A456';
+            fillColor = 'rgba(200, 164, 86, 0.1)';
+            textColor = '#C8A456';
           } else if (isUnreachable) {
             strokeColor = 'var(--graph-negative)';
             fillColor = 'rgba(239, 68, 68, 0.15)';
