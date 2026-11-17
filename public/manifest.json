@@ -4,8 +4,8 @@
   "description": "Освітній симулятор вирішення етичних дилем у секторі безпеки і оборони України",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#070b14",
-  "theme_color": "#0c1424",
+  "background_color": "#0B111A",
+  "theme_color": "#0E1520",
   "icons": [
     {
       "src": "/icon-192.png",
