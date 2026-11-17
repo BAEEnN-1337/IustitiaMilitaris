@@ -1,0 +1,18 @@
+{
+  "uk": {
+    "draft": "Чернетка",
+    "verified": "Перевірено",
+    "ai": "ШІ",
+    "cids": "Кейс CIDS",
+    "practice": "З практики",
+    "training": "Навчальний"
+  },
+  "en": {
+    "draft": "Draft",
+    "verified": "Verified",
+    "ai": "AI",
+    "cids": "CIDS case",
+    "practice": "From practice",
+    "training": "Training case"
+  }
+}

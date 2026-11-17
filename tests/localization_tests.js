@@ -66,7 +66,7 @@ for (const id of ['S01', 'S02', 'S03', 'S04', 'S05', 'S06', 'S07', 'S08']) {
 }
 console.log('PASS: S01–S08 complete English content, all branches, IDs, edges, scores and metadata');
 
-for (const name of ['accounts', 'group', 'themes', 'design', 'brand']) {
+for (const name of ['accounts', 'group', 'themes', 'design', 'brand', 'caseBadges']) {
   const dictionary = read(`../src/i18n/${name}.json`);
   assert.deepEqual(Object.keys(dictionary.uk).sort(), Object.keys(dictionary.en).sort());
   assert.ok(!/[\u0400-\u04ff]/u.test(JSON.stringify(dictionary.en)));
