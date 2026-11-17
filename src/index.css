@@ -861,3 +861,6 @@ summary::-webkit-details-marker { display:none; }
 details > summary { display:flex; align-items:center; gap:8px; }
 details > summary::before { content:none !important; }
 details > summary::-webkit-details-marker { display:none; }
+
+.scenario-card { position:relative; }
+.scenario-card:is(:hover,:focus-within) { z-index:30; }
