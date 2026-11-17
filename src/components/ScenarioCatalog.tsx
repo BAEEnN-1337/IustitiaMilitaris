@@ -1,3 +1,4 @@
+import { ScenarioDescription } from './ScenarioDescription';
 import { CaseMetadata } from './CaseMetadata';
 import { localizeScenario } from '../i18n/content';
 import { ui } from '../i18n/ui';
@@ -119,9 +120,7 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
             <h3 className="im-scenario-title font-serif text-base sm:text-lg font-bold text-white group-hover:text-justice-gold transition-colors leading-snug">
               {s.nazva}
             </h3>
-            <p className="text-xs text-steel-300 mt-2  leading-relaxed">
-              {s.sytuatsiia}
-            </p>
+            <ScenarioDescription text={s.sytuatsiia} lang={lang} />
           </div>
           </div>
           <div className="scenario-card-metadata mt-auto space-y-2">
