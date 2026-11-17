@@ -25,7 +25,7 @@ export const NormDetailModal: React.FC<NormDetailModalProps> = ({ norm: original
   const isRecommended = norm.status_zvirky === 'zvireno-rekomendatsiinyi';
 
   return (
-    <AnimatedOverlay isOpen={!!originalNorm} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm overflow-y-auto">
+    <AnimatedOverlay onClose={onClose} isOpen={!!originalNorm} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm overflow-y-auto">
       <div role="dialog" aria-modal="true" aria-label={ui(lang, 'closeDialog')}
         className="steel-panel animate-fadeIn relative w-full max-w-2xl bg-obsidian-850 border border-steel-700 rounded-sm shadow-2xl p-6 sm:p-7 text-steel-100 max-h-[85dvh] overflow-y-auto"
         onClick={e => e.stopPropagation()}
@@ -50,7 +50,7 @@ export const NormDetailModal: React.FC<NormDetailModalProps> = ({ norm: original
           <button
             aria-label={ui(lang, 'closeDialog')}
             onClick={onClose}
-            className="im-secondary p-1 rounded-sm text-steel-300 hover:text-white hover:bg-obsidian-800 transition-colors"
+            className="whitespace-nowrap im-secondary p-1 rounded-sm text-steel-300 hover:text-white hover:bg-obsidian-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -117,7 +117,7 @@ export const NormDetailModal: React.FC<NormDetailModalProps> = ({ norm: original
               href={safeExternalUrl(norm.posylannia)}
               target="_blank"
               rel="noopener noreferrer"
-              className="im-secondary inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-obsidian-800 hover:bg-steel-700 text-tactical-ice border border-tactical-ice transition-colors font-medium"
+              className="whitespace-nowrap im-secondary inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-obsidian-800 hover:bg-steel-700 text-tactical-ice border border-tactical-ice transition-colors font-medium"
             >
               <span>zakon.rada.gov.ua</span>
               <ExternalLink className="w-3.5 h-3.5" />

@@ -1,13 +1,14 @@
+import { SlidingNav } from './SlidingNav';
 import { Collapsible } from './Collapsible';
 import { BrandLogo } from './BrandLogo';
 import brandLabels from '../i18n/brand.json';
 import React, { useEffect, useState } from 'react';
-import { Sun, Moon, UserRound } from 'lucide-react';
+import { Sun, Moon, UserRound, ChevronDown } from 'lucide-react';
 import { Language, translations } from '../i18n';
 import labels from '../i18n/design.json';
 interface NavbarProps {
   onAuth?: () => void;
-  currentView: 'catalog' | 'solo' | 'classroom' | 'builder' | 'norms';
+  currentView: 'auth' | 'catalog' | 'solo' | 'auth' | 'classroom' | 'builder' | 'norms';
   setCurrentView: (
     view: 'catalog' | 'solo' | 'classroom' | 'builder' | 'norms'
   ) => void;
@@ -66,7 +67,7 @@ export const Navbar = ({
             <span className="brand-subtitle">{brandLabels[lang].short}</span>
           </span>
         </a>
-        <nav className="header-nav desktop-navigation" aria-label={translations[lang].appTitle}>
+        <SlidingNav className="header-nav desktop-navigation" label={translations[lang].appTitle} activeKey={currentView + lang}>
           {views.map((view) => (
             <button
               key={view}
@@ -82,9 +83,9 @@ export const Navbar = ({
               {t[view]}
             </button>
           ))}
-        </nav>
+        </SlidingNav>
         <div className="header-tools">
-          <button className="header-icon mobile-menu-trigger" aria-label={lang === 'uk' ? 'Меню навігації' : 'Navigation menu'} aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen(!menuOpen)}><span className={`collapse-chevron ${menuOpen ? 'is-open' : ''}`}>⌄</span></button>
+          <button className="header-icon mobile-menu-trigger" aria-label={lang === 'uk' ? 'Меню навігації' : 'Navigation menu'} aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen(!menuOpen)}><ChevronDown strokeWidth={1.75} className={`w-4 h-4 shrink-0 collapse-chevron ${menuOpen ? 'is-open' : ''}`} /></button>
           <span
             className={`flex items-center gap-1 text-xs ${online ? 'text-steel-300' : 'text-steel-400'}`}
             role="status"
@@ -104,18 +105,9 @@ export const Navbar = ({
           >
             {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
           </button>
-          <div className="flex rounded-sm border border-steel-700 p-0.5">
-            {(['uk', 'en'] as const).map((l) => (
-              <button
-                key={l}
-                className={`rounded-sm px-2 py-1 text-xs font-semibold ${lang === l ? 'bg-justice-gold/10 text-justice-gold' : 'text-steel-300'}`}
-                aria-pressed={lang === l}
-                onClick={() => setLang(l)}
-              >
-                {l === 'uk' ? 'УКР' : 'ENG'}
-              </button>
-            ))}
-          </div>
+          <button type="button" className={`language-toggle ${lang === 'en' ? 'is-english' : ''}`} aria-label={lang === 'uk' ? 'Мова: УКР. Перемкнути на ENG' : 'Language: ENG. Switch to UKR'} onClick={() => setLang(lang === 'uk' ? 'en' : 'uk')}>
+            <span className="language-thumb" aria-hidden="true" /><span>УКР</span><span>ENG</span>
+          </button>
           <button
             className="header-icon"
             onClick={onAuth}
@@ -126,7 +118,7 @@ export const Navbar = ({
           </button>
         </div>
       </div>
-      <div className="mobile-navigation"><Collapsible isOpen={menuOpen} id="mobile-navigation"><nav className="flex flex-wrap gap-2 px-4 pb-3" aria-label={lang === 'uk' ? 'Мобільна навігація' : 'Mobile navigation'}>{views.map(view => <button key={view} className="header-tab" onClick={() => {setCurrentView(view);setMenuOpen(false);}}>{t[view]}</button>)}</nav></Collapsible></div>
+      <div className="mobile-navigation"><Collapsible isOpen={menuOpen} id="mobile-navigation"><SlidingNav activeKey={currentView + lang + menuOpen} className="flex flex-wrap gap-2 px-4 pb-3" label={lang === 'uk' ? 'Мобільна навігація' : 'Mobile navigation'}>{views.map(view => <button key={view} aria-current={currentView === view || currentView === 'solo' && view === 'catalog' ? 'page' : undefined} className="header-tab" onClick={() => {setCurrentView(view);setMenuOpen(false);}}>{t[view]}</button>)}</SlidingNav></Collapsible></div>
     </header>
   );
 };

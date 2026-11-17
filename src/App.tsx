@@ -1,3 +1,4 @@
+import { PageMotion } from './components/PageMotion';
 import polish from './i18n/polish.json';
 import { caseLabel } from './i18n/display';
 import designLabels from './i18n/design.json';
@@ -142,7 +143,7 @@ export const App: React.FC = () => {
           currentView={
             currentView === 'student' || currentView === 'classroom'
               ? 'classroom'
-              : currentView === 'auth' || currentView === 'missing'
+              : currentView === 'missing'
                 ? 'catalog'
                 : currentView
           }
@@ -154,6 +155,7 @@ export const App: React.FC = () => {
           setLang={setLang}
         />
         <main className="flex-1"><Suspense fallback={<div className="page-shell" role="status"><div className="steel-panel p-4 font-mono text-sm text-tactical-ice">{polish[lang].loading}</div></div>}>
+          <PageMotion pathname={pathname} lang={lang}>
           {pathname !== '/' && (
             <nav
               id="breadcrumbs"
@@ -248,7 +250,7 @@ export const App: React.FC = () => {
           )}
 
           {currentView === 'norms' && <NormsLibrary lang={lang} />}
-        </Suspense></main>
+        </PageMotion></Suspense></main>
         <Footer lang={lang} />
       </div>
     </LanguageContext.Provider>
