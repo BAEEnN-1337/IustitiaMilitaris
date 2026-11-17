@@ -124,7 +124,7 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
             </p>
           </div>
           </div>
-          <div className="scenario-card-metadata mt-auto pt-4 border-t border-steel-700/40 space-y-3.5">
+          <div className="scenario-card-metadata mt-auto space-y-2">
           <CaseMetadata scenario={s} lang={lang} />
           <div className="text-[11px] text-steel-300">
             <span className="text-steel-300 font-semibold">{t.catalog.audience}: </span>
