@@ -5,7 +5,10 @@
     "ai": "ШІ",
     "cids": "Кейс CIDS",
     "practice": "З практики",
-    "training": "Навчальний"
+    "training": "Навчальний",
+    "draftHint": "Статус верифікації: робоча чернетка команди. Очікує фахової експертизи фахівцем з питань запобігання корупції (ДЗПК).",
+    "aiHint": "Використання ШІ: чернетки варіантів підготовлено за участі ШІ з наступною перевіркою людиною. Двигун рішень працює детерміновано без ШІ.",
+    "cidsHint": "Джерело кейсу: дилема змодельована на основі посібника CIDS (Центр доброчесності в оборонному секторі, Норвегія, 2025)."
   },
   "en": {
     "draft": "Draft",
@@ -13,6 +16,9 @@
     "ai": "AI",
     "cids": "CIDS case",
     "practice": "From practice",
-    "training": "Training case"
+    "training": "Training case",
+    "draftHint": "Verification status: team draft. Awaiting expert review by an anti-corruption integrity officer (DZPK).",
+    "aiHint": "AI disclosure: drafts generated with AI assistance and human review. Decision engine runs deterministically without AI.",
+    "cidsHint": "Case source: dilemma modeled after the CIDS Workplace Dilemmas Handbook (Norway, 2025)."
   }
 }

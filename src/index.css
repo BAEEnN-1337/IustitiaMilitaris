@@ -738,3 +738,10 @@ body,
 @media (min-width: 640px) and (max-width: 767px) {
   .scenario-card-metadata { margin-inline: -8px; }
 }
+
+.case-badge { min-width: 0; overflow: visible; }
+.case-badge > span:not([role="tooltip"]) { min-width: 0; overflow-wrap: anywhere; }
+.case-badge:is(:hover, :focus) { z-index: 60; border-color: var(--border-strong); outline-color: var(--accent-ice); }
+.case-badge-tooltip { max-width: calc(100vw - 32px); }
+.case-badge:first-child > .case-badge-tooltip { left: 0; transform: none; }
+.case-badge:last-child > .case-badge-tooltip { left: auto; right: 0; transform: none; }
