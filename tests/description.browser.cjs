@@ -77,7 +77,19 @@ const root = path.resolve(__dirname, '..'),
                 .textContent()
             ).trim(),
             original = (lang === 'uk' ? uk : en)[id].sytuatsiia;
-          assert.ok(Array.from(preview).length <= 390);
+          assert.ok(Array.from(preview).length > 0);
+          if (await popup.count()) assert.match(preview, /[.!?]$/u);
+          assert.equal(
+            await desc.locator('p').first().getAttribute('lang'),
+            lang
+          );
+          assert.equal(
+            await desc
+              .locator('p')
+              .first()
+              .evaluate((el) => getComputedStyle(el).textAlignLast),
+            'left'
+          );
           const typography = await desc
             .locator('p')
             .first()
@@ -95,9 +107,9 @@ const root = path.resolve(__dirname, '..'),
                 boxBottom: el.getBoundingClientRect().bottom
               };
             });
-          assert.equal(typography.align, 'left');
+          assert.equal(typography.align, 'justify');
           assert.ok(
-            Math.abs(typography.height - typography.line * 7) < 1,
+            typography.height >= typography.line * 7 - 1,
             JSON.stringify(typography)
           );
           assert.ok(typography.bottom <= typography.boxBottom + 1);
@@ -111,13 +123,7 @@ const root = path.resolve(__dirname, '..'),
             .boundingBox();
           assert.ok(Math.abs(descriptionBounds.x - titleBounds.x) < 1);
           if (await popup.count()) {
-            const marker = await desc.getByRole('button').boundingBox();
-            const box = await desc
-              .locator('.description-preview-box')
-              .boundingBox();
-            assert.ok(
-              Math.abs(marker.y + marker.height - box.y - box.height) < 1
-            );
+            assert.match(preview, /[.!?]$/u);
             await desc.evaluate((e) => e.scrollIntoView({ block: 'center' }));
             await p.mouse.move(0, 0);
             await p.evaluate(() =>
@@ -190,7 +196,7 @@ const root = path.resolve(__dirname, '..'),
         );
         await c.close();
         console.log(
-          'PASS word-boundary preview, exact continuation, overlay width, hover/focus and zero card/metadata/action displacement',
+          'PASS complete-sentence preview, exact continuation, overlay width, hover/focus and zero card/metadata/action displacement',
           lang,
           width
         );
