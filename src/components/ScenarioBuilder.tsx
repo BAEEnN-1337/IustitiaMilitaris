@@ -1,3 +1,4 @@
+import { parseImportedJson } from '../utils/security';
 import { caseLabel, stageLabel, variantLabel } from '../i18n/display';
 import { localizeScenario } from '../i18n/content';
 import { ui } from '../i18n/ui';
@@ -224,11 +225,13 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
   const handleImportJson = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > 1024 * 1024) { alert(lang === 'uk' ? 'Файл перевищує 1 МБ' : 'File exceeds 1 MB'); e.target.value = ''; return; }
 
     const reader = new FileReader();
     reader.onload = (event) => {
       try {
-        const parsed = JSON.parse(event.target?.result as string);
+        const parsed = parseImportedJson(event.target?.result as string) as Scenario;
+        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || validateScenario(parsed, normyData, lang).length) throw Error('Invalid scenario');
         setScenario(parsed);
         const errors = validateScenario(parsed, normyData, lang);
         setValidationRequested(true);

@@ -1,3 +1,4 @@
+import { safeExternalUrl } from '../utils/security';
 import { localizeNorm } from '../i18n/content';
 import { useLanguage } from '../i18n/ui';
 import { ui } from '../i18n/ui';
@@ -107,9 +108,9 @@ export const NormDetailModal: React.FC<NormDetailModalProps> = ({ norm: original
           <div>
             {ui(lang, 'm41')}{' '}{norm.dzherelo_zvirky} ({norm.data_zvirky})
           </div>
-          {norm.posylannia && (
+          {safeExternalUrl(norm.posylannia) && (
             <a
-              href={norm.posylannia}
+              href={safeExternalUrl(norm.posylannia)}
               target="_blank"
               rel="noopener noreferrer"
               className="im-secondary inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-obsidian-800 hover:bg-steel-700 text-tactical-ice border border-tactical-ice transition-colors font-medium"

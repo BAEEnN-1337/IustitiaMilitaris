@@ -1,3 +1,4 @@
+import { constantEqual, sameOrigin, parseJson } from './security.js';
 import { randomBytes, randomInt } from 'node:crypto';
 import { readFileSync, readdirSync } from 'node:fs';
 import { WebSocketServer } from 'ws';
@@ -11,7 +12,7 @@ export function installClassroom(server, directory) {
       })
   );
   const rooms = new Map();
-  const wss = new WebSocketServer({ server, path: '/ws', maxPayload: 8192 });
+  const wss = new WebSocketServer({ server, path: '/ws', maxPayload: 16 * 1024, verifyClient: info => sameOrigin(info.req) && wss.clients.size < 1000 });
   const send = (ws, data) => {
     if (ws.readyState === 1) ws.send(JSON.stringify(data));
   };
@@ -48,7 +49,7 @@ export function installClassroom(server, directory) {
   };
   const timer = setInterval(() => {
     for (const room of rooms.values())
-      if (Date.now() - room.updated > 3 * 3600000) close(room);
+      if (Date.now() - room.updated > 4 * 3600000) close(room);
   }, 60000);
   timer.unref();
   server.on('close', () => clearInterval(timer));
@@ -64,10 +65,22 @@ export function installClassroom(server, directory) {
         return;
       }
     }
+    ws.on('error', () => {});
     let joined;
+    let messages = 0, windowStart = Date.now();
     ws.on('message', (raw) => {
       try {
-        const data = JSON.parse(raw);
+        if (Date.now() - windowStart > 1000) { windowStart = Date.now(); messages = 0; }
+        if (++messages > 120) { ws.close(1008, 'rateLimit'); return; }
+        const data = parseJson(raw.toString());
+        if (!data || typeof data !== 'object' || Array.isArray(data) || typeof data.type !== 'string') throw Error('invalidMessage');
+        const allowed = ['CREATE_ROOM','JOIN_ROOM','SUBMIT_VOTE','SET_LIVE','OPEN_VOTING','SHOW_RESULTS','DISCUSS','NEXT_STAGE','CLOSE_SESSION'];
+        if (!allowed.includes(data.type)) throw Error('invalidMessage');
+        if (data.type === 'CREATE_ROOM' && (typeof data.scenarioId !== 'string' || !/^S[0-9]{2}$/.test(data.scenarioId))) throw Error('invalidMessage');
+        if (data.clientVoteToken !== undefined && (typeof data.clientVoteToken !== 'string' || !/^[a-zA-Z0-9-]{20,100}$/.test(data.clientVoteToken))) throw Error('invalidMessage');
+        if (data.variantId !== undefined && (typeof data.variantId !== 'string' || !/^[A-Z][0-9]?$/.test(data.variantId))) throw Error('invalidMessage');
+        if (data.hostSecret !== undefined && (typeof data.hostSecret !== 'string' || !/^[a-f0-9]{64}$/.test(data.hostSecret))) throw Error('invalidMessage');
+        if (data.type === 'SET_LIVE' && typeof data.showLive !== 'boolean') throw Error('invalidMessage');
         if (data.type === 'CREATE_ROOM') {
           if (joined || !scenarios.has(data.scenarioId) || rooms.size >= 100)
             return;
@@ -100,20 +113,22 @@ export function installClassroom(server, directory) {
           return;
         }
         if (data.type === 'JOIN_ROOM') {
-          const room = rooms.get(String(data.roomCode));
+          if (typeof data.roomCode !== 'string' || !/^[0-9]{6}$/.test(data.roomCode)) throw Error('invalidMessage');
+          const room = rooms.get(data.roomCode);
           if (!room) {
             send(ws, { type: 'ERROR', error: 'roomMissing' });
             return;
           }
-          if (data.hostSecret && data.hostSecret !== room.hostSecret) {
+          if (data.hostSecret && !constantEqual(data.hostSecret, room.hostSecret)) {
             send(ws, { type: 'ERROR', error: 'forbidden' });
             return;
           }
           if (
             !data.hostSecret &&
-            !/^[a-zA-Z0-9-]{20,100}$/.test(data.clientVoteToken || '')
+            (typeof data.clientVoteToken !== 'string' || !/^[a-zA-Z0-9-]{20,100}$/.test(data.clientVoteToken))
           )
             return;
+          if (room.clients.size >= 500 && !room.clients.has(ws)) { send(ws, { type: 'ERROR', error: 'roomFull' }); return; }
           if (joined) joined.clients.delete(ws);
           joined = room;
           ws.role = data.hostSecret ? 'host' : 'student';
@@ -125,7 +140,6 @@ export function installClassroom(server, directory) {
         }
         if (!joined || !rooms.has(joined.code)) return;
         const room = joined;
-        room.updated = Date.now();
         const node = scenarios
           .get(room.scenarioId)
           .vuzly.find((n) => n.id === room.currentNodeId);
@@ -137,6 +151,7 @@ export function installClassroom(server, directory) {
             !node.varianty.some((v) => v.id === data.variantId)
           )
             return;
+          room.updated = Date.now();
           room.voters.add(ws.token);
           room.votes[data.variantId] = (room.votes[data.variantId] || 0) + 1;
           const total = Object.values(room.votes).reduce((a, b) => a + b, 0),
@@ -153,10 +168,11 @@ export function installClassroom(server, directory) {
           broadcast(room);
           return;
         }
-        if (ws.role !== 'host') {
+        if (ws.role !== 'host' || !constantEqual(data.hostSecret, room.hostSecret)) {
           send(ws, { type: 'ERROR', error: 'forbidden' });
           return;
         }
+        room.updated = Date.now();
         if (data.type === 'SET_LIVE') {
           room.showLive = Boolean(data.showLive);
           broadcast(room);

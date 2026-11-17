@@ -1,3 +1,4 @@
+import { scriptJson } from './security';
 import { caseLabel, stageLabel, variantLabel } from '../i18n/display';
 import { Language } from '../i18n';
 import { localizeNorms, localizeScenario } from '../i18n/content';
@@ -16,7 +17,7 @@ export async function generateScorm12Zip(
 
   // 1. imsmanifest.xml (SCORM 1.2 compliant)
   const manifestXml = `<?xml version="1.0" standalone="no" ?>
-<manifest identifier="MANIFEST_${scenario.id}" version="1.2"
+<manifest identifier="MANIFEST_${escapeXml(scenario.id)}" version="1.2"
           xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2"
           xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -27,17 +28,17 @@ export async function generateScorm12Zip(
     <schema>ADL SCORM</schema>
     <schemaversion>1.2</schemaversion>
   </metadata>
-  <organizations default="ORG_${scenario.id}">
-    <organization identifier="ORG_${scenario.id}">
+  <organizations default="ORG_${escapeXml(scenario.id)}">
+    <organization identifier="ORG_${escapeXml(scenario.id)}">
       <title>${escapeXml(scenario.nazva)}</title>
-      <item identifier="ITEM_${scenario.id}" identifierref="RES_${scenario.id}">
+      <item identifier="ITEM_${escapeXml(scenario.id)}" identifierref="RES_${escapeXml(scenario.id)}">
         <title>${escapeXml(scenario.nazva)}</title>
         <adlcp:masteryscore>100</adlcp:masteryscore>
       </item>
     </organization>
   </organizations>
   <resources>
-    <resource identifier="RES_${scenario.id}" type="web-content" adlcp:scormtype="sco" href="index.html">
+    <resource identifier="RES_${escapeXml(scenario.id)}" type="web-content" adlcp:scormtype="sco" href="index.html">
       <file href="index.html" />
       <file href="scorm-api.js" />
     </resource>
@@ -164,8 +165,8 @@ function generateStandaloneHtmlPlayer(
       ])
     )
   };
-  const scenarioJson = JSON.stringify(scenario).replace(/</g, '\\u003c');
-  const normsJson = JSON.stringify(embeddedNorms).replace(/</g, '\\u003c');
+  const scenarioJson = scriptJson(scenario);
+  const normsJson = scriptJson(embeddedNorms);
 
   return `<!DOCTYPE html>
 <html lang="${lang}" class="dark">
@@ -302,10 +303,10 @@ function generateStandaloneHtmlPlayer(
   </div>
 
   <script>
-    var presentation = ${JSON.stringify(presentation).replace(/</g, '\\u003c')};
+    var presentation = ${scriptJson(presentation)};
     var scenario = ${scenarioJson};
     var norms = ${normsJson};
-    var normsMap = {};
+    var normsMap = Object.create(null);
     norms.forEach(function(n) { normsMap[n.id] = n; });
 
     var state = {
@@ -320,97 +321,83 @@ function generateStandaloneHtmlPlayer(
       render();
     };
 
+    var labels = ${scriptJson(labels)};
+    function element(tag, text, className, parent) {
+      var node = document.createElement(tag);
+      if (text !== undefined) node.textContent = String(text);
+      if (className) node.className = className;
+      (parent || document.getElementById('app')).appendChild(node);
+      return node;
+    }
+    function action(text, callback, className, parent) {
+      var button = element('button', undefined, className || 'btn-primary', parent);
+      button.type = 'button';
+      if (text !== undefined) button.textContent = text;
+      button.addEventListener('click', callback);
+      return button;
+    }
     function render() {
-      var app = document.getElementById('app');
+      document.getElementById('app').replaceChildren();
       if (state.step === 'briefing') {
-        app.innerHTML = \`
-          <span class="badge">\${presentation.case} • \${scenario.tryvalist_khv} ${escapeXml(labels.s1)} • \${scenario.tema}</span>
-          <h1>\${scenario.nazva}</h1>
-          <div class="context-box">
-            <strong>${escapeXml(labels.s2)}</strong> \${scenario.kontekst}
-          </div>
-          <div style="margin-bottom: 1.25rem;">
-            <h3>${escapeXml(labels.s3)}</h3>
-            <p>\${scenario.sytuatsiia}</p>
-          </div>
-          <button class="btn-primary" onclick="startScenario()">${escapeXml(labels.s4)}</button>
-          <div class="disclaimer">
-            ${escapeXml(labels.s5)}
-          </div>
-        \`;
+        element('span', presentation.case + ' • ' + scenario.tryvalist_khv + ' ' + labels.s1 + ' • ' + scenario.tema, 'badge');
+        element('h1', scenario.nazva);
+        var context = element('div', undefined, 'context-box');
+        element('strong', labels.s2, undefined, context);
+        element('p', scenario.kontekst, undefined, context);
+        element('h3', labels.s3);
+        element('p', scenario.sytuatsiia);
+        action(labels.s4, startScenario);
+        element('div', labels.s5, 'disclaimer');
       } else if (state.step === 'node') {
         var node = scenario.vuzly.find(function(v) { return v.id === state.currentNodeId; });
-        var optionsHtml = node.varianty.map(function(varItem) {
-          return \`<button class="btn-option" onclick="chooseOption('\${varItem.id}')">
-            <strong>\${presentation.variants[node.id][varItem.id]}.</strong> \${varItem.tekst}
-          </button>\`;
-        }).join('');
-
-        app.innerHTML = \`
-          <span class="badge">\${presentation.stages[node.id]}</span>
-          <h2>\${node.zapytannia}</h2>
-          \${node.tekst ? '<p style="margin-bottom: 1rem; color: var(--text-muted);">' + node.tekst + '</p>' : ''}
-          <div class="options-grid">
-            \${optionsHtml}
-          </div>
-        \`;
+        element('span', presentation.stages[node.id], 'badge');
+        element('h2', node.zapytannia);
+        if (node.tekst) element('p', node.tekst);
+        var options = element('div', undefined, 'options-grid');
+        node.varianty.forEach(function(variant) {
+          var button = action(undefined, function() { chooseOption(variant.id); }, 'btn-option', options);
+          element('strong', presentation.variants[node.id][variant.id] + '.', undefined, button);
+          button.appendChild(document.createTextNode(' ' + variant.tekst));
+        });
       } else if (state.step === 'feedback') {
         var v = state.selectedVariant;
-        function formatScore(num) { return num > 0 ? '+' + num : '' + num; }
-        function scoreClass(num) { return num > 0 ? 'pos' : (num === 0 ? 'zero' : 'neg'); }
-
-        app.innerHTML = \`
-          <span class="badge">${escapeXml(labels.s7)} \${presentation.variants[state.currentNodeId][v.id]}</span>
-          <h2>${escapeXml(labels.s8)}</h2>
-          <div class="scores-row">
-            <div class="score-card">
-              <div style="font-size:0.8rem;color:var(--text-muted)">${escapeXml(labels.s9)}</div>
-              <div class="score-val \${scoreClass(v.baly.dobrochesnist)}">\${formatScore(v.baly.dobrochesnist)}</div>
-            </div>
-            <div class="score-card">
-              <div style="font-size:0.8rem;color:var(--text-muted)">${escapeXml(labels.s10)}</div>
-              <div class="score-val \${scoreClass(v.baly.efektyvnist)}">\${formatScore(v.baly.efektyvnist)}</div>
-            </div>
-            <div class="score-card">
-              <div style="font-size:0.8rem;color:var(--text-muted)">${escapeXml(labels.s11)}</div>
-              <div class="score-val \${scoreClass(v.baly.dovira)}">\${formatScore(v.baly.dovira)}</div>
-            </div>
-          </div>
-          <div class="feedback-box">
-            <p><strong>${escapeXml(labels.s12)}</strong> \${v.naslidky.odrazu}</p>
-            <p style="margin-top: 0.5rem;"><strong>${escapeXml(labels.s13)}</strong> \${v.naslidky.vidkladeni}</p>
-          </div>
-          <p style="margin: 1rem 0; font-size: 0.95rem;"><strong>${escapeXml(labels.s14)}</strong> \${v.chomu_taki_baly}</p>
-          <div class="context-box">
-            <strong>${escapeXml(labels.s15)}</strong> \${v.zvorotnyi_zviazok}
-          </div>
-          <button class="btn-primary" onclick="nextStage()">\${v.nastupnyi_vuzol ? ${JSON.stringify(labels.s16)} : ${JSON.stringify(labels.s17)}}</button>
-        \`;
+        element('span', labels.s7 + ' ' + presentation.variants[state.currentNodeId][v.id], 'badge');
+        element('h2', labels.s8);
+        var scores = element('div', undefined, 'scores-row');
+        ['dobrochesnist', 'efektyvnist', 'dovira'].forEach(function(axis, index) {
+          var card = element('div', undefined, 'score-card', scores);
+          element('div', labels['s' + (9 + index)], undefined, card);
+          var value = v.baly[axis];
+          element('div', (value > 0 ? '+' : '') + value, 'score-val ' + (value > 0 ? 'pos' : value < 0 ? 'neg' : 'zero'), card);
+        });
+        var feedback = element('div', undefined, 'feedback-box');
+        element('strong', labels.s12, undefined, feedback);
+        element('p', v.naslidky.odrazu, undefined, feedback);
+        element('strong', labels.s13, undefined, feedback);
+        element('p', v.naslidky.vidkladeni, undefined, feedback);
+        element('strong', labels.s14);
+        element('p', v.chomu_taki_baly);
+        var analysis = element('div', undefined, 'context-box');
+        element('strong', labels.s15, undefined, analysis);
+        element('p', v.zvorotnyi_zviazok, undefined, analysis);
+        action(v.nastupnyi_vuzol ? labels.s16 : labels.s17, nextStage);
       } else if (state.step === 'reflection') {
         if (window.SCORM_COMPLETE) window.SCORM_COMPLETE();
-        var stepsList = state.pathway.map(function(p, idx) {
-          return '<li>' + presentation.stages[p.nodeId] + ' · ${escapeXml(labels.s19)} ' + presentation.variants[p.nodeId][p.variant.id] + ' — ' + p.variant.tekst + '</li>';
-        }).join('');
-
-        app.innerHTML = \`
-          <span class="badge" style="background:rgba(16,185,129,0.2)">${escapeXml(labels.s20)}</span>
-          <h1>${escapeXml(labels.s21)}</h1>
-          <div class="context-box" style="margin-top:1rem;">
-            <h3>${escapeXml(labels.s22)}</h3>
-            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">\${stepsList}</ul>
-          </div>
-          <div style="margin: 1.5rem 0;">
-            <h3>${escapeXml(labels.s23)}</h3>
-            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
-              \${scenario.porady.map(function(p) { return '<li>' + p + '</li>'; }).join('')}
-            </ul>
-          </div>
-          <div class="feedback-box">
-            <strong>${escapeXml(labels.s24)}</strong><br>
-            ${escapeXml(labels.s25)}
-          </div>
-          <button class="btn-primary" onclick="restart()">${escapeXml(labels.s26)}</button>
-        \`;
+        element('span', labels.s20, 'badge');
+        element('h1', labels.s21);
+        var path = element('div', undefined, 'context-box');
+        element('h3', labels.s22, undefined, path);
+        var list = element('ul', undefined, undefined, path);
+        state.pathway.forEach(function(p) {
+          element('li', presentation.stages[p.nodeId] + ' · ' + labels.s19 + ' ' + presentation.variants[p.nodeId][p.variant.id] + ' — ' + p.variant.tekst, undefined, list);
+        });
+        element('h3', labels.s23);
+        var tips = element('ul');
+        scenario.porady.forEach(function(tip) { element('li', tip, undefined, tips); });
+        var info = element('div', undefined, 'feedback-box');
+        element('strong', labels.s24, undefined, info);
+        element('p', labels.s25, undefined, info);
+        action(labels.s26, restart);
       }
     }
 

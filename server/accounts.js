@@ -1,3 +1,5 @@
+import { parseJson, constantEqual } from './security.js';
+import { promisify } from 'node:util';
 import { readdirSync, readFileSync } from 'node:fs';
 const scenarioNodes = new Map(
   readdirSync(new URL('../stsenarii/', import.meta.url))
@@ -11,19 +13,21 @@ const scenarioNodes = new Map(
 );
 import {
   randomBytes,
-  scryptSync,
+  scrypt,
   timingSafeEqual,
   createHmac
 } from 'node:crypto';
-import { mkdir, readFile, writeFile, rename } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, rename, chmod } from 'node:fs/promises';
 import path from 'node:path';
+const hashPassword = promisify(scrypt);
 
 export async function installAccounts(app, directory) {
   await mkdir(directory, { recursive: true, mode: 0o700 });
   const file = path.join(directory, 'store.json');
   let store;
   try {
-    store = JSON.parse(await readFile(file, 'utf8'));
+    store = parseJson(await readFile(file, 'utf8'));
+    await chmod(file, 0o600);
   } catch (e) {
     if (e.code !== 'ENOENT') throw e;
     store = { users: [], sessions: {}, progress: {} };
@@ -38,12 +42,17 @@ export async function installAccounts(app, directory) {
       secret = randomBytes(48).toString('hex');
       await writeFile(secretFile, secret, { mode: 0o600, flag: 'wx' });
     }
+    await chmod(secretFile, 0o600);
   }
+  if (Buffer.byteLength(secret) < 32) throw Error('Session secret must contain at least 32 bytes');
   let queue = Promise.resolve();
+  let pendingWrites = 0;
   const update = (fn) => {
+    if (pendingWrites >= 128) return Promise.reject(Object.assign(Error('busy'), { status: 503 }));
+    pendingWrites++;
     const task = queue.then(async () => {
       const draft = structuredClone(store);
-      const result = fn(draft);
+      const result = await fn(draft);
       const tmp = file + '.tmp';
       await writeFile(tmp, JSON.stringify(draft), { mode: 0o600 });
       await rename(tmp, file);
@@ -51,14 +60,11 @@ export async function installAccounts(app, directory) {
       return result;
     });
     queue = task.catch(() => {});
-    return task;
+    return task.finally(() => { pendingWrites--; });
   };
   const sign = (token) =>
     createHmac('sha256', secret).update(token).digest('hex');
-  const equal = (a, b) =>
-    typeof a === 'string' &&
-    Buffer.byteLength(a) === Buffer.byteLength(b) &&
-    timingSafeEqual(Buffer.from(a), Buffer.from(b));
+  const equal = constantEqual;
   const tokenOf = (req) => {
     const value = req.headers.cookie
       ?.split(';')
@@ -66,43 +72,24 @@ export async function installAccounts(app, directory) {
       .find((v) => v.startsWith('eds_session='))
       ?.slice(12);
     if (!value) return null;
-    const [token, signature] = value.split('.');
-    return signature && equal(sign(token), signature) ? token : null;
+    if (value.length > 256) return null;
+    const pieces = value.split('.');
+    const [token, signature] = pieces;
+    if (pieces.length !== 2 || !/^[a-f0-9]{64}~[0-9]{13}$/.test(token) || !equal(sign(token), signature)) return null;
+    return Number(token.split('~')[1]) > Date.now() ? token : null;
   };
   const identity = (req) => {
-    const session = store.sessions[tokenOf(req)];
+    const token = tokenOf(req);
+    const session = token && Object.hasOwn(store.sessions, token) ? store.sessions[token] : null;
     return session && session.expires > Date.now() ? session.userId : null;
   };
   const cookie = (res, req, value, age) =>
     res.setHeader(
       'Set-Cookie',
-      `eds_session=${value}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${age}${req.secure ? '; Secure' : ''}`
+      `eds_session=${value}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${age}${req.secure || req.headers['x-forwarded-proto'] === 'https' ? '; Secure' : ''}`
     );
   const wrap = (fn) => (req, res, next) =>
     Promise.resolve(fn(req, res)).catch(next);
-  app.use('/api', (req, res, next) => {
-    res.setHeader('Cache-Control', 'no-store');
-    if (
-      req.method !== 'GET' &&
-      req.headers.origin &&
-      req.headers.origin !== `${req.protocol}://${req.headers.host}`
-    )
-      return res.status(403).json({ error: 'forbidden' });
-    next();
-  });
-  const attempts = new Map();
-  app.use('/api/auth', (req, res, next) => {
-    if (req.method !== 'POST') return next();
-    const key = String(req.body?.login || '').toLowerCase();
-    const now = Date.now();
-    for (const [k, v] of attempts) if (v.until < now) attempts.delete(k);
-    if (attempts.size > 1000)
-      return res.status(429).json({ error: 'rateLimit' });
-    const item = attempts.get(key) || { count: 0, until: now + 60000 };
-    attempts.set(key, item);
-    if (++item.count > 12) return res.status(429).json({ error: 'rateLimit' });
-    next();
-  });
   for (const action of ['register', 'login'])
     app.post(
       `/api/auth/${action}`,
@@ -117,8 +104,9 @@ export async function installAccounts(app, directory) {
         )
           return res.status(400).json({ error: 'credentialsFormat' });
         const normalized = login.toLowerCase();
-        const token = randomBytes(32).toString('hex');
-        const outcome = await update((draft) => {
+        const expires = Date.now() + 7 * 86400000;
+        const token = randomBytes(32).toString('hex') + '~' + expires;
+        const outcome = await update(async (draft) => {
           let user = draft.users.find(
             (u) => u.login.toLowerCase() === normalized
           );
@@ -129,15 +117,15 @@ export async function installAccounts(app, directory) {
               id: randomBytes(16).toString('hex'),
               login,
               salt,
-              hash: scryptSync(password, salt, 64).toString('hex')
+              hash: (await hashPassword(password, salt, 64)).toString('hex')
             };
             draft.users.push(user);
           } else {
-            const computed = scryptSync(
+            const computed = (await hashPassword(
               password,
               user?.salt || 'missing-user',
               64
-            ).toString('hex');
+            )).toString('hex');
             if (!user || !equal(computed, user.hash))
               return { error: 'invalidCredentials' };
           }
@@ -145,7 +133,7 @@ export async function installAccounts(app, directory) {
             if (s.expires < Date.now()) delete draft.sessions[key];
           draft.sessions[token] = {
             userId: user.id,
-            expires: Date.now() + 7 * 86400000
+            expires
           };
           return { login: user.login };
         });
