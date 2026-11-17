@@ -30,19 +30,20 @@ const danglingWords = new Set([
   'but'
 ]);
 
-export function descriptionPreview(text: string) {
+export function descriptionPreview(text: string, maxCharacters = 390) {
   const characters = Array.from(text);
-  if (characters.length <= 350) return { preview: text, continuation: '' };
+  if (characters.length <= maxCharacters)
+    return { preview: text, continuation: '' };
   let boundary = 0;
-  for (let i = 219; i < 350; i++) {
+  for (let i = 299; i < maxCharacters; i++) {
     if (/[.!?]/u.test(characters[i]) && /\s/u.test(characters[i + 1]))
       boundary = i + 1;
   }
   if (!boundary) {
-    boundary = 320;
+    boundary = Math.min(360, maxCharacters);
     while (boundary > 0 && !/\s/u.test(characters[boundary])) boundary--;
     if (!boundary) {
-      boundary = 320;
+      boundary = Math.min(360, maxCharacters);
       while (boundary < characters.length && !/\s/u.test(characters[boundary]))
         boundary++;
     }
