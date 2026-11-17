@@ -582,7 +582,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 </h3>
                 <DecisionTreeSvg
                   scenario={scenario}
-                  visitedNodeIds={pathway.map((p) => p.nodeId)}
+                  selectedPath={pathway.map(p => ({ nodeId: p.nodeId, variantId: p.variant.id }))}
                 />
               </div>
             </div>
