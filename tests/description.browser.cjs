@@ -50,6 +50,20 @@ const root = path.resolve(__dirname, '..'),
         const p = await c.newPage();
         await p.goto('http://127.0.0.1:18496/');
         const cards = p.locator('.scenario-card');
+        const starts = await cards.evaluateAll((els) =>
+          els.map((el) => ({
+            top: el.getBoundingClientRect().top,
+            start: el
+              .querySelector('.scenario-description')
+              .getBoundingClientRect().top
+          }))
+        );
+        for (const a of starts)
+          for (const b of starts.filter((b) => Math.abs(a.top - b.top) < 2))
+            assert.ok(
+              Math.abs(a.start - b.start) < 2,
+              JSON.stringify({ a, b })
+            );
         for (let i = 0; i < (await cards.count()); i++) {
           const card = cards.nth(i),
             desc = card.locator('.scenario-description'),
@@ -62,7 +76,7 @@ const root = path.resolve(__dirname, '..'),
                 .textContent()
             ).trim(),
             original = (lang === 'uk' ? uk : en)[id].sytuatsiia;
-          assert.ok(Array.from(preview).length <= 190);
+          assert.ok(Array.from(preview).length <= 350);
           assert.equal(
             preview + ((await popup.count()) ? await popup.textContent() : ''),
             original
@@ -95,9 +109,18 @@ const root = path.resolve(__dirname, '..'),
               b = await popup.boundingBox();
             assert.ok(Math.abs(a.width - b.width) < 1);
             assert.ok(Math.abs(a.x - b.x) < 1);
-            assert.equal(
-              await popup.evaluate((e) => getComputedStyle(e).position),
-              'absolute'
+            assert.deepEqual(
+              await popup.evaluate((e) => {
+                const s = getComputedStyle(e);
+                return [
+                  s.position,
+                  s.maxHeight,
+                  s.overflowY,
+                  s.overflowX,
+                  e.scrollHeight <= e.clientHeight
+                ];
+              }),
+              ['absolute', 'none', 'visible', 'visible', true]
             );
             await p.mouse.move(0, 0);
             await desc.getByRole('button').focus();

@@ -35,7 +35,7 @@ export function ScenarioDescription({
         <div
           id={id}
           role="tooltip"
-          className="description-continuation absolute left-0 right-0 top-full mt-1.5 w-full z-40 p-3 rounded-sm bg-obsidian-900/95 border border-steel-600 shadow-panel backdrop-blur-md font-sans text-xs sm:text-sm text-steel-100 leading-relaxed transition-all duration-200 ease-out opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible"
+          className="description-continuation absolute left-0 right-0 top-full mt-1.5 w-full z-40 p-3.5 rounded-sm bg-obsidian-900/[0.98] border border-steel-600 shadow-2xl h-auto max-h-none overflow-visible backdrop-blur-md font-sans text-xs sm:text-sm text-steel-100 leading-relaxed transition-all duration-200 ease-out opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible"
         >
           {continuation}
         </div>
