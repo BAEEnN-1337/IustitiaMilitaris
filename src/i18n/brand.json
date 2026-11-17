@@ -1,0 +1,32 @@
+{
+  "uk": {
+    "dossier": "Службове досьє системи",
+    "subtitle": "Симулятор етичних дилем у секторі безпеки та оборони України",
+    "short": "Симулятор етичних дилем",
+    "open": "Відкрити службове досьє системи",
+    "crest": "Герб Iustitia Militaris: щит, меч і терези правосуддя",
+    "version": "Версія",
+    "architecture": "Архітектура",
+    "privacy": "Zero-PII · без персональних даних учасників",
+    "references": "Методичні орієнтири",
+    "cids": "Посібник CIDS 2025",
+    "context": "Розроблено для",
+    "hackathon": "IV Хакатона з питань виховання доброчесності",
+    "close": "Закрити досьє"
+  },
+  "en": {
+    "dossier": "System briefing dossier",
+    "subtitle": "Ethical dilemmas simulator for Ukraine’s security and defence sector",
+    "short": "Ethical dilemmas simulator",
+    "open": "Open system briefing dossier",
+    "crest": "Iustitia Militaris coat of arms: shield, sword and scales of justice",
+    "version": "Version",
+    "architecture": "Architecture",
+    "privacy": "Zero-PII · no participant personal data",
+    "references": "Methodological references",
+    "cids": "CIDS 2025 Guide",
+    "context": "Developed for",
+    "hackathon": "IV Hackathon on Building Integrity",
+    "close": "Close dossier"
+  }
+}
