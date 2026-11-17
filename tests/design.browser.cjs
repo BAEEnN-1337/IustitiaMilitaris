@@ -62,7 +62,7 @@ const root = path.resolve(__dirname, '..'),
           radius: parseFloat(getComputedStyle(el).borderRadius)
         }));
         assert.notEqual(css.bg, 'rgba(0, 0, 0, 0)');
-        assert.ok(css.padding >= 12 && css.radius >= 6, JSON.stringify(css));
+        assert.ok(css.padding >= 12 && css.radius === 2, JSON.stringify(css));
       }
     }
     for (const theme of ['dark', 'light'])
@@ -216,8 +216,8 @@ const root = path.resolve(__dirname, '..'),
             .getByRole('heading', { name: g[lang].summary, exact: true })
             .waitFor();
           await styled(host);
-          await host.getByTestId('radar').waitFor();
-          await one.getByTestId('radar').waitFor();
+          assert.equal(await host.getByTestId('radar').count(), 0);
+          assert.equal(await one.getByTestId('radar').count(), 0);
           await host
             .getByRole('button', { name: g[lang].close, exact: true })
             .click();
