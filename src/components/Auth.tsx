@@ -1,4 +1,5 @@
-import { caseLabel, choiceLabel } from '../i18n/display';
+import { ProfileDecisionPath } from './ProfileDecisionPath';
+import { caseLabel } from '../i18n/display';
 import { allScenarios } from '../data/scenarios';
 import { localizeScenario } from '../i18n/content';
 import { DecisionProfile, resolvePath } from './DecisionProfile';
@@ -79,6 +80,10 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
       steps[steps.length - 1].variant.nastupnyi_vuzol === null;
     return [{ id, entry, scenario, steps, complete }];
   });
+  const latestRecordId = [...records].sort((a, b) =>
+    (Date.parse(a.entry.completedAt || a.entry.updatedAt || '') || 0) -
+    (Date.parse(b.entry.completedAt || b.entry.updatedAt || '') || 0)
+  ).slice(-1)[0]?.id;
   const completed = records.filter((r) => r.complete);
   const recent = records
     .map((r) => r.entry.completedAt || r.entry.updatedAt)
@@ -161,7 +166,7 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
           </h2>
           {!records.length && <p className="surface">{t.empty}</p>}
           {records.map(({ id, entry, scenario, steps, complete }) => (
-            <article key={id} className="surface space-y-5">
+            <article key={id} className="surface min-w-0 space-y-5" data-testid="profile-case" data-scenario-id={id}>
               <header className="flex flex-wrap justify-between items-start gap-3">
                 <div>
                   <div className="flex flex-wrap gap-2 mb-3">
@@ -187,43 +192,7 @@ export function Auth({ lang, onExit }: { lang: Language; onExit: () => void }) {
                   {date(entry.completedAt || entry.updatedAt)}
                 </time>
               </header>
-              <div
-                className="flex flex-wrap gap-2 items-center"
-                aria-label={t.path}
-              >
-                {steps.map((step, i) => (
-                  <React.Fragment key={i}>
-                    {i > 0 && (
-                      <span aria-hidden="true" className="text-steel-400">
-                        →
-                      </span>
-                    )}
-                    <span className="badge font-mono">
-                      {choiceLabel(scenario, step.nodeId, step.variantId, lang)}
-                    </span>
-                  </React.Fragment>
-                ))}
-              </div>
-              <details className="surface-muted">
-                <summary className="cursor-pointer text-sm text-tactical-ice">
-                  {t.path}
-                </summary>
-                <ol className="mt-3 space-y-3 text-sm text-steel-300">
-                  {steps.map((step, i) => (
-                    <li key={i}>
-                      <strong>
-                        {choiceLabel(
-                          scenario,
-                          step.nodeId,
-                          step.variantId,
-                          lang
-                        )}
-                      </strong>{' '}
-                      — {step.variant.tekst}
-                    </li>
-                  ))}
-                </ol>
-              </details>
+              <ProfileDecisionPath scenario={scenario} path={entry.pathway} lang={lang} open={id === latestRecordId} />
               <DecisionProfile
                 scenario={scenario}
                 path={entry.pathway}
