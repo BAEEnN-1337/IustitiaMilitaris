@@ -279,7 +279,7 @@ export function GroupSession({
           return (
             <article
               key={s.id}
-              className="surface-muted h-full flex flex-col justify-between gap-4"
+              className="surface-muted h-full flex flex-col gap-4"
             >
               <div className="space-y-3">
                 <div className="flex flex-wrap gap-2">
@@ -296,7 +296,7 @@ export function GroupSession({
                 </h4>
               </div>
               <a
-                className="action w-full border-steel-700 text-steel-300 hover:border-steel-600 hover:text-steel-100"
+                className="action mt-auto w-full border-steel-700 text-steel-300 hover:border-steel-600 hover:text-steel-100"
                 href={`/classroom/host/new?scenario=${s.id}`}
               >
                 {t.host} →

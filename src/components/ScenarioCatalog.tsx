@@ -83,13 +83,14 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
     return (
       <div 
         key={s.id}
-        className={`steel-panel flex flex-col justify-between rounded-sm bg-obsidian-850 border transition-all duration-200 hover:shadow-xl hover:border-tactical-ice/60 ${
+        className={`scenario-card steel-panel h-full flex flex-col rounded-sm bg-obsidian-850 border transition-all duration-200 hover:shadow-xl hover:border-tactical-ice/60 ${
           isTeam
             ? 'border-justice-gold/30 hover:border-justice-gold/60 shadow-justice-gold/20'
             : 'border-steel-700 hover:border-steel-600'
         }`}
       >
-        <div className="p-5 sm:p-6 space-y-3.5">
+        <div className="scenario-card-content flex flex-1 flex-col p-5 sm:p-6 gap-3.5">
+          <div className="scenario-card-description space-y-3.5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex flex-wrap items-center gap-2">
               <span className={`im-tag font-mono text-xs font-bold px-2.5 py-1 rounded-sm border ${
@@ -123,7 +124,9 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
               {s.sytuatsiia}
             </p>
           </div>
-          <div className="pt-2 border-t border-obsidian-800 flex flex-wrap items-center gap-2 text-[11px]">
+          </div>
+          <div className="scenario-card-metadata mt-auto pt-4 border-t border-steel-700/40 space-y-3.5">
+          <div className="flex flex-wrap items-center gap-2 text-[11px]">
             <span 
               className={`im-tag inline-flex items-center gap-1 px-2 py-0.5 rounded-sm border ${
                 isVerified
@@ -154,6 +157,7 @@ export const ScenarioCatalog: React.FC<ScenarioCatalogProps> = ({
           <div className="text-[11px] text-steel-300">
             <span className="text-steel-300 font-semibold">{t.catalog.audience}: </span>
             <span className="">{s.audytoriia.join(', ')}</span>
+          </div>
           </div>
         </div>
         <div className="p-4 bg-obsidian-950/70 border-t border-obsidian-800/80 rounded-sm flex flex-wrap items-center justify-between gap-2">
