@@ -53,7 +53,7 @@ export default {
       fontFamily: {
         serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
         sans: [
-          '"Plus Jakarta Sans"',
+          '"IBM Plex Sans"',
           'system-ui',
           '-apple-system',
           'sans-serif'
