@@ -1,5 +1,5 @@
 import studioLabels from '../i18n/builderStudio.json';
-import { freshNode, freshVariant, reachableNodes } from '../utils/builderStudio';
+import { freshNode, freshVariant, reachableNodes, nextScenarioId, knownScenarioIds } from '../utils/builderStudio';
 import { BuilderNodeEditor } from './BuilderNodeEditor';
 import { ScenarioDescription } from './ScenarioDescription';
 import { CaseMetadata } from './CaseMetadata';
@@ -7,7 +7,7 @@ import { parseImportedJson } from '../utils/security';
 import { caseLabel } from '../i18n/display';
 import { localizeScenario } from '../i18n/content';
 import { ui } from '../i18n/ui';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Wrench,
   CheckCircle2,
@@ -60,7 +60,7 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
 
   const [scenario, setScenarioState] = useState<Scenario>(
     (() => { const source = allScenarios.find(s => s.id === window.location.pathname.split('/')[2]); return source ? copyCase(source) : undefined; })() || {
-      id: 'S09',
+      id: nextScenarioId(knownScenarioIds(allScenarios)) || '',
       nazva: ui(lang, 'm53'),
       versiia: '1.0',
       data_stvorennia: '2026-11-16',
@@ -197,6 +197,13 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
     }
   );
 
+  useEffect(() => {
+    if (!/^S\d{2}$/.test(scenario.id)) return;
+    try {
+      sessionStorage.setItem('builder-scenario-ids', JSON.stringify([...new Set([...knownScenarioIds(allScenarios), scenario.id])]));
+    } catch { /* Editing works when session storage is unavailable. */ }
+  }, [scenario.id]);
+
   const setScenario: React.Dispatch<React.SetStateAction<Scenario>> = next => { setDirty(true); setScenarioState(next); };
 
   const [selectedNodeIdx, setSelectedNodeIdx] = useState<number>(0);
@@ -297,7 +304,9 @@ export const ScenarioBuilder: React.FC<ScenarioBuilderProps> = ({
   };
   const loadDraft = (source?: Scenario) => {
     if(dirty && !confirm(studio.replace))return;
-    const draft=copyCase(source || allScenarios[0]);draft.id='S09';
+    const id = nextScenarioId([...knownScenarioIds(allScenarios), scenario.id]);
+    if (!id) { alert(studio.noCaseId); return; }
+    const draft=copyCase(source || allScenarios[0]);draft.id=id;
     if(!source){
       draft.nazva=studio.title;draft.kontekst=studio.context;draft.sytuatsiia=studio.brief;
       draft.vuzly=[];

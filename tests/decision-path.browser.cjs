@@ -24,6 +24,8 @@ for(const theme of ['dark','light'])for(const lang of ['uk','en'])for(const widt
    const selected=stages.nth(i).locator('[data-selected="true"] > rect').first(),next=stages.nth(i+1).locator('[data-selected="true"] > rect').first();
    const rect=await selected.evaluate(e=>[+e.getAttribute('x'),+e.getAttribute('y'),+e.getAttribute('width'),+e.getAttribute('height')]),r2=await next.evaluate(e=>[+e.getAttribute('x'),+e.getAttribute('y'),+e.getAttribute('height')]);
    assert.deepEqual(geometry,[rect[0]+rect[2],rect[1]+rect[3]/2,r2[0],r2[1]+r2[2]/2]);
+   const coords=(await curves.nth(i).getAttribute('d')).match(/-?\d+(?:\.\d+)?/g).map(Number);assert.equal(coords[1],coords[3]);assert.equal(coords[5],coords[7]);
+   const marker=await curves.nth(i).evaluate(e=>document.getElementById(e.getAttribute('marker-end').slice(5,-1)).getAttribute('refX'));assert.equal(marker,'10');
   }
   const text=await stages.allTextContents();assert.doesNotMatch(text.join(' '),/\bV\d+\b/);if(lang==='en')assert.doesNotMatch(text.join(' '),/\p{Script=Cyrillic}/u);
   assert.ok(await p.locator('.decision-path-scroll').evaluate(e=>e.scrollWidth>e.clientWidth));
@@ -31,8 +33,18 @@ for(const theme of ['dark','light'])for(const lang of ['uk','en'])for(const widt
   await p.screenshot({path:`${root}/test-results/decision-path/${id}-${theme}-${lang}-${width}.png`,fullPage:true});
  }
  await p.goto('http://127.0.0.1:18560/builder/S01');await p.getByRole('button',{name:labels[lang].builder.visualGraphTab,exact:true}).click();
+ const stages=p.getByTestId('builder-stage');assert.equal(await stages.count(),9);
+ for(const [i,node]of scenarios[0].vuzly.entries()){const blocks=stages.nth(i).getByTestId('builder-option');assert.equal(await blocks.count(),node.varianty.length);assert.deepEqual(await blocks.locator('strong').allTextContents(),(lang==='uk'?'АБВГ':'ABCD').slice(0,node.varianty.length).split(''));}
+ assert.equal(await p.getByTestId('builder-stage-button').count(),9);
+ await p.screenshot({path:`${root}/test-results/decision-path/builder-${theme}-${lang}-${width}.png`,fullPage:true});
  const edges=p.getByTestId('builder-edge');assert.equal(await edges.count(),11);
- const strings=await edges.locator('text').allTextContents();assert.ok(strings.includes(lang==='uk'?'А · Б · В · Г':'A · B · C · D'));assert.ok(strings.every(s=>!/[АБВГABCD]{2}/.test(s)));
+ assert.equal(await p.getByTestId('builder-option-curve').count(),scenarios[0].vuzly.flatMap(n=>n.varianty).filter(v=>v.nastupnyi_vuzol).length);
+ for(const node of scenarios[0].vuzly){const routes=p.locator(`[data-testid=builder-edge][data-from=${node.id}]`).getByTestId('builder-option-curve');for(let i=0;i<await routes.count();i++){const d=(await routes.nth(i).getAttribute('d')).match(/-?\d+(?:\.\d+)?/g).map(Number);assert.equal(d[1],d[3]);assert.equal(d[5],d[7]);}}
+ const strings=await edges.locator('title').allTextContents();assert.ok(strings.includes(lang==='uk'?'А · Б · В · Г':'A · B · C · D'));assert.ok(strings.every(s=>!/[АБВГABCD]{2}/.test(s)));
+ await p.getByTestId('builder-stage-button').nth(1).hover();assert.equal(await edges.filter({has:p.locator('[stroke="#C8A456"]')}).count()>=1,true);assert.equal(await p.locator('[data-testid=builder-edge][data-from=V2]').getAttribute('data-active'),'true');
+ assert.ok(await p.getByTestId('terminal-marker').count()>0);
+ await p.getByTestId('builder-option').nth(4).locator('button').hover();assert.equal(await p.locator('[data-testid=builder-edge][data-from=V2] [data-testid=builder-option-curve][data-active=true]').count(),1);
+ await p.getByTestId('builder-option').nth(4).locator('button').click();await p.getByTestId('studio-editor').waitFor();
  assert.deepEqual(errors,[]);await c.close();console.log('PASS decision paths and grouped edges',theme,lang,width);
 }
 }finally{await browser?.close();server.kill();await fs.rm(dir,{recursive:true,force:true});}})().catch(e=>{console.error(e);process.exitCode=1;});

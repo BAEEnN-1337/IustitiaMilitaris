@@ -1,6 +1,24 @@
 import type { Scenario, Node, Variant } from '../types';
 import type { Language } from '../i18n';
 import labels from '../i18n/builderStudio.json';
+
+export function nextScenarioId(ids: Iterable<string>): string | null {
+  const numbers = [...ids].filter(id => /^S\d{2}$/.test(id)).map(id => Number(id.slice(1)));
+  const next = Math.max(0, ...numbers) + 1;
+  return next <= 99 ? `S${String(next).padStart(2, '0')}` : null;
+}
+
+export function knownScenarioIds(catalog: { id: string }[]): string[] {
+  const ids = catalog.map(s => s.id);
+  try {
+    const saved: unknown = JSON.parse(sessionStorage.getItem('builder-scenario-ids') || '[]');
+    if (Array.isArray(saved)) ids.push(...saved.filter((id): id is string => typeof id === 'string' && /^S\d{2}$/.test(id)));
+    const preview = JSON.parse(sessionStorage.getItem('builder-preview') || 'null');
+    if (typeof preview?.id === 'string' && /^S\d{2}$/.test(preview.id)) ids.push(preview.id);
+  } catch { /* Storage may be unavailable; catalogue IDs remain authoritative. */ }
+  return [...new Set(ids)];
+}
+
 export function nextVariantId(scenario: Scenario): string {
   const used = new Set(scenario.vuzly.flatMap(n => n.varianty.map(v => v.id)));
   for (const letter of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ') for (const suffix of ['', ...Array.from({length:10},(_,i)=>String(i))]) if (!used.has(letter+suffix)) return letter+suffix;

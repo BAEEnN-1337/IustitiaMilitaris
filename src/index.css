@@ -788,3 +788,8 @@ body,
 .builder-studio .studio-option summary { overflow-wrap:anywhere; }
 @media(max-width:767px) { .studio-node-layout { grid-template-columns:minmax(0,1fr); } }
 @media(prefers-reduced-motion:reduce) { .studio-stage,.studio-score,.studio-norm { transition:none; } }
+
+.diagram-stage-button { border-radius:2px; transition:background-color 180ms; }
+.diagram-stage-button:hover { background:rgba(107,174,196,.1); }
+.diagram-stage-button:focus-visible { outline:2px solid #6BAEC4; outline-offset:-2px; }
+@media(prefers-reduced-motion:reduce) { .diagram-stage-button { transition:none; } }

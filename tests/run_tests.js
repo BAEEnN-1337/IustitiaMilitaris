@@ -117,4 +117,27 @@ await test('Builder allocates valid unique IDs after stage nine without changing
   assert.equal(reachableNodes(draft).has(created.id),false);draft.vuzly[0].varianty[0].nastupnyi_vuzol=created.id;assert.equal(reachableNodes(draft).has(created.id),true);
 });
 
+await test('Scenario IDs advance past catalogue, imported and reserved IDs within the schema limit', () => {
+  const { nextScenarioId }=load(root+'/src/utils/builderStudio.ts');
+  assert.equal(nextScenarioId(scenarios.map(s=>s.id)),'S04');
+  assert.equal(nextScenarioId(['S01','S03','S04']),'S05');
+  assert.equal(nextScenarioId(['S03','S10','S05']),'S11');
+  assert.equal(nextScenarioId(['S09','S09','invalid','S100']),'S10');
+  assert.equal(nextScenarioId(['S99']),null);
+});
+await test('Diagram geometry uses card centres, horizontal tangents and non-overlapping branch columns', () => {
+  const { choiceRect, horizontalCurve, layoutDecisionStages, diagram }=load(root+'/src/utils/decisionDiagram.ts');
+  const a=choiceRect(16,92,1),b=choiceRect(408,92,3);
+  const from={x:a.x+a.width,y:a.y+a.height/2},to={x:b.x,y:b.y+b.height/2};
+  assert.equal(horizontalCurve(from,to),'M 296 216 C 352 216, 352 392, 408 392');
+  const layout=layoutDecisionStages(scenarios[0]);
+  assert.equal(layout.positions.size,9);
+  const branches=['V2','V3','V4','V5'].map(id=>layout.positions.get(id));
+  assert.ok(branches.every(p=>p.x===branches[0].x));
+  branches.slice(1).forEach((p,i)=>assert.ok(p.top>=branches[i].top+diagram.header+scenarios[0].vuzly.find(n=>n.id===['V2','V3','V4','V5'][i]).varianty.length*diagram.row));
+  assert.ok([...layout.positions.values()].every(p=>p.reachable));
+  const cyclic=structuredClone(scenarios[0]);cyclic.vuzly[1].varianty[0].nastupnyi_vuzol='V1';
+  assert.equal(layoutDecisionStages(cyclic).positions.size,9);
+});
+
 console.log(`${passed}/${total} tests passed (${Math.round(100*passed/total)}%)`);
