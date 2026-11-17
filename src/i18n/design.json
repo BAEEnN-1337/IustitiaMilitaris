@@ -22,7 +22,8 @@
     "neutral": "Без зміни цього виміру",
     "negative": "Ризик для цього виміру",
     "discussion": "Точка найбільшої дискусії",
-    "exitProjector": "Вийти з проєктора (Esc)"
+    "exitProjector": "Вийти з проєктора (Esc)",
+    "descriptionMore": "Показати продовження опису"
   },
   "en": {
     "catalog": "Catalog",
@@ -47,6 +48,7 @@
     "neutral": "No change to this dimension",
     "negative": "Risk to this dimension",
     "discussion": "Point of greatest discussion",
-    "exitProjector": "Exit projector (Esc)"
+    "exitProjector": "Exit projector (Esc)",
+    "descriptionMore": "Show description continuation"
   }
 }

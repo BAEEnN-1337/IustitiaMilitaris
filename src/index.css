@@ -767,3 +767,7 @@ body,
     transition: none;
   }
 }
+
+.scenario-description:is(:hover, :focus-within) { z-index: 70; }
+.scenario-description:is(:hover, :focus-within)::after { content: ''; position: absolute; top: 100%; left: 0; right: 0; height: 6px; }
+.description-continuation { max-height: min(50vh, 320px); overflow-y: auto; overflow-wrap: anywhere; }
