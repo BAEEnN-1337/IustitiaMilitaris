@@ -101,6 +101,7 @@ function contrast(a, b) {
             '/scenarios/S01'
           ]) {
             await p.goto(base + route);
+            await p.locator('main h1').first().waitFor();
             assert.equal(
               await p.evaluate(() => document.documentElement.dataset.theme),
               theme

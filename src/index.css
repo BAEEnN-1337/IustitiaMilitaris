@@ -192,7 +192,7 @@
   --panel-top: #ffffff;
   --panel-bottom: #f6f8fa;
   --panel-shadow:
-    inset 0 1px 0 0 #ffffff, 0 10px 30px -10px rgba(20, 34, 53, 0.15);
+    0 4px 16px -4px rgba(15, 23, 42, 0.08);
 }
 
 @layer base {
@@ -801,3 +801,22 @@ body,
 .profile-decision-step::before { content:''; position:absolute; left:-24px; top:9px; width:7px; height:7px; border-radius:50%; background:#C8A456; }
 .profile-decision-badges { display:flex; flex-wrap:nowrap; gap:6px; margin-bottom:8px; }
 @media(min-width:768px) { .profile-decision-step { display:grid; grid-template-columns:205px minmax(0,1fr); gap:16px; } .profile-decision-badges { margin-bottom:0; align-items:flex-start; } }
+
+:root { --scroll-track:#162030; --scroll-thumb:#475569; }
+:root[data-theme='light'] { --scroll-track:#F1F5F9; --scroll-thumb:#94A3B8; }
+* { scrollbar-width:thin; scrollbar-color:var(--scroll-thumb) var(--scroll-track); }
+::-webkit-scrollbar { width:6px; height:6px; }
+::-webkit-scrollbar-track { background:var(--scroll-track); }
+::-webkit-scrollbar-thumb { background:var(--scroll-thumb); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:#6BAEC4; }
+:root[data-theme='light'] :is(.steel-panel,.surface,.im-primary,.action-primary) { box-shadow:var(--panel-shadow); border-color:#CBD5E1; }
+@media print {
+  @page { margin:15mm; }
+  html, body, #root, main, .solo-shell { background:white !important; color:black !important; min-height:0 !important; width:auto !important; max-width:none !important; padding:0 !important; }
+  nav, header, footer, button, #breadcrumbs, .decision-path-scroll, [role='dialog'] { display:none !important; }
+  *, *::before, *::after { box-shadow:none !important; text-shadow:none !important; animation:none !important; transition:none !important; color:black !important; background:transparent !important; }
+  .min-h-screen { min-height:0 !important; }
+  .summary-sheet, .summary-sheet * { background:white !important; color:black !important; overflow:visible !important; }
+  .summary-sheet p, .summary-sheet li { break-inside:avoid; }
+  .summary-sheet .steel-panel { border:0 !important; padding:0 !important; }
+}

@@ -3,7 +3,6 @@ import { caseLabel, stageLabel, variantLabel } from '../i18n/display';
 import { Language } from '../i18n';
 import { localizeNorms, localizeScenario } from '../i18n/content';
 import scormLabels from '../i18n/scorm.json';
-import JSZip from 'jszip';
 import { Scenario, NormsData } from '../types';
 
 export async function generateScorm12Zip(
@@ -11,6 +10,7 @@ export async function generateScorm12Zip(
   normsData: NormsData,
   lang: Language = 'uk'
 ): Promise<Blob> {
+  const { default: JSZip } = await import('jszip');
   const zip = new JSZip();
   scenario = localizeScenario(scenario, lang);
   normsData = localizeNorms(normsData, lang);

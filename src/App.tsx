@@ -1,21 +1,27 @@
+import polish from './i18n/polish.json';
 import { caseLabel } from './i18n/display';
 import designLabels from './i18n/design.json';
-import { Auth } from './components/Auth';
 import accountLabels from './i18n/accounts.json';
 import { localizeScenario } from './i18n/content';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Scenario } from './types';
 import { allScenarios, teamScenarios } from './data/scenarios';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { ScenarioCatalog } from './components/ScenarioCatalog';
 import { SoloSimulator } from './components/SoloSimulator';
-import { ClassroomFacilitator } from './components/ClassroomFacilitator';
-import { ClassroomStudent } from './components/ClassroomStudent';
-import { ScenarioBuilder } from './components/ScenarioBuilder';
-import { NormsLibrary } from './components/NormsLibrary';
 import { Language, translations } from './i18n';
 import { LanguageContext } from './i18n/ui';
+
+const Auth = lazy(() => import('./components/Auth').then(module => ({ default: module.Auth })));
+
+const ClassroomFacilitator = lazy(() => import('./components/ClassroomFacilitator').then(module => ({ default: module.ClassroomFacilitator })));
+
+const ClassroomStudent = lazy(() => import('./components/ClassroomStudent').then(module => ({ default: module.ClassroomStudent })));
+
+const ScenarioBuilder = lazy(() => import('./components/ScenarioBuilder').then(module => ({ default: module.ScenarioBuilder })));
+
+const NormsLibrary = lazy(() => import('./components/NormsLibrary').then(module => ({ default: module.NormsLibrary })));
 
 export const App: React.FC = () => {
   const [pathname, setPathname] = useState(window.location.pathname);
@@ -147,7 +153,7 @@ export const App: React.FC = () => {
           lang={lang}
           setLang={setLang}
         />
-        <main className="flex-1">
+        <main className="flex-1"><Suspense fallback={<div className="page-shell" role="status"><div className="steel-panel p-4 font-mono text-sm text-tactical-ice">{polish[lang].loading}</div></div>}>
           {pathname !== '/' && (
             <nav
               id="breadcrumbs"
@@ -242,7 +248,7 @@ export const App: React.FC = () => {
           )}
 
           {currentView === 'norms' && <NormsLibrary lang={lang} />}
-        </main>
+        </Suspense></main>
         <Footer lang={lang} />
       </div>
     </LanguageContext.Provider>

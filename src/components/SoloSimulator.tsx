@@ -1,4 +1,5 @@
-import { caseLabel, stageLabel, variantLabel } from '../i18n/display';
+import polish from '../i18n/polish.json';
+import { caseLabel, stageLabel, variantLabel, scenarioStageCount } from '../i18n/display';
 import {
   Dossier,
   ValueConflict,
@@ -49,6 +50,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
     [...originalNormMap].map(([id, norm]) => [id, localizeNorm(norm, lang)])
   );
   const t = translations[lang];
+  const copy = polish[lang];
 
   // Simulator stage: 'briefing' | 'decision' | 'feedback' | 'reflection'
   const [phase, setPhase] = useState<
@@ -235,6 +237,22 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
     }
   };
 
+  useEffect(() => {
+    const handleKey = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (event.repeat || event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey || isCidsOpen || activeNormDetail || document.querySelector('[role="dialog"]') || target?.closest('input,textarea,select,button,a,summary,[contenteditable]:not([contenteditable="false"])')) return;
+      if (phase === 'decision' && /^[1-4]$/.test(event.key)) {
+        const variant = scenario.vuzly.find(n => n.id === currentNodeId)?.varianty[Number(event.key) - 1];
+        if (variant) { event.preventDefault(); setPendingVariant(variant); }
+      } else if (event.key === 'Enter' && (phase === 'decision' || phase === 'feedback')) {
+        event.preventDefault();
+        if (phase === 'decision') handleConfirmDecision(); else handleNextStep();
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  });
+
   const openNormModal = (normId: string) => {
     const entry = normMap.get(normId);
     if (!entry) return;
@@ -255,7 +273,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
   );
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+    <div className={`solo-shell mx-auto px-4 sm:px-6 py-8 ${phase === 'decision' || phase === 'feedback' ? 'max-w-6xl' : 'max-w-4xl'}`}>
       <div className="flex flex-wrap items-center justify-between gap-2 pb-4 mb-6 border-b border-obsidian-800">
         <div className="flex flex-wrap items-center gap-2">
           <span className="im-tag font-mono text-xs font-bold px-2 py-0.5 rounded-sm bg-obsidian-800 text-justice-gold border border-steel-700">
@@ -368,6 +386,8 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
           </div>
         </div>
       )}
+      <div className={phase === 'decision' || phase === 'feedback' ? 'play-layout grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_280px] gap-6 items-start' : ''}>
+      <div className="min-w-0 max-w-3xl w-full">
       {phase === 'decision' && currentNode && (
         <div
           key={`${scenario.id}:${phase}:${currentNodeId}`}
@@ -382,13 +402,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                 {t.step.stepLabel} {pathway.length + 1}
               </span>
             </div>
-            <button
-              onClick={() => setIsCidsOpen(true)}
-              className="inline-flex flex-wrap items-center gap-2 px-3.5 py-1.5 rounded-sm bg-status-warning/15 hover:bg-status-warning/25 text-status-warning border border-status-warning/30 text-xs font-semibold transition-colors"
-            >
-              <Scale className="w-4 h-4 text-status-warning" />
-              {t.step.cidsHelperBtn}
-            </button>
+
           </div>
 
           <div className="steel-panel p-6 sm:p-8 rounded-sm bg-obsidian-850 border border-steel-700 shadow-xl space-y-6">
@@ -496,10 +510,10 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
               </span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Consequence title={t.feedback.immediateTitle}>
+              <Consequence title={copy.immediate}>
                 {selectedVariant.naslidky.odrazu}
               </Consequence>
-              <Consequence delayed title={t.feedback.delayedTitle}>
+              <Consequence delayed title={copy.delayed}>
                 {selectedVariant.naslidky.vidkladeni}
               </Consequence>
             </div>
@@ -555,10 +569,20 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
           </div>
         </div>
       )}
+      </div>
+      {(phase === 'decision' || phase === 'feedback') && <aside className="tactical-tracker steel-panel p-4 space-y-4 lg:sticky lg:top-20 min-w-0" aria-label={copy.tracker}>
+        <h2 className="font-mono text-xs uppercase text-justice-gold">{copy.tracker}</h2>
+        <p>{copy.stage} {pathway.filter(p => p.nodeId !== currentNodeId).length + 1} {copy.of} {scenarioStageCount(scenario)}</p>
+        <p className="text-sm text-steel-300">{scenario.diiovi_osoby.find(r => r.hravets)?.rol}</p>
+        <dl className="space-y-2">{(['dobrochesnist','efektyvnist','dovira'] as const).map(axis => <div key={axis} className="flex justify-between gap-2 text-sm"><dt>{t.dimensions[axis]}</dt><dd className="font-mono">{cumulativeScores[axis] > 0 ? '+' : ''}{cumulativeScores[axis]}</dd></div>)}</dl>
+        <button className="action w-full" onClick={() => setIsCidsOpen(true)}>{t.step.cidsHelperBtn}</button>
+        <p className="hidden lg:block text-xs text-steel-300">{copy.keys}</p>
+      </aside>}
+      </div>
       {phase === 'reflection' && (
         <div
           key={`${scenario.id}:${phase}:${currentNodeId}`}
-          className="space-y-6 animate-fadeIn"
+          className="summary-sheet space-y-6 animate-fadeIn"
         >
           <div className="steel-panel p-6 sm:p-8 rounded-sm bg-obsidian-850 border border-steel-700 shadow-xl space-y-6">
             <div className="border-b border-obsidian-800 pb-3 flex flex-wrap items-center justify-between gap-2">
@@ -667,6 +691,8 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
               <CheckCircle2 className="w-4 h-4 text-justice-gold shrink-0" />
               <span>{t.reflection.privacyBanner}</span>
             </div>
+            <section className="space-y-2 print-norms"><h3 className="font-bold">{t.feedback.normsTitle}</h3>{[...new Set(pathway.flatMap(p => p.variant.normy))].map(id => {const norm = normMap.get(id); return norm ? <p key={id} className="text-sm text-steel-300">{norm.akt} · {norm.punkt} — {norm.korotko}</p> : null;})}</section>
+            <button className="action" onClick={() => window.print()}>{copy.print}</button>
             <div className="pt-4 border-t border-obsidian-800 flex flex-col sm:flex-row items-center justify-between gap-3">
               <button
                 onClick={handleRestart}
