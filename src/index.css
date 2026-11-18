@@ -864,3 +864,10 @@ details > summary::-webkit-details-marker { display:none; }
 
 .scenario-card { position:relative; }
 .scenario-card:is(:hover,:focus-within) { z-index:30; }
+.norm-code { display:inline-block; flex-shrink:0; white-space:nowrap; }
+.norm-chip { text-align:left; align-items:center; justify-content:flex-start; min-width:0; max-width:100%; }
+.norm-chip > :not(.norm-code) { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.norm-external-link { font-size:11px; }
+.norm-summary-card { overflow-wrap:anywhere; }
+@media print { .norm-summary-card { display:block !important; break-inside:avoid; border:1px solid #94A3B8 !important; padding:10px !important; } }
+.norm-chip { height:36px; }

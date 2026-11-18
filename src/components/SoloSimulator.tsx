@@ -1,3 +1,5 @@
+import { NormCards } from './NormCards';
+import { formatNormDisplayId } from '../i18n/normDisplay';
 import { Collapsible } from './Collapsible';
 import polish from '../i18n/polish.json';
 import { caseLabel, stageLabel, variantLabel, scenarioStageCount } from '../i18n/display';
@@ -538,9 +540,9 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                       <button
                         key={normId}
                         onClick={() => openNormModal(normId)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-tactical-ice/10 hover:bg-tactical-ice/20 text-tactical-ice border border-tactical-ice/30 text-xs font-medium transition-colors"
+                        className="norm-chip inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-tactical-ice/10 hover:bg-tactical-ice/20 text-tactical-ice border border-tactical-ice/30 text-xs font-medium transition-colors"
                       >
-                        <span className="font-mono font-bold">{normId}</span>
+                        <span className="norm-code font-mono font-bold">{formatNormDisplayId(normId, lang)}</span>
                         {n && (
                           <span className="text-[11px] text-steel-300 break-words">
                             {n.punkt}
@@ -688,7 +690,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
               <CheckCircle2 className="w-4 h-4 text-justice-gold shrink-0" />
               <span>{t.reflection.privacyBanner}</span>
             </div>
-            <section className="space-y-2 print-norms"><h3 className="font-bold">{t.feedback.normsTitle}</h3>{[...new Set(pathway.flatMap(p => p.variant.normy))].map(id => {const norm = normMap.get(id); return norm ? <p key={id} className="text-sm text-steel-300">{norm.akt} · {norm.punkt} — {norm.korotko}</p> : null;})}</section>
+            <section className="space-y-2 print-norms"><h3 className="font-bold">{t.feedback.normsTitle}</h3><NormCards ids={pathway.flatMap(p => p.variant.normy)} scenario={scenario} lang={lang} onSelect={openNormModal} /></section>
             <button className="action" onClick={() => window.print()}>{copy.print}</button>
             <div className="pt-4 border-t border-obsidian-800 flex flex-col sm:flex-row items-center justify-between gap-3">
               <button

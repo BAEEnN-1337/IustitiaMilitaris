@@ -1,3 +1,4 @@
+import { formatNormDisplayId } from '../i18n/normDisplay';
 import { scriptJson } from './security';
 import { caseLabel, stageLabel, variantLabel } from '../i18n/display';
 import { Language } from '../i18n';
@@ -146,6 +147,8 @@ function generateStandaloneHtmlPlayer(
 ): string {
   const labels = scormLabels[lang];
   const presentation = {
+    normCodes: Object.fromEntries(embeddedNorms.map(norm => [norm.id, formatNormDisplayId(norm.id, lang)])),
+    normsTitle: lang === 'uk' ? 'Застосовні норми права' : 'Applicable legal provisions',
     case: caseLabel(scenario.id, lang),
     stages: Object.fromEntries(
       scenario.vuzly.map((node) => [
@@ -336,6 +339,20 @@ function generateStandaloneHtmlPlayer(
       button.addEventListener('click', callback);
       return button;
     }
+    function renderNorms(ids) {
+      var unique = Array.from(new Set(ids));
+      if (!unique.length) return;
+      element('h3', presentation.normsTitle);
+      var cards = element('div', undefined, 'options-grid');
+      unique.forEach(function(id) {
+        var norm = normsMap[id]; if (!norm) return;
+        var card = element('section', undefined, 'context-box', cards);
+        var badge = element('strong', presentation.normCodes[id] || id, 'badge', card);
+        badge.style.whiteSpace = 'nowrap';
+        element('h4', norm.akt + ' · ' + norm.punkt, undefined, card);
+        element('p', norm.korotko, undefined, card);
+      });
+    }
     function render() {
       document.getElementById('app').replaceChildren();
       if (state.step === 'briefing') {
@@ -380,6 +397,7 @@ function generateStandaloneHtmlPlayer(
         var analysis = element('div', undefined, 'context-box');
         element('strong', labels.s15, undefined, analysis);
         element('p', v.zvorotnyi_zviazok, undefined, analysis);
+        renderNorms(v.normy || []);
         action(v.nastupnyi_vuzol ? labels.s16 : labels.s17, nextStage);
       } else if (state.step === 'reflection') {
         if (window.SCORM_COMPLETE) window.SCORM_COMPLETE();
@@ -391,6 +409,7 @@ function generateStandaloneHtmlPlayer(
         state.pathway.forEach(function(p) {
           element('li', presentation.stages[p.nodeId] + ' · ' + labels.s19 + ' ' + presentation.variants[p.nodeId][p.variant.id] + ' — ' + p.variant.tekst, undefined, list);
         });
+        renderNorms(state.pathway.flatMap(function(p) { return p.variant.normy || []; }));
         element('h3', labels.s23);
         var tips = element('ul');
         scenario.porady.forEach(function(tip) { element('li', tip, undefined, tips); });

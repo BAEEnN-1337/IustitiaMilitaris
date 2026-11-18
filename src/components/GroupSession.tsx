@@ -1,3 +1,5 @@
+import { NormCards } from './NormCards';
+import { formatNormDisplayId } from '../i18n/normDisplay';
 import { AnimatedDetails } from './Collapsible';
 import { caseLabel, stageLabel, optionLabel, variantLabel, choiceLabel, scenarioStageCount } from '../i18n/display';
 import { CaseMetadata } from './CaseMetadata';
@@ -540,6 +542,7 @@ export function GroupSession({
                   </AnimatedDetails>
                 );
               })}
+              <section className="space-y-3"><h3 className="im-section-title font-bold">{translations[lang].feedback.normsTitle}</h3><NormCards ids={room.history.flatMap(h => scenario.vuzly.find(n => n.id === h.nodeId)?.varianty.find(v => v.id === h.selectedVariantId)?.normy || [])} scenario={scenario} lang={lang} onSelect={setNorm} /></section>
               <h3 className="im-section-title font-bold">
                 {translations[lang].reflection.applicabilityTitle}
               </h3>
@@ -751,11 +754,11 @@ export function GroupSession({
                       <div className="flex flex-wrap gap-2">
                         {variant.normy.map((id) => (
                           <button
-                            className="action !text-tactical-ice"
+                            className="action norm-chip !text-tactical-ice"
                             key={id}
                             onClick={() => setNorm(id)}
                           >
-                            {id}
+                            <span className="norm-code">{formatNormDisplayId(id, lang)}</span>
                           </button>
                         ))}
                       </div>
