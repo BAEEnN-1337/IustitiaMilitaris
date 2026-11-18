@@ -140,4 +140,11 @@ await test('Diagram geometry uses card centres, horizontal tangents and non-over
   assert.equal(layoutDecisionStages(cyclic).positions.size,9);
 });
 
+await test('Norm display codes localize every source prefix without changing internal IDs', () => {
+  const { formatNormDisplayId }=load(root+'/src/i18n/normDisplay.ts');
+  for(const norm of norms.normy){assert.equal(formatNormDisplayId(norm.id,'en'),norm.id);assert.doesNotMatch(formatNormDisplayId(norm.id,'uk').split('-')[0],/[A-Z]/);}
+  assert.equal(formatNormDisplayId('KZPP-2-1','uk'),'КЗпП-2-1');
+  assert.equal(formatNormDisplayId('DS-22','uk'),'ЗДС-22');
+});
+
 console.log(`${passed}/${total} tests passed (${Math.round(100*passed/total)}%)`);

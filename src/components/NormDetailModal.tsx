@@ -1,3 +1,4 @@
+import { formatNormDisplayId } from '../i18n/normDisplay';
 import { AnimatedOverlay } from './Collapsible';
 import { safeExternalUrl } from '../utils/security';
 import { localizeNorm } from '../i18n/content';
@@ -31,18 +32,18 @@ export const NormDetailModal: React.FC<NormDetailModalProps> = ({ norm: original
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-3 pb-4 border-b border-steel-700">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
             <div className="p-2 rounded-sm bg-tactical-ice/20 text-tactical-ice border border-tactical-ice/30">
               <BookOpen className="w-5 h-5" />
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="im-tag font-mono text-xs font-bold px-2 py-0.5 rounded-sm bg-obsidian-800 text-tactical-ice border border-tactical-ice">
-                  {norm.id}
+                <span className="norm-code im-tag font-mono text-xs font-bold px-2 py-0.5 rounded-sm bg-obsidian-800 text-tactical-ice border border-tactical-ice">
+                  {formatNormDisplayId(norm.id, lang)}
                 </span>
                 <span className="text-xs text-steel-300">{norm.punkt}</span>
               </div>
-              <h2 className="im-title font-serif text-base sm:text-lg font-bold text-white mt-1">
+              <h2 className="im-title font-serif text-base sm:text-lg font-bold text-white mt-1 break-words">
                 {norm.akt}
               </h2>
             </div>
@@ -108,8 +109,8 @@ export const NormDetailModal: React.FC<NormDetailModalProps> = ({ norm: original
             ))}
           </div>
         )}
-        <div className="mt-6 pt-4 border-t border-obsidian-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-steel-300">
-          <div>
+        <div className="norm-modal-footer mt-6 pt-4 border-t border-steel-700 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="min-w-0 flex-1 text-xs text-steel-400 text-left break-words">
             {ui(lang, 'm41')}{' '}{norm.dzherelo_zvirky} ({norm.data_zvirky})
           </div>
           {safeExternalUrl(norm.posylannia) && (
@@ -117,10 +118,10 @@ export const NormDetailModal: React.FC<NormDetailModalProps> = ({ norm: original
               href={safeExternalUrl(norm.posylannia)}
               target="_blank"
               rel="noopener noreferrer"
-              className="whitespace-nowrap im-secondary inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-obsidian-800 hover:bg-steel-700 text-tactical-ice border border-tactical-ice transition-colors font-medium"
+              className="norm-external-link whitespace-nowrap im-secondary inline-flex items-center justify-center gap-2 shrink-0 w-fit max-w-full px-3.5 py-2 rounded-sm bg-obsidian-800 hover:bg-steel-700 text-tactical-ice border border-tactical-ice transition-colors font-medium"
             >
-              <span>zakon.rada.gov.ua</span>
-              <ExternalLink className="w-3.5 h-3.5" />
+              <span>{new URL(safeExternalUrl(norm.posylannia)!).hostname.replace(/^www\./, '')}</span>
+              <ExternalLink className="w-3.5 h-3.5 shrink-0" />
             </a>
           )}
         </div>

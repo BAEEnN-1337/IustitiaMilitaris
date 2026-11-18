@@ -83,9 +83,9 @@ async function solo(page,source,lang,branch=0) {
       if(width===1280)assert.equal(visited.size,26);
       await page.goto('http://127.0.0.1:18500/norms');
       assert.equal(await page.locator('main .cursor-pointer').count(),norms.normy.length);
-      for(const norm of norms.normy.filter(n=>/^(KZPP-|KONST-|DS-|EQUAL-|PROC-|KK-|VS-)/.test(n.id)))assert.equal(await page.getByText(norm.id,{exact:true}).count(),1);
+      for(const norm of norms.normy.filter(n=>/^(KZPP-|KONST-|DS-|EQUAL-|PROC-|KK-|VS-)/.test(n.id)))assert.equal(await page.locator(`[data-testid=norm-card][data-norm-id="${norm.id}"]`).count(),1);
       for(const court of norms.normy.filter(n=>n.id.startsWith('VS-'))) {
-        await page.getByText(court.id,{exact:true}).click();const dialog=page.getByRole('dialog');await dialog.waitFor();
+        await page.locator(`[data-testid=norm-card][data-norm-id="${court.id}"]`).click();const dialog=page.getByRole('dialog');await dialog.waitFor();
         assert.ok((await dialog.innerText()).includes(lang==='uk'?'Не звірено':'Not verified'));
         if(lang==='en')assert.doesNotMatch(await dialog.innerText(),/\p{Script=Cyrillic}/u);
         await dialog.getByRole('button').first().click();

@@ -1,3 +1,4 @@
+import { formatNormDisplayId } from '../i18n/normDisplay';
 import polish from '../i18n/polish.json';
 import { caseLabel } from '../i18n/display';
 import { localizeNorms } from '../i18n/content';
@@ -125,8 +126,8 @@ export const NormsLibrary: React.FC<NormsLibraryProps> = ({ lang }) => {
               >
                 <div className="space-y-2">
                   <div className="flex flex-wrap items-center justify-between gap-2 gap-2">
-                    <span className="im-tag font-mono text-xs font-bold px-2 py-0.5 rounded-sm bg-obsidian-800 text-tactical-ice border border-tactical-ice">
-                      {norm.id}
+                    <span className="norm-code im-tag font-mono text-xs font-bold px-2 py-0.5 rounded-sm bg-obsidian-800 text-tactical-ice border border-tactical-ice">
+                      {formatNormDisplayId(norm.id, lang)}
                     </span>
                     <span
                       className={`im-tag text-[11px] px-2 py-0.5 rounded-sm border flex items-center gap-1 font-medium ${
