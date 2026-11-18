@@ -871,3 +871,5 @@ details > summary::-webkit-details-marker { display:none; }
 .norm-summary-card { overflow-wrap:anywhere; }
 @media print { .norm-summary-card { display:block !important; break-inside:avoid; border:1px solid #94A3B8 !important; padding:10px !important; } }
 .norm-chip { height:36px; }
+.norm-chip-grid .norm-chip { height:40px; justify-content:space-between; }
+.norm-chip-grid .norm-chip > .norm-code { overflow:visible; text-overflow:clip; }

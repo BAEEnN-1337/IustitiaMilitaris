@@ -147,4 +147,13 @@ await test('Norm display codes localize every source prefix without changing int
   assert.equal(formatNormDisplayId('DS-22','uk'),'ЗДС-22');
 });
 
+await test('Compact norm points retain article and court numbers; corrected SC outcomes stay unverified', () => {
+  const {formatNormChipPoint}=load(root+'/src/i18n/normDisplay.ts');
+  assert.equal(formatNormChipPoint({id:'ZPK-1',punkt:'ст. 1 — визначення термінів'},'uk'),'ст. 1');
+  assert.equal(formatNormChipPoint({id:'ZPK-1',punkt:'Article 1: definitions'},'en'),'Art. 1');
+  assert.equal(formatNormChipPoint(norms.normy.find(n=>n.id==='VS-826-5931-16'),'uk'),'№ 826/5931/16');
+  const court=norms.normy.find(n=>n.id==='VS-335-10825-16');assert.equal(court.status_zvirky,'ne-zvireno');assert.match(court.korotko,/скасував виправдувальний вирок/);assert.match(court.punkt,/51-4643км23/);
+  assert.match(scenarios[2].vuzly[6].tekst,/скасував виправдувальний вирок/);
+});
+
 console.log(`${passed}/${total} tests passed (${Math.round(100*passed/total)}%)`);

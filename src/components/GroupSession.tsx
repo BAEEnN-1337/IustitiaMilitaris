@@ -1,5 +1,5 @@
+import { NormChips } from './NormChips';
 import { NormCards } from './NormCards';
-import { formatNormDisplayId } from '../i18n/normDisplay';
 import { AnimatedDetails } from './Collapsible';
 import { caseLabel, stageLabel, optionLabel, variantLabel, choiceLabel, scenarioStageCount } from '../i18n/display';
 import { CaseMetadata } from './CaseMetadata';
@@ -751,17 +751,7 @@ export function GroupSession({
                       <p className="leading-relaxed text-steel-300">
                         {variant.zvorotnyi_zviazok}
                       </p>
-                      <div className="flex flex-wrap gap-2">
-                        {variant.normy.map((id) => (
-                          <button
-                            className="action norm-chip !text-tactical-ice"
-                            key={id}
-                            onClick={() => setNorm(id)}
-                          >
-                            <span className="norm-code">{formatNormDisplayId(id, lang)}</span>
-                          </button>
-                        ))}
-                      </div>
+<NormChips ids={variant.normy} lang={lang} onSelect={setNorm} />
                       {host && (
                         <button
                           className="action-primary"

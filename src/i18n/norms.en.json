@@ -858,15 +858,15 @@
     },
     "VS-761-42072-23": {
       "id": "VS-761-42072-23",
-      "akt": "Supreme Court decision (PDF identifiers; unverified)",
-      "punkt": "25.02.2026; case 761/42072/23",
-      "korotko": "Judicial decision cited by the source case. Verify its date, case number, document identifier and findings before legal use. Educational reference from the PDF; not a verified quotation of current law.",
+      "akt": "Judgment of the Civil Cassation Court of the Supreme Court (not verified)",
+      "punkt": "25 February 2026; case No. 761/42072/23; proceedings No. 61-8250sv25",
+      "korotko": "Mobbing dispute: dismissal of the claim was upheld. Register / YouControl document 122935566 is the first-instance decision of 30 October 2024 in the same case, not the Civil Cassation Court judgment of 25 February 2026.",
       "tsytaty": [],
       "redaktsiia": "Current edition not established; manual verification required.",
       "posylannia": "https://youcontrol.com.ua/catalog/court-document/122935566/",
       "typ": "sudova-praktyka",
       "status_zvirky": "ne-zvireno",
-      "dzherelo_zvirky": "docs/cases-source.pdf; primary sources were inaccessible on 17 November 2026. The team must manually check the text, identifiers and edition. Court metadata is supplied by the PDF and has not been independently verified.",
+      "dzherelo_zvirky": "The references and outcome summary were updated using the team's editorial correction of 18 November 2026. Status remains \"not verified\": the team must complete a final manual check of the full judgment and wording; no verbatim quotation has been confirmed. Mobbing dispute: dismissal of the claim was upheld. Register / YouControl document 122935566 is the first-instance decision of 30 October 2024 in the same case, not the Civil Cassation Court judgment of 25 February 2026.",
       "data_zvirky": "2026-11-17"
     },
     "VS-826-5931-16": {
@@ -910,15 +910,15 @@
     },
     "VS-335-10825-16": {
       "id": "VS-335-10825-16",
-      "akt": "Supreme Court decision (PDF identifiers; unverified)",
-      "punkt": "14.01.2025; case 335/10825/16",
-      "korotko": "Judicial decision cited by the source case. Verify its date, case number, document identifier and findings before legal use. Educational reference from the PDF; not a verified quotation of current law.",
+      "akt": "Judgment of the Criminal Cassation Court of the Supreme Court (not verified)",
+      "punkt": "14 January 2025; case No. 335/10825/16; proceedings No. 51-4643km23; register No. 124968308",
+      "korotko": "In its judgment of 14 January 2025 in case No. 335/10825/16 (proceedings No. 51-4643km23, register No. 124968308), the Criminal Cassation Court of the Supreme Court quashed the acquittal and ordered a new trial in the court of first instance, stressing proper assessment and admissibility of evidence.",
       "tsytaty": [],
       "redaktsiia": "Current edition not established; manual verification required.",
       "posylannia": "https://iplex.com.ua/doc.php?regnum=124968308",
       "typ": "sudova-praktyka",
       "status_zvirky": "ne-zvireno",
-      "dzherelo_zvirky": "docs/cases-source.pdf; primary sources were inaccessible on 17 November 2026. The team must manually check the text, identifiers and edition. Court metadata is supplied by the PDF and has not been independently verified.",
+      "dzherelo_zvirky": "The references and outcome summary were updated using the team's editorial correction of 18 November 2026. Status remains \"not verified\": the team must complete a final manual check of the full judgment and wording; no verbatim quotation has been confirmed.",
       "data_zvirky": "2026-11-17"
     }
   }
