@@ -1,5 +1,5 @@
+import { NormChips } from './NormChips';
 import { NormCards } from './NormCards';
-import { formatNormDisplayId } from '../i18n/normDisplay';
 import { Collapsible } from './Collapsible';
 import polish from '../i18n/polish.json';
 import { caseLabel, stageLabel, variantLabel, scenarioStageCount } from '../i18n/display';
@@ -533,25 +533,7 @@ export const SoloSimulator: React.FC<SoloSimulatorProps> = ({
                   <BookOpen className="w-3.5 h-3.5" />
                   {t.feedback.normsTitle}
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {selectedVariant.normy.map((normId) => {
-                    const n = normMap.get(normId);
-                    return (
-                      <button
-                        key={normId}
-                        onClick={() => openNormModal(normId)}
-                        className="norm-chip inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-tactical-ice/10 hover:bg-tactical-ice/20 text-tactical-ice border border-tactical-ice/30 text-xs font-medium transition-colors"
-                      >
-                        <span className="norm-code font-mono font-bold">{formatNormDisplayId(normId, lang)}</span>
-                        {n && (
-                          <span className="text-[11px] text-steel-300 break-words">
-                            {n.punkt}
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
+<NormChips ids={selectedVariant.normy} lang={lang} onSelect={openNormModal} />
               </div>
             )}
             <button
